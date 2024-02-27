@@ -27,7 +27,6 @@ export default {
     },
     description: {
       type: String,
-      required: true
     }
   }
 };
@@ -36,6 +35,7 @@ export default {
 <style scoped>
 .custom-card {
   width: 100%;
+  height: 100%;
   border-radius: 10px; /* Rounded corners */
   overflow: hidden; /* Makes sure the image stays within the border radius */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */

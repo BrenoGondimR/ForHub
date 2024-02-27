@@ -64,3 +64,12 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
+.titles-primary{
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+}
+
+.subtext-primary{
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+}
