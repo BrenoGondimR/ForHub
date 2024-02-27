@@ -28,7 +28,7 @@
           você pode encontrar o local perfeito para o seu próximo evento, seja uma reunião de diretoria,
           conferência ou lançamento de produto.</p>
       </b-colxx>
-      <b-row style="padding: 0px 50px;">
+      <b-row style="padding: 0 50px;">
         <b-colxx class="mt-4" lg="4" v-for="(acomodacao, index) in detalhesForHub" :key="index" style="">
           <card-acomodacao
               :image="acomodacao.imagem"
