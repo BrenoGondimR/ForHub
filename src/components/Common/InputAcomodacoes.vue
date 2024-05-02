@@ -42,8 +42,8 @@
 
 .search-section .input-group-append {
   position: absolute;
-  right: 0; /* Ajustado para 0 para alinhar com o canto direito do input */
-  top: 0; /* Alinha com o topo do input */
+  right: 10px;
+  top: 8px;
   height: 100%; /* Faz o botão ter a mesma altura do input group */
 }
 

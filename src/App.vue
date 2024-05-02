@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
+  <nav v-if="$route.path !== '/login'" class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
     <div class="container-fluid" style="justify-content: space-between; padding: 0 35px 0 35px">
       <b-colxx lg="3">
         <router-link class="navbar-brand" to="/" style="display: flex; gap: 10px">

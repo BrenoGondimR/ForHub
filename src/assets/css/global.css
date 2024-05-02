@@ -60,6 +60,19 @@ body {
     font-weight: 600;
 }
 
+.overlay-text {
+    color: white;
+    position: absolute;
+    bottom: 38%;
+    left: 10%;
+    font-family: "Poppins", sans-serif;
+    right: 10%;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
 .form-control{
     font-family: "Poppins", sans-serif;
 }
@@ -72,7 +85,7 @@ body {
 
 .subtext-primary{
     font-family: "Poppins", sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     color: #121417;
 }
 
