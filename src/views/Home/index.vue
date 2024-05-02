@@ -60,12 +60,14 @@
       </b-colxx>
     </b-row>
   </b-row>
+  <FooterComp></FooterComp>
 </template>
 
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
 import InputAcomodacoes from "@/components/Common/InputAcomodacoes.vue";
 import CardAcomodacao from "@/components/Common/CardAcomodação.vue";
+import FooterComp from "@/components/Common/FooterComp.vue";
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 
@@ -85,6 +87,7 @@ export default {
     CardAcomodacao,
     Accordion,
     AccordionTab,
+    FooterComp,
     BColxx,
     InputAcomodacoes
   },

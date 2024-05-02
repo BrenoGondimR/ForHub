@@ -5,12 +5,15 @@ import 'primeicons/primeicons.css'
 import BootstrapVue3 from 'bootstrap-vue-3';
 import PrimeVue from 'primevue/config';
 
+
 // Importar o arquivo CSS global
 import '@/assets/css/global.css';
 
 // Importar estilos do Bootstrap e BootstrapVue3
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+
+import 'mdb-vue-ui-kit/css/mdb.min.css';
 
 // Importar estilos do PrimeVue
 import 'primevue/resources/themes/aura-light-green/theme.css'
