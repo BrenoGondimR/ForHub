@@ -69,7 +69,8 @@ body {
     right: 10%;
     padding: 20px;
     border-radius: 8px;
-    font-size: 1.1em;
+    font-size: 25px;
+    z-index: 2; /* Garante que o texto esteja acima do overlay */
     text-align: center;
 }
 

@@ -29,8 +29,8 @@
       <!-- Coluna da Imagem com Texto -->
       <b-colxx md="6" class="login-image-container">
         <div class="overlay-text">
-          "Easy Manage"
-          <p>Na Easy Manage, transformamos complexidade em simplicidade. Para cada desafio diário de uma pousada, oferecemos uma solução fácil e eficaz.</p>
+          ForHub
+          <p>ForHub Texto exemplo falando sobre a empresa e sua ideia.</p>
         </div>
       </b-colxx>
     </b-row>
@@ -57,7 +57,7 @@ export default {
 <style scoped>
 .login-card {
   padding: 20px;
-  max-width: 400px;
+  max-width: 550px;
 }
 
 .login-image-container {
@@ -77,7 +77,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(169, 199, 255, 0.3); /* Cor azul com opacidade */
+  background-color: rgba(107, 122, 164, 0.5); /* Cor azul com opacidade */
   z-index: 1;
 }
 
