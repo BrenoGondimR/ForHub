@@ -1,6 +1,13 @@
 <template>
   <b-container fluid class="vh-100">
     <b-row class="h-100">
+       <!-- Coluna da Imagem com Texto -->
+       <b-colxx md="6" class="login-image-container">
+        <div class="overlay-text">
+          ForHub
+          <p>ForHub Texto exemplo falando sobre a empresa e sua ideia.</p>
+        </div>
+      </b-colxx>
       <!-- Coluna do Formulário de Login -->
       <b-colxx md="6" style="display: flex;">
         <b-card class="login-card shadow" style="width: 80% !important; margin: auto">
@@ -23,15 +30,8 @@
             ></b-form-input>
           </b-form-group>
           <b-button type="submit" variant="success" block style="width: 100%">Entrar</b-button>
+          <b-button class="mt-2"@click="redirectToRegister" variant="success" block style="width: 100%">Registrar</b-button>
         </b-card>
-      </b-colxx>
-
-      <!-- Coluna da Imagem com Texto -->
-      <b-colxx md="6" class="login-image-container">
-        <div class="overlay-text">
-          ForHub
-          <p>ForHub Texto exemplo falando sobre a empresa e sua ideia.</p>
-        </div>
       </b-colxx>
     </b-row>
   </b-container>
@@ -49,6 +49,9 @@ export default {
   methods: {
     login() {
       // Implementar lógica de login
+    },
+    redirectToRegister() {
+      this.$router.push('/register');
     }
   }
 };
