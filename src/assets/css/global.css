@@ -25,6 +25,15 @@ body {
     border: none !important;
 }
 
+.button-dados {
+    background: #1AA3E5 !important;
+    box-shadow: 0 4px 9px -4px #1AA3E5 !important;
+}
+
+.button-dados2 {
+    box-shadow: 0 4px 9px -4px #1AA3E5 !important;
+}
+
 .button-secondary{
     border-radius: 15px !important;
     background-color: #E5E8EB !important;
@@ -51,6 +60,11 @@ body {
     background-position: center center; /* Centraliza a imagem de fundo */
     height: 480px !important;
 }
+
+.text-title{
+    font-family: "Poppins", sans-serif;
+}
+
 
 #titulo-imagem{
     color: white;

@@ -18,6 +18,11 @@ import 'mdb-vue-ui-kit/css/mdb.min.css';
 // Importar estilos do PrimeVue
 import 'primevue/resources/themes/aura-light-green/theme.css'
 
+import FloatLabel from 'primevue/floatlabel';
+import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
+import Button from 'primevue/button';
+
 // Componente Col Personalizado
 import Colxx from "@/components/Common/Colxx.vue";
 
@@ -35,6 +40,11 @@ appInstance.use(router);
 
 // Registrar o componente Col Personalizado globalmente
 appInstance.component('b-colxx', Colxx);
+
+appInstance.component('FloatLabel', FloatLabel);
+appInstance.component('InputText', InputText);
+appInstance.component('Password', Password);
+appInstance.component('Button', Button);
 
 // Montar a aplicação
 appInstance.mount('#app');

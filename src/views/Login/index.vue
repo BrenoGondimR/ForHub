@@ -1,36 +1,34 @@
 <template>
   <b-container fluid class="vh-100">
     <b-row class="h-100">
-       <!-- Coluna da Imagem com Texto -->
-       <b-colxx md="6" class="login-image-container">
-        <div class="overlay-text">
-          ForHub
-          <p>ForHub Texto exemplo falando sobre a empresa e sua ideia.</p>
+      <!-- Coluna da Imagem com Texto -->
+      <b-colxx class="container-img" md="6" style="padding: 10px; height: 100% !important;">
+        <div class="login-image-container">
+          <img :src="'https://i.imgur.com/YB2cezI.jpg'" alt="Img" class="full-width-img">
+          <div class="overlay-text">
+            <h3>ForHub</h3>
+            <p>Texto exemplo falando sobre a empresa e sua ideia.</p>
+          </div>
         </div>
       </b-colxx>
       <!-- Coluna do Formulário de Login -->
       <b-colxx md="6" style="display: flex;">
         <b-card class="login-card shadow" style="width: 80% !important; margin: auto">
-          <h2 class="mb-4">Login</h2>
-          <b-form-group label="Usuário:" label-for="input-username">
-            <b-form-input
-                id="input-username"
-                v-model="username"
-                required
-                placeholder="Coloque seu usuário"
-            ></b-form-input>
+          <h2 class="mb-5 text-title">Login</h2>
+          <b-form-group style="margin-bottom: 35px !important;" label-for="input-username">
+            <FloatLabel>
+              <InputText style="width: 100%" id="username" v-model="username" required />
+              <label for="username">Username</label>
+            </FloatLabel>
           </b-form-group>
-          <b-form-group label="Senha:" label-for="input-password">
-            <b-form-input
-                id="input-password"
-                v-model="password"
-                type="password"
-                required
-                placeholder="Senha"
-            ></b-form-input>
+          <b-form-group label-for="input-password">
+            <FloatLabel>
+              <Password style="width: 100%" id="password" v-model="password" toggleMask />
+              <label for="password">Password</label>
+            </FloatLabel>
           </b-form-group>
-          <b-button type="submit" variant="success" block style="width: 100%">Entrar</b-button>
-          <b-button class="mt-2"@click="redirectToRegister" variant="success" block style="width: 100%">Registrar</b-button>
+          <b-button class="button-dados" type="submit" variant="success" block style="width: 100%">Entrar</b-button>
+          <b-button class="mt-2 button-dados2" @click="redirectToRegister" variant="success" block style="width: 100%; background: none; border: 1.5px solid #1AA3E5; color: #1AA3E5;">Registrar</b-button>
         </b-card>
       </b-colxx>
     </b-row>
@@ -38,6 +36,7 @@
 </template>
 
 <script>
+import FloatLabel from 'primevue/floatlabel';
 export default {
   data() {
     return {
@@ -63,14 +62,20 @@ export default {
   max-width: 550px;
 }
 
+:deep(.p-inputtext) {
+  width: 100% !important;
+}
+
 .login-image-container {
-  background-image: url('https://i.imgur.com/YB2cezI.jpg');
   background-size: cover;
   background-position: center;
   position: relative;
   border-radius: 20px;
-  margin: 20px auto;
-  overflow: hidden; /* Garante que o overlay não saia dos limites do border-radius */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .login-image-container::before {
@@ -84,5 +89,29 @@ export default {
   z-index: 1;
 }
 
+.full-width-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem cubra o espaço disponível sem perder proporção */
+}
 
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* Garante que o texto fique acima da imagem */
+  text-align: center; /* Centraliza o texto horizontalmente */
+  color: white; /* Muda a cor do texto para branco */
+}
+
+
+@media screen and (max-width: 768px) {
+  .container-img{
+    display: none;
+  }
+}
 </style>
