@@ -65,6 +65,83 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
+:deep(.p-calendar){
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 12px !important;
+}
+:deep(.p-inputtext) {
+    border-radius: 12px !important;
+}
+:deep(.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext) {
+    outline: 1px solid #1AA3E5 !important;
+}
+
+:deep(.p-dropdown:not(.p-disabled).p-focus) {
+    outline: 1px solid #1AA3E5 !important;
+}
+
+:deep(.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight) {
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight{
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+:deep(.p-datepicker table td.p-datepicker-today > span.p-highlight){
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+.p-datepicker table td.p-datepicker-today > span.p-highlight{
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+.p-datepicker table td > span:focus{
+    outline: 1px solid #1AA3E5 !important;
+}
+
+.p-datepicker table td > span.p-highlight{
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+.p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight{
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+    outline: 1px solid #1AA3E5 !important;
+}
+
+.p-datepicker .p-yearpicker .p-yearpicker-year.p-highlight{
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+    outline: 1px solid #1AA3E5 !important;
+}
+
+.container-filtros{
+    border-radius: 35px;
+    padding: 14px;
+    border: 1.5px solid lightgrey;
+}
+
+:deep(.p-dropdown) {
+    width: 100% !important;
+    height: 100% !important;
+    align-items: center !important;
+    border-radius: 12px !important;
+}
+:deep(.p-dropdown-items){
+    padding-left: 4px !important;
+}
+
+.p-dropdown-items-wrapper > ul {
+    padding-left: 4px !important;
+}
+
 
 #titulo-imagem{
     color: white;

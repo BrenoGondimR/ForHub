@@ -1,50 +1,134 @@
 <template>
-  <b-col lg="7" class="search-section">
+  <div class="search-section">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Pesquisar endereço, cidade ou região" aria-label="Search" style="border-radius: 12px; z-index: 1; padding: 0 30px;">
+      <input v-model="searchQuery" @input="filterLocations" type="text" class="form-control" :placeholder="placeholderText" aria-label="Search" style="border-radius: 12px; padding: 0 30px; height: 55px; z-index: 0;">
       <span class="input-group-append">
-        <button class="btn btn-primary" type="button">
-          <i class="pi pi-search" style="margin: auto"></i>
+        <button class="btn btn-primary" type="button" @click="searchAndNavigate">
+          <i class="pi pi-search"></i>
         </button>
       </span>
+      <ul v-if="filteredLocations.length" class="suggestions">
+        <li v-for="location in filteredLocations" :key="location" @click="selectLocation(location)">
+          {{ location }}
+        </li>
+      </ul>
     </div>
-  </b-col>
+  </div>
 </template>
+<script>
+export default {
+  props: {
+    placeholderText: {
+      type: String,
+      default: 'Pesquisar endereço, cidade ou região' // Valor padrão se nenhum for fornecido
+    }
+  },
+  data() {
+    return {
+      searchQuery: '',
+      allLocations: [
+        'Florianópolis - SC', 'Fortaleza - CE', 'Fortaleza, Ceará',
+        'Foz do Iguaçu - PR', 'Florença, Itália'
+      ],
+      filteredLocations: []
+    };
+  },
+  methods: {
+    filterLocations() {
+      if (!this.searchQuery) {
+        this.filteredLocations = [];
+        return;
+      }
 
+      this.filteredLocations = this.allLocations.filter((location) =>
+          location.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+    selectLocation(location) {
+      this.searchQuery = location;
+      this.filteredLocations = [];
+    },
+    searchAndNavigate() {
+      if (this.searchQuery) {
+        localStorage.setItem('lastSearchedLocation', this.searchQuery); // Salva a localização no localStorage
+        this.$router.push('/coworkings');
+      } else {
+        alert("Por favor, insira uma localização para pesquisar.");
+      }
+    }
+  }
+};
+</script>
 <style>
 .search-section {
   position: relative;
   margin: 0 auto;
+  width: 85%;
 }
 
 .input-group {
+  position: relative;
   border-radius: 10px;
-  height: 65px; /* Altura do input group */
-}
-
-.search-section .input-group .form-control {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  height: 100%; /* Faz o input ter a mesma altura do input group */
-}
-
-#input-search{
-  height: 65px;
-  background-color: white;
   margin: auto;
+}
+
+.input-group .form-control:focus-within {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.input-group .form-control {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+}
+
+.input-group-append {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
   display: flex;
-  width: 35px;
+  align-items: center;
+}
+
+.btn-primary {
   border: none;
-  z-index: 20;
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
+  background-color: transparent;
+  color: white;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 12px 12px !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.suggestions li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background: #c6d4ec !important; /* Cor de fundo ao passar o mouse */
+  color: #1AA3E5 !important; /* Cor do texto ao passar o mouse */
 }
 
 .search-section .input-group-append {
   position: absolute;
   right: 10px;
   top: 8px;
-  height: 100%; /* Faz o botão ter a mesma altura do input group */
+  height: 100%; /* Ajusta a altura do botão de pesquisa */
 }
 
 .search-section .btn-primary {
@@ -54,21 +138,15 @@
   border: none;
   background-color: #1AA3E5;
   display: flex;
+  bottom: 13px;
   z-index: 20;
+  top: -9px;
   align-items: center;
   justify-content: center;
-  height: 75%;
+  height: 73%;
   padding: 0 20px;
   margin-top: 8px;
   margin-right: 10px;
 }
 
-/* Ajustes para responsividade */
-@media (max-width: 992px) {
-  .search-section .input-group {
-    width: 100%;
-  }
-}
 </style>
-<script setup>
-</script>

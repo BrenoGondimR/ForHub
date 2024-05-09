@@ -8,7 +8,7 @@
       </b-row>
       <b-row>
         <b-colxx lg="12">
-          <input-acomodacoes></input-acomodacoes>
+          <input-acomodacoes :placeholder-text="'Pesquisar endereço, cidade ou região'"></input-acomodacoes>
         </b-colxx>
       </b-row>
     </b-card>

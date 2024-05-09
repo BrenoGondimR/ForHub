@@ -2,6 +2,7 @@ import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import Home from '../views/Home/index.vue'
 import Login from '../views/Login/index.vue'
 import Register from '../views/Register/index.vue'
+import Coworkings from '../views/Coworkings/index.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register
+  },
+  {
+    path: '/coworkings',
+    name: 'coworkings',
+    component: Coworkings
   },
   
 ]

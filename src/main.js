@@ -22,6 +22,8 @@ import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
+import Calendar from 'primevue/calendar';
+import Dropdown from 'primevue/dropdown';
 
 // Componente Col Personalizado
 import Colxx from "@/components/Common/Colxx.vue";
@@ -45,6 +47,8 @@ appInstance.component('FloatLabel', FloatLabel);
 appInstance.component('InputText', InputText);
 appInstance.component('Password', Password);
 appInstance.component('Button', Button);
+appInstance.component('Calendar', Calendar);
+appInstance.component('Dropdown', Dropdown);
 
 // Montar a aplicação
 appInstance.mount('#app');
