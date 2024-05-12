@@ -22,7 +22,14 @@
       </b-colxx>
     </b-colxx>
     <b-colxx lg="6">
-
+      <GoogleMap
+          :api-key="apiKeyGoogle"
+          style="width: 100%; height: 100%"
+          :center="center"
+          :zoom="15"
+      >
+        <Marker :options="{ position: center }" />
+      </GoogleMap>
     </b-colxx>
   </b-row>
   <FooterComp></FooterComp>
@@ -37,6 +44,7 @@ import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
 import escritorio2Img from "@/assets/img/escritorio2.jpg";
 import escritorio3Img from "@/assets/img/escritorio3.jpg";
 import escritorio4Img from "@/assets/img/escritorio4.jpg";
+import { GoogleMap, Marker } from 'vue3-google-map'
 
 export default {
   name: "home",
@@ -45,12 +53,15 @@ export default {
     CardCoworkings,
     FooterComp,
     BColxx,
+    GoogleMap,
+    Marker
   },
   data() {
     return {
       dates: null,
       selectedCity: null,
-
+      apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
+      center: { lat: 40.689247, lng: -74.044502 }, // Valor padrão, será atualizado
       filtros: [
         {name: 'Pesquisa', type: 'search', value: '', },
         {name: 'Data', type: 'date', value: '', placeholder: 'Período' },
@@ -65,10 +76,26 @@ export default {
     };
   },
   methods: {
-
+    getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+              this.center = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+            },
+            () => {
+              alert("Não foi possível obter a localização.");
+            }
+        );
+      } else {
+        alert("Geolocalização não é suportada por este navegador.");
+      }
+    }
   },
   mounted() {
-
+    this.getUserLocation();
   }
 };
 </script>

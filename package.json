@@ -8,6 +8,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.79",
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-3": "^0.5.1",
@@ -20,6 +21,7 @@
     "primevue": "^3.49.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue3-google-map": "^0.20.0",
     "vuetify": "^3.5.11"
   },
   "devDependencies": {
