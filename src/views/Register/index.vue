@@ -1,45 +1,30 @@
 <template>
   <b-container fluid class="vh-100">
     <b-row class="h-100">
-      <!-- Coluna da Imagem com Texto -->
       <b-colxx class="container-img" md="6" style="padding: 10px; height: 100% !important;">
         <div class="login-image-container">
-          <img :src="'https://i.imgur.com/YB2cezI.jpg'" alt="Img" class="full-width-img">
+          <img :src="'https://i.imgur.com/YB2cezI.jpg'" alt="Img" class="full-width-img" style="height: 100%; width: 100%;">
           <div class="overlay-text">
             <h3>ForHub</h3>
             <p>Texto exemplo falando sobre a empresa e sua ideia.</p>
           </div>
         </div>
       </b-colxx>
-      <!-- Coluna do Formulário de Registro -->
       <b-colxx md="6" style="display: flex;">
         <b-card class="login-card shadow" style="width: 80% !important; margin: auto">
           <h2 class="mb-5 text-title">Registro</h2>
-          <b-form-group style="margin-bottom: 35px !important;" label-for="input-username">
+          <b-form-group v-for="field in fields" :key="field.id" style="margin-bottom: 35px !important;" :label-for="field.id">
             <FloatLabel>
-              <InputText style="width: 100%" id="username" v-model="username" required />
-              <label for="username">Usuário</label>
+              <component :is="field.type"
+                         :style="{ width: '100%' }"
+                         :id="field.id"
+                         v-model="field.value"
+                         :required="field.required"
+                         :toggle-mask="field.toggleMask || false" />
+              <label :for="field.id">{{ field.label }}</label>
             </FloatLabel>
           </b-form-group>
-          <b-form-group style="margin-bottom: 35px !important;" label-for="input-email">
-            <FloatLabel>
-              <InputText style="width: 100%" id="email" v-model="email" required />
-              <label for="email">Email</label>
-            </FloatLabel>
-          </b-form-group>
-          <b-form-group style="margin-bottom: 35px !important;" label-for="input-password">
-            <FloatLabel>
-              <Password style="width: 100%" id="password" v-model="password" toggleMask required />
-              <label for="password">Senha</label>
-            </FloatLabel>
-          </b-form-group>
-          <b-form-group label-for="input-confirm-password">
-            <FloatLabel>
-              <Password style="width: 100%" id="confirm-password" v-model="confirmPassword" toggleMask required />
-              <label for="confirm-password">Confirmar senha</label>
-            </FloatLabel>
-          </b-form-group>
-          <b-button class="button-dados" type="submit" variant="success" block style="width: 100%">Registrar</b-button>
+          <b-button class="button-dados" type="button" @click="register" variant="success" block style="width: 100%">Registrar</b-button>
         </b-card>
       </b-colxx>
     </b-row>
@@ -50,19 +35,42 @@
 import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
+import {createAccount} from "@/views/Register/register_service";
 
 export default {
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
+      fields: [
+        { id: 'username', value: '', type: 'InputText', label: 'Usuário', required: true },
+        { id: 'email', value: '', type: 'InputText', label: 'Email', required: true },
+        { id: 'telefone', value: '', type: 'InputText', label: 'Telefone', required: true },
+        { id: 'cpf_cnpj', value: '', type: 'InputText', label: 'CPF/CNPJ', required: true },
+        { id: 'password', value: '', type: 'Password', label: 'Senha', required: true, toggleMask: true },
+        { id: 'confirm-password', value: '', type: 'Password', label: 'Confirmar senha', required: true, toggleMask: true }
+      ]
     };
   },
   methods: {
-    login() {
-      // Implementar lógica de registro
+    register() {
+      if (this.fields[5].value !== this.fields[4].value) {
+        alert("As senhas não coincidem.");
+        return;
+      }
+      let userData = {
+        Nome: this.fields[0].value,
+        Email: this.fields[1].value,
+        TelefoneWpp: this.fields[2].value,
+        CpfCNPJ: this.fields[3].value,
+        Senha: this.fields[4].value
+      };
+      createAccount(userData)
+          .then(() => {
+            this.$router.push("/home");
+          })
+          .catch(error => {
+            console.error("Falha ao registrar:", error);
+            alert("Erro ao registrar. Verifique os dados e tente novamente.");
+          });
     }
   }
 };

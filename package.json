@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.79",
+    "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-3": "^0.5.1",
