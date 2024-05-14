@@ -4,6 +4,7 @@ import router from './router';
 import 'primeicons/primeicons.css'
 import BootstrapVue3 from 'bootstrap-vue-3';
 import PrimeVue from 'primevue/config';
+import Paginator from 'primevue/paginator';
 
 
 // Importar o arquivo CSS global
@@ -49,6 +50,7 @@ appInstance.component('Password', Password);
 appInstance.component('Button', Button);
 appInstance.component('Calendar', Calendar);
 appInstance.component('Dropdown', Dropdown);
+appInstance.component('Paginator', Paginator);
 
 // Montar a aplicação
 appInstance.mount('#app');

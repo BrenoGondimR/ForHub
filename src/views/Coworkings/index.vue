@@ -20,6 +20,9 @@
             :description="acomodacao.description"
         />
       </b-colxx>
+      <b-colxx lg="12">
+        <Paginator class="mt-3" :rows="10" :totalRecords="120"></Paginator>
+      </b-colxx>
     </b-colxx>
     <b-colxx lg="6">
       <GoogleMap
