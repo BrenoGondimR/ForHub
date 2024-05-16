@@ -26,6 +26,11 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import Rating from 'primevue/rating';
+import Card from 'primevue/card';
+import Galleria from 'primevue/galleria';
+
+
 import InputSwitch from 'primevue/inputswitch';
 
 
@@ -54,6 +59,9 @@ appInstance.component('Button', Button);
 appInstance.component('Calendar', Calendar);
 appInstance.component('Dropdown', Dropdown);
 appInstance.component('Paginator', Paginator);
+appInstance.component('Rating', Rating);
+appInstance.component('Card', Card);
+appInstance.component('Galleria', Galleria);
 appInstance.component('InputSwitch', InputSwitch);
 
 
