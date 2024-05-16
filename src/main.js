@@ -25,6 +25,11 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import Rating from 'primevue/rating';
+import Card from 'primevue/card';
+import Galleria from 'primevue/galleria';
+
+
 
 // Componente Col Personalizado
 import Colxx from "@/components/Common/Colxx.vue";
@@ -51,6 +56,9 @@ appInstance.component('Button', Button);
 appInstance.component('Calendar', Calendar);
 appInstance.component('Dropdown', Dropdown);
 appInstance.component('Paginator', Paginator);
+appInstance.component('Rating', Rating);
+appInstance.component('Card', Card);
+appInstance.component('Galleria', Galleria);
 
 // Montar a aplicação
 appInstance.mount('#app');
