@@ -7,6 +7,7 @@ import PrimeVue from 'primevue/config';
 import Paginator from 'primevue/paginator';
 
 
+
 // Importar o arquivo CSS global
 import '@/assets/css/global.css';
 
@@ -25,6 +26,8 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import InputSwitch from 'primevue/inputswitch';
+
 
 // Componente Col Personalizado
 import Colxx from "@/components/Common/Colxx.vue";
@@ -51,6 +54,8 @@ appInstance.component('Button', Button);
 appInstance.component('Calendar', Calendar);
 appInstance.component('Dropdown', Dropdown);
 appInstance.component('Paginator', Paginator);
+appInstance.component('InputSwitch', InputSwitch);
+
 
 // Montar a aplicação
 appInstance.mount('#app');

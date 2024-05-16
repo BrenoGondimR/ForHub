@@ -3,6 +3,7 @@ import Home from '../views/Home/index.vue'
 import Login from '../views/Login/index.vue'
 import Register from '../views/Register/index.vue'
 import Coworkings from '../views/Coworkings/index.vue'
+import Planos from '@/views/Planos/index.vue'
 
 const routes = [
   {
@@ -25,7 +26,12 @@ const routes = [
     name: 'coworkings',
     component: Coworkings
   },
-  
+    {
+    path: '/planos',
+    name: 'planos',
+    component: Planos
+  },
+
 ]
 
 const router = createRouter({
