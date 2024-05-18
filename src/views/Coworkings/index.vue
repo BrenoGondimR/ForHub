@@ -37,7 +37,7 @@
             v-for="(marker, index) in markers"
             :key="index"
             :options="{ position: marker.position }"
-            @click="showInfoWindow(index)"
+            @mouseover="showInfoWindow(index)"
         >
           <InfoWindow v-if="marker.showInfo">
             <div>

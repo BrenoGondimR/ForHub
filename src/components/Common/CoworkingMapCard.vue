@@ -1,10 +1,10 @@
 <template>
-  <Card style="width: 25rem; overflow: hidden">
+  <Card style="width: 20rem; overflow: hidden">
     <template #header>
       <Galleria :value="images" :numVisible="5" containerStyle="max-width: 640px"
                 :showThumbnails="false" :showIndicators="true" :changeItemOnIndicatorHover="true">
         <template #item="slotProps">
-          <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block" />
+          <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block; max-height: 200px;" />
         </template>
       </Galleria>
     </template>
