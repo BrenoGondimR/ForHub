@@ -5,6 +5,7 @@
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">{{ price }}</p>
       <p class="card-text description">{{ description }}</p>
+      <b-button v-if="buttonInfo === true" class="button-dados" type="button" @click="showInfo(id)" variant="success" block style="width: 100%; margin-top: 35px;">Saiba Mais</b-button>
     </div>
   </div>
 </template>
@@ -21,12 +22,25 @@ export default {
       type: String,
       required: true
     },
+    buttonInfo: {
+      type: Boolean,
+      required: true
+    },
     price: {
+      type: String,
+      required: true
+    },
+    id: {
       type: String,
       required: true
     },
     description: {
       type: String,
+    }
+  },
+  methods: {
+    showInfo(id){
+      this.$router.push(`/coworkinginfo/${id}`);
     }
   }
 };

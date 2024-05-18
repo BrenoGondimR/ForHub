@@ -4,6 +4,7 @@ import Login from '../views/Login/index.vue'
 import Register from '../views/Register/index.vue'
 import Coworkings from '../views/Coworkings/index.vue'
 import Planos from '@/views/Planos/index.vue'
+import CoworkingInfo from '@/views/CoworkingsInfo/index.vue'
 
 const routes = [
   {
@@ -26,10 +27,15 @@ const routes = [
     name: 'coworkings',
     component: Coworkings
   },
-    {
+  {
     path: '/planos',
     name: 'planos',
     component: Planos
+  },
+  {
+    path: '/coworkinginfo/:id',
+    name: 'coworkinginfo',
+    component: CoworkingInfo
   },
 
 ]
