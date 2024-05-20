@@ -74,14 +74,18 @@ body {
     user-select: none;
     opacity: unset !important;
     border-radius: 50% !important;
-    top: -2px !important;
-    right: -2px !important;
+    top: 5px !important;
+    right: 5px !important;
     width: 30px;
     height: 30px;
 }
 
 .p-galleria-indicators{
     margin-bottom: 0px !important;
+}
+
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+    color: #eead2d !important;
 }
 
 .p-card .p-card-body{

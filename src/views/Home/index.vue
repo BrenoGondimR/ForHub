@@ -18,7 +18,10 @@
             :image="acomodacao.imagem"
             :title="acomodacao.title"
             :price="acomodacao.price"
+            :rating="acomodacao.rating"
+            :is-rating="true"
             :description="acomodacao.description"
+            @click="showInfo(acomodacao.id)"
         />
       </b-colxx>
       <b-colxx lg="12" class="mt-5">
@@ -28,11 +31,13 @@
           você pode encontrar o local perfeito para o seu próximo evento, seja uma reunião de diretoria,
           conferência ou lançamento de produto.</p>
       </b-colxx>
-      <b-row style="padding: 0 50px;">
+      <b-row class="row-class" style="">
         <b-colxx class="mt-4" lg="4" v-for="(acomodacao, index) in detalhesForHub" :key="index" style="">
           <card-acomodacao
               :image="acomodacao.imagem"
               :title="acomodacao.title"
+              :rating="acomodacao.title"
+              :is-rating="false"
               :price="acomodacao.price"
           />
         </b-colxx>
@@ -96,21 +101,23 @@ export default {
       tituloCompleto: "Encontre o espaço perfeito para seus eventos e reuniões",
       tituloAnimado: "",
       acomodacoesPatrocinadas: [
-        { imagem: escritorioMeirelesImg, title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { imagem: escritorio2Img, title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { imagem: escritorio3Img, title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { imagem: escritorio4Img, title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: 1, rating: 5, imagem: escritorioMeirelesImg, title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: 2, rating: 4, imagem: escritorio2Img, title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: 3, rating: 5, imagem: escritorio3Img, title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: 4, rating: 4,imagem: escritorio4Img, title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
       ],
       detalhesForHub: [
         { imagem: reservas, title: 'Reserve Sob Demanda', price: 'Reserve espaços de trabalho e salas de reunião em todo o mundo'},
         { imagem: estenderequipe, title: 'Estenda Sua Equipe', price: 'Economize tempo e dinheiro com um plano de membros que oferece acesso ilimitado a espaços de coworking ao redor do mundo'},
         { imagem: eventos, title: 'Planeje Eventos', price: 'Encontre o local perfeito para o seu próximo evento, seja uma reunião de diretoria, conferência ou lançamento de produto'},
       ],
-      typingSpeed: 75 // Velocidade de digitação em milissegundos
+      typingSpeed: 60 // Velocidade de digitação em milissegundos
     };
   },
   methods: {
-
+    showInfo(id){
+      this.$router.push(`/coworkinginfo/${id}`);
+    },
   },
   mounted() {
     let i = 0;
@@ -133,5 +140,17 @@ export default {
 ::v-deep .p-accordion .p-accordion-header a {
   text-decoration: none !important;
   color: black;
+}
+
+@media screen and (min-width: 992px) {
+  .row-class{
+    padding: 0 50px;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  #titulo-imagem{
+    font-size: 30px
+  }
 }
 </style>

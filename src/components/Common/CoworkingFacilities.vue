@@ -7,17 +7,56 @@
         <span>{{ facility.name }}</span>
       </div>
     </div>
+    <div class="map-container">
+      <GoogleMap
+          :api-key="apiKeyGoogle"
+          style="width: 100%; height: 400px;"
+          :center="center"
+          :zoom="15"
+      >
+        <Marker
+            v-for="(marker, index) in markers"
+            :key="index"
+            :options="{ position: marker.position }"
+        >
+        </Marker>
+      </GoogleMap>
+    </div>
   </div>
 </template>
 
 <script>
+
+import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
+import CoworkingMapCard from './CoworkingMapCard';
+import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
+import escritorio2Img from "@/assets/img/escritorio2.jpg";
+
 export default {
   name: 'CoworkingFacilities',
+  components: {
+    GoogleMap,
+    Marker,
+    InfoWindow,
+    CoworkingMapCard
+  },
   props: {
     facilities: {
       type: Array,
       required: true
     }
+  },
+  data() {
+    return {
+      apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
+      center: { lat: -23.55052, lng: -46.633308 },
+      markers: [
+        { title: 'Escritório Meireles', position: { lat: -23.55052, lng: -46.633308 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorioMeirelesImg, alt: 'Escritório Meireles' }, { itemImageSrc: escritorio2Img, alt: 'Escritório Aldeota' }], description: 'Escritório em São Paulo' },
+      ]
+    }
+  },
+  methods: {
+
   }
 };
 </script>
@@ -25,6 +64,18 @@ export default {
 <style scoped>
 .facilities {
   margin-top: 20px;
+}
+
+.map-container {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+}
+
+:deep(.mapdiv) {
+  border-radius: 12px;
 }
 
 h2 {

@@ -4,6 +4,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">{{ price }}</p>
+      <Rating v-if="isRating === true" v-model="ratingValue" readonly :cancel="false" style="margin-bottom: 5px" />
       <p class="card-text description">{{ description }}</p>
     </div>
   </div>
@@ -25,8 +26,21 @@ export default {
       type: String,
       required: true
     },
+    rating: {
+      type: Number,
+      required: false
+    },
+    isRating: {
+      type: Boolean,
+      required: true
+    },
     description: {
       type: String,
+    }
+  },
+  data(){
+    return{
+      ratingValue: this.rating,
     }
   }
 };
@@ -49,7 +63,7 @@ export default {
 .custom-card img {
   width: 100%; /* Ensures the image covers the width of the card */
   height: auto; /* Keeps the aspect ratio of the image */
-  max-height: 180px;
+  max-height: 195px;
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
   min-height: 180px;
@@ -75,5 +89,28 @@ export default {
 .custom-card .description {
   font-size: 0.875rem; /* Smaller text for the description */
   color: #888888;
+}
+
+@media screen and (min-height: 1091px) and (max-width: 1220px) {
+  .custom-card img{
+    max-height: 217px;
+  }
+}
+@media screen and (min-height: 1091px) {
+  .custom-card img{
+    max-height: 240px;
+  }
+}
+
+@media screen and (min-height: 1068px) {
+  .custom-card img{
+    max-height: 260px;
+  }
+}
+
+@media screen and (min-height: 991px) {
+  .custom-card img{
+    max-height: 195px;
+  }
 }
 </style>

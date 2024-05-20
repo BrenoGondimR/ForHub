@@ -29,6 +29,7 @@ import Dropdown from 'primevue/dropdown';
 import Rating from 'primevue/rating';
 import Card from 'primevue/card';
 import Galleria from 'primevue/galleria';
+import InputNumber from 'primevue/inputnumber';
 
 
 import InputSwitch from 'primevue/inputswitch';

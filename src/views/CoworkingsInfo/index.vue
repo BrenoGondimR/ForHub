@@ -16,6 +16,7 @@ import escritorio2Img from '@/assets/img/escritorio2.jpg';
 import escritorio3Img from '@/assets/img/escritorio3.jpg';
 import escritorio4Img from '@/assets/img/escritorio4.jpg';
 
+
 export default {
   name: 'CoworkingInfoPage',
   components: {
@@ -39,7 +40,8 @@ export default {
         availability: {
           date: '23/04/2024',
           time: '08:00 AM'
-        }
+        },
+        local: { lat: -23.55052, lng: -46.633308 }
       },
       facilities: [
         { icon: '🪑', name: '18' },
@@ -51,6 +53,7 @@ export default {
       reviews: [
         {
           id: 1,
+          idLocal: 1,
           user: {
             name: 'Dave Hudson',
             avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
@@ -61,6 +64,7 @@ export default {
         },
         {
           id: 2,
+          idLocal: 2,
           user: {
             name: 'Jane Doe',
             avatar: 'https://randomuser.me/api/portraits/women/44.jpg'

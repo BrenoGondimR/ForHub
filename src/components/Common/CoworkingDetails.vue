@@ -13,20 +13,20 @@
       </div>
       <div class="availability">
         <div class="date-time-picker">
-          <label>Data de Início</label>
-          <input type="date" v-model="startDate" />
+          <label for="inputDateStart" class="font-bold block mb-2">Data de Início</label>
+          <Calendar inputId="inputDateStart" v-model="startDate" dateFormat="dd/mm/yy" showIcon iconDisplay="input" />
         </div>
         <div class="date-time-picker">
-          <label>Hora de Início</label>
-          <input type="time" v-model="startTime" />
+          <label for="inputTimeStart" class="font-bold block mb-2">Hora de Início</label>
+          <Calendar inputId="inputTimeStart" id="calendar-timeonly" v-model="startTime" timeOnly showIcon iconDisplay="input" :icon="'pi pi-clock cursor-pointer'"/>
         </div>
         <div class="date-time-picker">
-          <label>Hora de Término</label>
-          <input type="time" v-model="endTime" />
+          <label for="inputTimeEnd" class="font-bold block mb-2">Hora de Termino</label>
+          <Calendar inputId="inputTimeEnd" id="calendar-timeonly" v-model="endTime" timeOnly showIcon iconDisplay="input" :icon="'pi pi-clock cursor-pointer'"/>
         </div>
         <div v-if="addMoreDays" class="date-time-picker">
-          <label>Data de Término</label>
-          <input type="date" v-model="endDate" />
+          <label for="inputDateStart" class="font-bold block mb-2">Data de Término</label>
+          <Calendar inputId="inputDateStart" v-model="endDate" dateFormat="dd/mm/yy" showIcon iconDisplay="input" />
         </div>
         <div class="add-day">
           <label>
@@ -153,6 +153,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
+  max-height: 560px;
 }
 
 h1 {

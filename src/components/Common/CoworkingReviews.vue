@@ -40,13 +40,26 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'CoworkingReviews',
+  components: {
+
+  },
   props: {
     reviews: {
       type: Array,
       required: true
     }
+  },
+  data() {
+    return {
+
+    };
+  },
+  methods: {
+
   },
   computed: {
     averageRating() {
@@ -72,6 +85,8 @@ export default {
   margin-top: 20px;
 }
 
+
+
 .average-rating {
   text-align: center;
   margin-bottom: 20px;
@@ -83,6 +98,8 @@ export default {
   justify-content: center;
   gap: 10px;
 }
+
+
 
 .score {
   font-size: 3rem;

@@ -5,6 +5,7 @@
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">{{ price }}</p>
       <p class="card-text description">{{ description }}</p>
+      <Rating v-model="ratingValue" readonly :cancel="false" />
       <b-button v-if="buttonInfo === true" class="button-dados" type="button" @click="showInfo(id)" variant="success" block style="width: 100%; margin-top: 30px;">Saiba Mais</b-button>
     </div>
   </div>
@@ -30,6 +31,10 @@ export default {
       type: String,
       required: true
     },
+    rating: {
+      type: Number,
+      required: true
+    },
     id: {
       type: String,
       required: true
@@ -37,6 +42,11 @@ export default {
     description: {
       type: String,
     }
+  },
+  data() {
+    return {
+      ratingValue: this.rating,
+    };
   },
   methods: {
     showInfo(id){
@@ -64,7 +74,7 @@ export default {
 .custom-card img {
   width: 100%; /* Ensures the image covers the width of the card */
   height: auto; /* Keeps the aspect ratio of the image */
-  max-height: 180px;
+  max-height: 195px;
   min-width: 200px;
   max-width: 300px;
   border-top-right-radius: 12px;
