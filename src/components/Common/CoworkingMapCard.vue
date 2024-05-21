@@ -7,6 +7,15 @@
           <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block; max-height: 200px;" />
         </template>
       </Galleria>
+      <Galleria :value="images" :responsiveOptions="responsiveOptions" :numVisible="5" :circular="true" containerStyle="max-width: 640px"
+                :showItemNavigators="true" :showThumbnails="false">
+        <template #item="slotProps">
+          <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; display: block;" />
+        </template>
+        <template #thumbnail="slotProps">
+          <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" style="display: block;" />
+        </template>
+      </Galleria>
     </template>
     <template #title>{{ title }}</template>
     <template #subtitle><Rating v-model="rating" readonly :cancel="false" /></template>

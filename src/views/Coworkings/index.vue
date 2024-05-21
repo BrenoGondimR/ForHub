@@ -14,7 +14,7 @@
     <b-colxx lg="6">
       <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
         <card-coworkings
-            :image="acomodacao.imagem"
+            :images="acomodacao.imagens"
             :title="acomodacao.title"
             :price="acomodacao.price"
             :id="acomodacao.id"
@@ -101,10 +101,10 @@ export default {
         },
       ],
       acomodacoesPatrocinadas: [
-        { id: '1', rating: 5, imagem: escritorioMeirelesImg, title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '2', rating: 4, imagem: escritorio2Img, title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '3', rating: 2, imagem: escritorio3Img, title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '4', rating: 4, imagem: escritorio4Img, title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: '1', rating: 5, imagens: [escritorioMeirelesImg, escritorio2Img], title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: '2', rating: 4, imagens: [escritorio2Img, escritorio3Img], title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: '3', rating: 2, imagens: [escritorio3Img, escritorio4Img], title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
+        { id: '4', rating: 4, imagens: [escritorio4Img, escritorioMeirelesImg], title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
       ],
       markers: [
         { title: 'Escritório Meireles', position: { lat: -23.55052, lng: -46.633308 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorioMeirelesImg, alt: 'Escritório Meireles' }, { itemImageSrc: escritorio2Img, alt: 'Escritório Aldeota' }], description: 'Escritório em São Paulo' },
