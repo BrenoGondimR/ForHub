@@ -16,12 +16,16 @@
           <b-form-group v-for="field in fields" :key="field.id" style="margin-bottom: 35px !important;" :label-for="field.id">
             <FloatLabel>
               <component :is="field.type"
+                         :class="{ 'is-invalid': field.error }"
+                         aria-describedby="username-help"
                          :style="{ width: '100%' }"
                          :id="field.id"
                          v-model="field.value"
+                         @input="clearError(field.id)"
                          :required="field.required"
                          :toggle-mask="field.toggleMask || false" />
               <label :for="field.id">{{ field.label }}</label>
+              <small id="username-help" v-if="field.error" class="text-danger">{{ field.error }}</small>
             </FloatLabel>
           </b-form-group>
           <b-button class="button-dados" type="button" @click="register" variant="success" block style="width: 100%">Registrar</b-button>
@@ -35,27 +39,61 @@
 import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
-import {createAccount} from "@/views/Register/register_service";
+import { createAccount } from "@/views/Register/register_service";
 
 export default {
   data() {
     return {
       fields: [
-        { id: 'username', value: '', type: 'InputText', label: 'Usuário', required: true },
-        { id: 'email', value: '', type: 'InputText', label: 'Email', required: true },
-        { id: 'telefone', value: '', type: 'InputText', label: 'Telefone', required: true },
-        { id: 'cpf_cnpj', value: '', type: 'InputText', label: 'CPF/CNPJ', required: true },
-        { id: 'password', value: '', type: 'Password', label: 'Senha', required: true, toggleMask: true },
-        { id: 'confirm-password', value: '', type: 'Password', label: 'Confirmar senha', required: true, toggleMask: true }
+        { id: 'username', value: '', type: 'InputText', label: 'Usuário', required: true, error: '' },
+        { id: 'email', value: '', type: 'InputText', label: 'Email', required: true, error: '' },
+        { id: 'telefone', value: '', type: 'InputText', label: 'Telefone', required: true, error: '' },
+        { id: 'cpf_cnpj', value: '', type: 'InputText', label: 'CPF/CNPJ', required: true, error: '' },
+        { id: 'password', value: '', type: 'Password', label: 'Senha', required: true, toggleMask: true, error: '' },
+        { id: 'confirm-password', value: '', type: 'Password', label: 'Confirmar senha', required: true, toggleMask: true, error: '' }
       ]
     };
   },
   methods: {
+    validatePassword(password) {
+      const minLength = 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      if (password.length < minLength) {
+        return "A senha deve ter pelo menos 8 caracteres.";
+      }
+      if (!hasUpperCase) {
+        return "A senha deve conter pelo menos uma letra maiúscula.";
+      }
+      if (!hasSpecialChar) {
+        return "A senha deve conter pelo menos um caractere especial.";
+      }
+      return null;
+    },
+    clearErrors() {
+      this.fields.forEach(field => field.error = '');
+    },
+    clearError(fieldId) {
+      const field = this.fields.find(f => f.id === fieldId);
+      if (field) {
+        field.error = '';
+      }
+    },
     register() {
+      this.clearErrors();
+
       if (this.fields[5].value !== this.fields[4].value) {
-        alert("As senhas não coincidem.");
+        this.fields[5].error = "As senhas não coincidem.";
         return;
       }
+
+      const passwordError = this.validatePassword(this.fields[4].value);
+      if (passwordError) {
+        this.fields[4].error = passwordError;
+        return;
+      }
+
       let userData = {
         Nome: this.fields[0].value,
         Email: this.fields[1].value,
@@ -63,13 +101,24 @@ export default {
         CpfCNPJ: this.fields[3].value,
         Senha: this.fields[4].value
       };
+
       createAccount(userData)
           .then(() => {
             this.$router.push("/home");
           })
           .catch(error => {
             console.error("Falha ao registrar:", error);
-            alert("Erro ao registrar. Verifique os dados e tente novamente.");
+            if (error.response && error.response.data.errors) {
+              const errors = error.response.data.errors;
+              for (const key in errors) {
+                const field = this.fields.find(f => f.id === key);
+                if (field) {
+                  field.error = errors[key];
+                }
+              }
+            } else {
+              alert("Erro ao registrar. Verifique os dados e tente novamente.");
+            }
           });
     }
   }
@@ -80,6 +129,11 @@ export default {
 .login-card {
   padding: 20px;
   max-width: 550px;
+}
+
+.is-invalid :deep(.p-inputtext),
+.is-invalid :deep(.p-password) {
+  border: 1.5px solid #FE3232 !important;
 }
 
 :deep(.p-inputtext), :deep(.p-password) {
@@ -105,8 +159,17 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(107, 122, 164, 0.5); /* Cor azul com opacidade */
+  background-color: rgba(107, 122, 164, 0.5);
   z-index: 1;
+}
+
+.full-width-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
 }
 
 .overlay-text {
@@ -114,13 +177,13 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2; /* Garante que o texto fique acima da imagem */
-  text-align: center; /* Centraliza o texto horizontalmente */
-  color: white; /* Muda a cor do texto para branco */
+  z-index: 2;
+  text-align: center;
+  color: white;
 }
 
 @media screen and (max-width: 768px) {
-  .container-img{
+  .container-img {
     display: none;
   }
 }

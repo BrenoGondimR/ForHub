@@ -8,14 +8,17 @@
         </button>
       </span>
       <ul v-if="filteredLocations.length" class="suggestions">
-        <li v-for="location in filteredLocations" :key="location" @click="selectLocation(location)">
+        <li v-for="location in filteredLocations.slice(0, 10)" :key="location" @click="selectLocation(location)">
           {{ location }}
         </li>
       </ul>
     </div>
   </div>
 </template>
+
 <script>
+import axios from 'axios';
+
 export default {
   props: {
     placeholderText: {
@@ -26,14 +29,22 @@ export default {
   data() {
     return {
       searchQuery: '',
-      allLocations: [
-        'Florianópolis - SC', 'Fortaleza - CE', 'Fortaleza, Ceará',
-        'Foz do Iguaçu - PR', 'Florença, Itália'
-      ],
+      allLocations: [],
       filteredLocations: []
     };
   },
+  created() {
+    this.fetchLocations();
+  },
   methods: {
+    async fetchLocations() {
+      try {
+        const response = await axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios');
+        this.allLocations = response.data.map(municipio => `${municipio.nome} - ${municipio.microrregiao.mesorregiao.UF.sigla}`);
+      } catch (error) {
+        console.error('Erro ao buscar localidades:', error);
+      }
+    },
     filterLocations() {
       if (!this.searchQuery) {
         this.filteredLocations = [];
@@ -59,6 +70,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .search-section {
   position: relative;
@@ -112,6 +124,8 @@ export default {
   border-radius: 0 0 12px 12px !important;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   z-index: 10;
+  max-height: 300px; /* Ajuste a altura máxima conforme necessário */
+  overflow-y: auto; /* Adiciona rolagem vertical se necessário */
 }
 
 .suggestions li {
@@ -148,5 +162,4 @@ export default {
   margin-top: 8px;
   margin-right: 10px;
 }
-
 </style>

@@ -7,4 +7,5 @@ if (window.location.host === "easymanagepro.com.br") {
 }
 
 
-export const createUserUrl = apisUrl + 'users/';
+export const createUserUrl = apisUrl + 'users';
+export const loginUrl = apisUrl + 'login';

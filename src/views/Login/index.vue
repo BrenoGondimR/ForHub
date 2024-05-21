@@ -15,19 +15,21 @@
       <b-colxx md="6" style="display: flex;">
         <b-card class="login-card shadow" style="width: 80% !important; margin: auto">
           <h2 class="mb-5 text-title">Login</h2>
-          <b-form-group style="margin-bottom: 35px !important;" label-for="input-username">
-            <FloatLabel>
-              <InputText style="width: 100%" id="username" v-model="username" required />
-              <label for="username">Username</label>
-            </FloatLabel>
-          </b-form-group>
-          <b-form-group label-for="input-password">
-            <FloatLabel>
-              <Password style="width: 100%" id="password" v-model="password" toggleMask />
-              <label for="password">Password</label>
-            </FloatLabel>
-          </b-form-group>
-          <b-button class="button-dados" type="submit" variant="success" block style="width: 100%">Entrar</b-button>
+          <b-form @submit.prevent="login">
+            <b-form-group style="margin-bottom: 35px !important;" label-for="input-username">
+              <FloatLabel>
+                <InputText style="width: 100%" id="username" v-model="username" required />
+                <label for="username">Username</label>
+              </FloatLabel>
+            </b-form-group>
+            <b-form-group label-for="input-password">
+              <FloatLabel>
+                <Password style="width: 100%" id="password" v-model="password" toggleMask />
+                <label for="password">Password</label>
+              </FloatLabel>
+            </b-form-group>
+            <b-button class="button-dados" type="submit" variant="success" block style="width: 100%">Entrar</b-button>
+          </b-form>
           <b-button class="mt-2 button-dados2" @click="redirectToRegister" variant="success" block style="width: 100%; background: none; border: 1.5px solid #1AA3E5; color: #1AA3E5;">Registrar</b-button>
         </b-card>
       </b-colxx>
@@ -36,18 +38,33 @@
 </template>
 
 <script>
+import axios from 'axios';
 import FloatLabel from 'primevue/floatlabel';
+import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
+import {userLogin} from "@/views/Login/login_service";
+
 export default {
   data() {
     return {
       username: '',
-      password: '',
-      establishment: ''
+      password: ''
     };
   },
   methods: {
     login() {
-      // Implementar lógica de login
+      const userData = {
+        nome: this.username,
+        senha: this.password
+      };
+      userLogin(userData)
+          .then(() => {
+            this.$router.push("/dashboard");
+          })
+          .catch(error => {
+            console.error("Falha ao Logar:", error);
+            alert("Erro ao Logar. Verifique os dados e tente novamente.");
+          });
     },
     redirectToRegister() {
       this.$router.push('/register');
@@ -85,7 +102,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(107, 122, 164, 0.5); /* Cor azul com opacidade */
+  background-color: rgba(107, 122, 164, 0.5);
   z-index: 1;
 }
 
@@ -95,7 +112,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100% !important;
-  object-fit: cover; /* Garante que a imagem cubra o espaço disponível sem perder proporção */
+  object-fit: cover;
 }
 
 .overlay-text {
@@ -103,14 +120,13 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2; /* Garante que o texto fique acima da imagem */
-  text-align: center; /* Centraliza o texto horizontalmente */
-  color: white; /* Muda a cor do texto para branco */
+  z-index: 2;
+  text-align: center;
+  color: white;
 }
 
-
 @media screen and (max-width: 768px) {
-  .container-img{
+  .container-img {
     display: none;
   }
 }

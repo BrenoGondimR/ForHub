@@ -7,6 +7,11 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
+.logo{
+    width: 35px;
+    height: 35px;
+}
+
 .text-logo{
     margin-bottom: 0px;
     font-size: 17px;
@@ -32,6 +37,91 @@ body {
 
 .button-dados2 {
     box-shadow: 0 4px 9px -4px #1AA3E5 !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight{
+    border-radius: 20px;
+    background: #c6d4ec !important;
+    color: #1AA3E5 !important;
+}
+
+.p-rating .p-rating-item.p-focus{
+    outline: none !important;
+}
+
+.p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button{
+    border-radius: 50% !important;
+}
+
+.p-galleria .p-galleria-indicators .p-galleria-indicator button{
+    border-radius: 50% !important;
+}
+
+.gm-style .gm-style-iw-c{
+    padding: 0 !important;
+}
+
+.gm-style .gm-style-iw-d{
+    overflow: auto !important;
+}
+
+.gm-ui-hover-effect{
+    background: none;
+    display: block;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    text-transform: none;
+    appearance: none;
+    position: absolute;
+    cursor: pointer;
+    background: white !important;
+    user-select: none;
+    opacity: unset !important;
+    border-radius: 50% !important;
+    top: 5px !important;
+    right: 5px !important;
+    width: 30px;
+    height: 30px;
+}
+
+.p-galleria-indicators{
+    margin-bottom: 0px !important;
+}
+
+.gm-style-mtc-bbw{
+    display: none !important;
+}
+
+.gm-svpc{
+    display: none !important;
+}
+
+.gmnoscreen{
+    display: none !important;
+}
+.gm-style-cc{
+    display: none !important;
+}
+
+.gmnoprint{
+    top: 29px !important;
+}
+
+.p-sidebar-mask.p-component-overlay{
+    pointer-events: none !important;
+}
+
+.p-component-overlay-enter{
+    animation: none!important;
+}
+
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+    color: #eead2d !important;
+}
+
+.p-card .p-card-body{
+    padding-top: 0.5rem;
 }
 
 .button-secondary{
