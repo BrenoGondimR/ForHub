@@ -1,9 +1,15 @@
 <template>
   <b-row class="support-header">
-      <b-colxx lg="12" class="text-center">
-        <h2 class="support-greeting">Oi, como posso ajudar?</h2>
-      </b-colxx>
-    </b-row>
+    <b-colxx lg="12" class="text-center">
+      <h2 class="support-greeting">Oi, como posso ajudar?</h2>
+    </b-colxx>
+  </b-row>
+  <b-row style="margin-top: -50px;">
+    <b-colxx v-for="(card, index) in supportCards" :key="index" lg="4" class="text-center" style="justify-content: center; display: flex;">
+      <SupportCard :iconClass="card.iconClass" :text="card.text" @card-clicked="handleCardClick(index)"/>
+    </b-colxx>
+  </b-row>
+
   <b-container class="support-container">
     <b-row class="support-search mt-4">
       <b-colxx lg="12">
@@ -12,8 +18,7 @@
     </b-row>
     <b-row class="support-content mt-5">
       <b-colxx lg="12">
-        <Accordion :activeIndex="0">
-          <!-- Exemplos de novas abas adicionadas -->
+        <Accordion :activeIndex="activeAccordionIndex">
           <AccordionTab header="Como redefinir minha senha?">
             <p class="m-0 sub-text-accordion">
               Para redefinir sua senha, acesse a página de login e clique em
@@ -32,7 +37,6 @@
               e selecione 'Cancelar assinatura'. Siga os passos para confirmar.
             </p>
           </AccordionTab>
-          <!-- Abas existentes -->
         </Accordion>
       </b-colxx>
     </b-row>
@@ -40,7 +44,6 @@
       <b-colxx lg="12" class="text-center">
         <h2 class="titles-primary">Espaços de Trabalho Populares</h2>
       </b-colxx>
-      <!-- Cards de acomodações -->
     </b-row>
   </b-container>
   <FooterComp></FooterComp>
@@ -49,59 +52,38 @@
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
 import FaqSearchBar from "@/components/Common/FaqSearchBar.vue";
-import CardAcomodacao from "@/components/Common/CardAcomodação.vue";
 import FooterComp from "@/components/Common/FooterComp.vue";
+import SupportCard from "@/components/Common/CardSupport.vue";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
-
-//TODO TIRAR ESSES IMPORTS E PUXAR IMAGENS DO BANCO
-import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
-import escritorio2Img from "@/assets/img/escritorio2.jpg";
-import escritorio3Img from "@/assets/img/escritorio3.jpg";
-import escritorio4Img from "@/assets/img/escritorio4.jpg";
 
 export default {
   name: "home",
   components: {
-    CardAcomodacao,
     Accordion,
     AccordionTab,
     FooterComp,
     BColxx,
     FaqSearchBar,
+    SupportCard,
   },
   data() {
     return {
+      supportCards: [
+        { iconClass: 'pi pi-key', text: 'Redefinir Senha' },
+        { iconClass: 'pi pi-user-edit', text: 'Atualizar Dados Pessoais' },
+        { iconClass: 'pi pi-times', text: 'Cancelar Assinatura' },
+      ],
       tituloCompleto: "Encontre o espaço perfeito para seus eventos e reuniões",
       tituloAnimado: "",
-      acomodacoesPatrocinadas: [
-        {
-          imagem: escritorioMeirelesImg,
-          title: "Escritório Meireles",
-          price: "R$120/dia",
-          description: "Ótima localização...mais texto aqui",
-        },
-        {
-          imagem: escritorio2Img,
-          title: "Escritório Aldeota",
-          price: "R$120/dia",
-          description: "Ótima localização...mais texto aqui",
-        },
-        {
-          imagem: escritorio3Img,
-          title: "Escritório Iguatemi",
-          price: "R$120/dia",
-          description: "Ótima localização...mais texto aqui",
-        },
-        {
-          imagem: escritorio4Img,
-          title: "Coworking Cafeteria",
-          price: "R$120/dia",
-          description: "Ótima localização...mais texto aqui",
-        },
-      ],
       typingSpeed: 75, // Velocidade de digitação em milissegundos
+      activeAccordionIndex: null,
     };
+  },
+  methods: {
+    handleCardClick(index) {
+      this.activeAccordionIndex = index;
+    }
   },
   mounted() {
     let i = 0;
@@ -117,7 +99,6 @@ export default {
 </script>
 
 <style scoped>
-
 .support-container {
   max-width: 1200px;
   margin: auto;
@@ -150,4 +131,3 @@ export default {
   margin-bottom: 20px;
 }
 </style>
-
