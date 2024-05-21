@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
-      <p class="card-text">{{ price }}</p>
+      <p class="card-text" style="font-size: 1rem; font-weight: 600;">{{ price }}</p>
       <p class="card-text description">{{ description }}</p>
       <Rating v-model="ratingValue" readonly :cancel="false" />
       <b-button v-if="buttonInfo === true" class="button-dados" type="button" @click="showInfo(id)" variant="success" block style="width: 100%; margin-top: 30px;">Saiba Mais</b-button>
@@ -93,7 +93,7 @@ export default {
 .image-container img {
   width: 100%;
   height: auto;
-  max-height: 195px;
+  max-height: 197px;
   min-width: 292px;
   max-width: 300px;
   border-top-right-radius: 12px;
@@ -142,5 +142,18 @@ export default {
 .description {
   font-size: 0.875rem;
   color: #888888;
+}
+
+@media screen and (max-width: 1220px){
+  .image-container img{
+    max-height: 220px !important;
+    min-height: 220px;
+  }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1040px){
+  .image-container img{
+    min-height: 261px;
+  }
 }
 </style>

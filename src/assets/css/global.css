@@ -84,6 +84,33 @@ body {
     margin-bottom: 0px !important;
 }
 
+.gm-style-mtc-bbw{
+    display: none !important;
+}
+
+.gm-svpc{
+    display: none !important;
+}
+
+.gmnoscreen{
+    display: none !important;
+}
+.gm-style-cc{
+    display: none !important;
+}
+
+.gmnoprint{
+    top: 29px !important;
+}
+
+.p-sidebar-mask.p-component-overlay{
+    pointer-events: none !important;
+}
+
+.p-component-overlay-enter{
+    animation: none!important;
+}
+
 .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
     color: #eead2d !important;
 }
