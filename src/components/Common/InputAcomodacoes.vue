@@ -71,7 +71,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .search-section {
   position: relative;
   margin: 0 auto;

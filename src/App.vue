@@ -17,7 +17,7 @@
             <router-link class="nav-link" to="/eventos">Eventos</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/ajuda">Ajuda</router-link>
+            <router-link class="nav-link" to="/support">Ajuda</router-link>
           </li>
           <li class="nav-item d-flex align-items-center" style="gap: 5px">
             <button class="button-primary">

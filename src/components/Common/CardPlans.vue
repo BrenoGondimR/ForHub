@@ -1,5 +1,5 @@
 <template>
-  <b-col cols="12" lg="4" class="mb-4">
+  <b-colxx lg="4" class="mb-4">
     <b-card :class="['plan-card', { 'highlighted': highlighted }]">
       <b-card-header class="plan-header">
         <h2 class="plan-title">{{ plan.name }}</h2>
@@ -35,7 +35,7 @@
         <b-button class="plan-button" @click="selectPlan(plan)">{{ plan.buttonLabel }}</b-button>
       </b-card-footer>
     </b-card>
-  </b-col>
+  </b-colxx>
 </template>
 
 <script>

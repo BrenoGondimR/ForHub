@@ -13,12 +13,6 @@
       </b-row>
     </b-card>
     <b-row class="mt-2">
-      <b-colxx lg="12" class="mt-5">
-        <h2 class="titles-primary" style="margin-bottom: 1rem">Oi, como posso ajudar?</h2>
-        <faq-search-bar :placeholder="'Pesquisar no FAQ'"></faq-search-bar>
-      </b-colxx>
-    </b-row>
-    <b-row class="mt-2">
       <b-colxx class="mt-5" lg="3" md="6" sm="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
         <card-acomodacao
             :image="acomodacao.imagem"
@@ -37,13 +31,8 @@
           você pode encontrar o local perfeito para o seu próximo evento, seja uma reunião de diretoria,
           conferência ou lançamento de produto.</p>
       </b-colxx>
-<<<<<<< HEAD
-      <b-row style="padding: 0 50px;">
-        <b-colxx class="mt-4" lg="4" v-for="(acomodacao, index) in detalhesForHub" :key="index">
-=======
       <b-row class="row-class" style="">
         <b-colxx class="mt-4" lg="4" v-for="(acomodacao, index) in detalhesForHub" :key="index" style="">
->>>>>>> e98d29a765b661e6b5f90d1bb6fe7bf7be7c4e21
           <card-acomodacao
               :image="acomodacao.imagem"
               :title="acomodacao.title"
@@ -154,10 +143,6 @@ export default {
   text-decoration: none !important;
   color: black;
 }
-<<<<<<< HEAD
-</style>
-=======
-
 @media screen and (min-width: 992px) {
   .row-class{
     padding: 0 50px;
@@ -170,4 +155,3 @@ export default {
   }
 }
 </style>
->>>>>>> e98d29a765b661e6b5f90d1bb6fe7bf7be7c4e21
