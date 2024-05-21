@@ -11,7 +11,8 @@
     </b-colxx>
   </b-row>
   <b-row style="padding: 30px; width: 100%;">
-    <b-colxx lg="6">
+    <b-colxx lg="12"><AnimatedLogo :show-logo="showAnimatedLogo" v-if="showAnimatedLogo" /></b-colxx>
+    <b-colxx lg="6" v-if="showAnimatedLogo === false">
       <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
         <card-coworkings
             :images="acomodacao.imagens"
@@ -70,10 +71,12 @@ import escritorio2Img from "@/assets/img/escritorio2.jpg";
 import escritorio3Img from "@/assets/img/escritorio3.jpg";
 import escritorio4Img from "@/assets/img/escritorio4.jpg";
 import CoworkingMapCard from "@/components/Common/CoworkingMapCard.vue";
+import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
 
 export default {
   name: "home",
   components: {
+    AnimatedLogo,
     CoworkingMapCard,
     InputAcomodacoes,
     CardCoworkings,
@@ -87,6 +90,7 @@ export default {
     return {
       dates: null,
       selectedCity: null,
+      showAnimatedLogo: true,
       apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
       center: { lat: -14.235004, lng: -51.92528 }, // Centro do Brasil
       filtros: [
@@ -398,6 +402,9 @@ export default {
   },
   mounted() {
     this.getUserLocation();
+    setTimeout(() => {
+      this.showAnimatedLogo = false;
+    }, 2500);
   }
 };
 </script>

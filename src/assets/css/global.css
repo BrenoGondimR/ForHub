@@ -7,6 +7,11 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
+.logo{
+    width: 35px;
+    height: 35px;
+}
+
 .text-logo{
     margin-bottom: 0px;
     font-size: 17px;

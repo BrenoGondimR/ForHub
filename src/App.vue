@@ -2,7 +2,7 @@
   <nav v-if="$route.path !== '/login' && $route.path !== '/register' && $route.path !== '/dashboard'"  class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
     <div class="container-fluid" style="justify-content: space-between; padding: 0 35px 0 35px">
       <router-link class="navbar-brand d-flex align-items-center" to="/" style="gap: 10px">
-        <img class="logo" src="./assets/img/logoforhub.svg" alt="Logo">
+        <img class="logo" src="./assets/img/logoforhubnova.svg" alt="Logo">
         <h6 class="text-logo">ForHub</h6>
       </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
       <div class="flex flex-column h-full">
         <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
               <span class="inline-flex align-items-center gap-2">
-                <img src="@/assets/img/logoforhub.svg" width="35" height="40" alt="Your Logo">
+                <img class="logo" src="@/assets/img/logoforhubnova.svg" alt="Your Logo">
                 <span class="font-semibold text-2xl text-primary">ForHub</span>
               </span>
               <span>
