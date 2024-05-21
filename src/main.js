@@ -25,6 +25,7 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import Accordion from 'primevue/accordion';
 
 // Componente Col Personalizado
 import Colxx from "@/components/Common/Colxx.vue";
@@ -51,6 +52,7 @@ appInstance.component('Button', Button);
 appInstance.component('Calendar', Calendar);
 appInstance.component('Dropdown', Dropdown);
 appInstance.component('Paginator', Paginator);
+appInstance.component('Accordion', Accordion);
 
 // Montar a aplicação
 appInstance.mount('#app');
