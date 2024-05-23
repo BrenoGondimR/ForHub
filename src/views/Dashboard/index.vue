@@ -107,6 +107,10 @@ export default {
   color: black;
 }
 
+.main-flux{
+  margin: 20px !important;
+}
+
 .subtitle-dash {
   font-family: "Poppins", sans-serif;
 }
