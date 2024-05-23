@@ -39,7 +39,7 @@
                 <img class="logo" src="@/assets/img/logoforhubnova.svg" alt="Your Logo">
                 <span class="font-semibold text-2xl text-primary" style="color: #007bff !important;">ForHub</span>
               </span>
-              <span>
+          <span>
                 <Button type="button" @click="closeCallback" icon="pi pi-times" rounded outlined class="h-2rem w-2rem" style="border-radius: 26px; color: white;"></Button>
               </span>
         </div>
@@ -69,6 +69,12 @@
                   <a @click="navigateTo('/dashboard/calendario')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                     <i class="pi pi-calendar mr-2"></i>
                     <span class="font-medium">Calendário</span>
+                  </a>
+                </li>
+                <li>
+                  <a @click="navigateTo('/dashboard/reservas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                    <i class="pi pi-calendar-plus mr-2"></i>
+                    <span class="font-medium">Reservas</span>
                   </a>
                 </li>
                 <li>
