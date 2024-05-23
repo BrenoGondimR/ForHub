@@ -7,6 +7,7 @@ import Support from '../views/Support/index.vue'
 import Planos from '@/views/Planos/index.vue'
 import CoworkingInfo from '@/views/CoworkingsInfo/index.vue'
 import Dashboard from '@/views/Dashboard/index.vue'
+import Clientes from '@/views/Clientes/index.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard
+  },
+  {
+    path: '/dashboard/clientes',
+    name: 'clientes',
+    component: Clientes
   },
 
 ]

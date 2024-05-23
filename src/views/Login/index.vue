@@ -28,9 +28,9 @@
                 <label for="password">Password</label>
               </FloatLabel>
             </b-form-group>
-            <b-button class="button-dados" type="submit" variant="success" block style="width: 100%">Entrar</b-button>
+            <b-button class="button-dados" type="submit" variant="success" block style="width: 100%; box-shadow: 0 4px 9px -4px #1AA3E5 !important;">Entrar</b-button>
           </b-form>
-          <b-button class="mt-2 button-dados2" @click="redirectToRegister" variant="success" block style="width: 100%; background: none; border: 1.5px solid #1AA3E5; color: #1AA3E5;">Registrar</b-button>
+          <b-button class="mt-2 button-dados2" @click="redirectToRegister" variant="success" block style="width: 100%; background: none !important; border: 1.5px solid #1AA3E5; color: #1AA3E5;">Registrar</b-button>
         </b-card>
       </b-colxx>
     </b-row>
