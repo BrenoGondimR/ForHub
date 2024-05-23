@@ -154,12 +154,12 @@ export default {
   display: flex;
   bottom: 13px;
   z-index: 20;
-  top: -9px;
+  top: -12px;
   align-items: center;
   justify-content: center;
   height: 73%;
   padding: 0 20px;
   margin-top: 8px;
-  margin-right: 10px;
+  margin-right: 3px;
 }
 </style>

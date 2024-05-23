@@ -50,13 +50,13 @@ export default {
 
 i {
   font-size: 50px;
-  color: #5a67d8; /* Icon color */
+  color: #1AA3E5; /* Icon color */
   margin-bottom: 10px;
 }
 
 .text {
   font-size: 15px;
-  color: #5a67d8; /* Text color */
+  color: #1AA3E5; /* Text color */
   font-family: 'Poppins', sans-serif;
   text-align: center;
 }

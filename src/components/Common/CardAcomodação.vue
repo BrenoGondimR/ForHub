@@ -63,7 +63,7 @@ export default {
 .custom-card img {
   width: 100%; /* Ensures the image covers the width of the card */
   height: auto; /* Keeps the aspect ratio of the image */
-  max-height: 195px;
+  max-height: 182px;
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
   min-height: 180px;
