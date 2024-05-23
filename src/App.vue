@@ -1,6 +1,5 @@
 <template>
-  <nav v-if="!isDashboardRoute" class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
-    <div class="container-fluid" style="justify-content: space-between; padding: 0 35px 0 35px">
+  <nav v-if="$route.path !== '/login' && $route.path !== '/register' && $route.path !== $route.path.startsWith('/dashboard')"  class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">    <div class="container-fluid" style="justify-content: space-between; padding: 0 35px 0 35px">
       <router-link class="navbar-brand d-flex align-items-center" to="/" style="gap: 10px">
         <img class="logo" src="./assets/img/logoforhubnova.svg" alt="Logo">
         <h6 class="text-logo">ForHub</h6>
