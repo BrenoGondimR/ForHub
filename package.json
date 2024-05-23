@@ -13,6 +13,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-3": "^0.5.1",
+    "chart.js": "^4.4.3",
     "core-js": "^3.8.3",
     "flowbite": "^2.3.0",
     "flowbite-vue": "^0.1.3",

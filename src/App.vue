@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="$route.path !== '/login' && $route.path !== '/register' && $route.path !== '/dashboard'"  class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
+  <nav v-if="!isDashboardRoute" class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #E5E8EB">
     <div class="container-fluid" style="justify-content: space-between; padding: 0 35px 0 35px">
       <router-link class="navbar-brand d-flex align-items-center" to="/" style="gap: 10px">
         <img class="logo" src="./assets/img/logoforhubnova.svg" alt="Logo">
@@ -31,16 +31,16 @@
       </div>
     </div>
   </nav>
-  <Sidebar v-if="$route.path === '/dashboard'" v-model:visible="visible" :dismissable="false">
+  <Sidebar v-if="$route.path.startsWith('/dashboard')" v-model:visible="visible" :dismissable="false">
     <template #container="{ closeCallback }">
       <div class="flex flex-column h-full">
         <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
               <span class="inline-flex align-items-center gap-2">
                 <img class="logo" src="@/assets/img/logoforhubnova.svg" alt="Your Logo">
-                <span class="font-semibold text-2xl text-primary">ForHub</span>
+                <span class="font-semibold text-2xl text-primary" style="color: #007bff !important;">ForHub</span>
               </span>
               <span>
-                <Button type="button" @click="closeCallback" icon="pi pi-times" rounded outlined class="h-2rem w-2rem" style="border-radius: 26px;"></Button>
+                <Button type="button" @click="closeCallback" icon="pi pi-times" rounded outlined class="h-2rem w-2rem" style="border-radius: 26px; color: white;"></Button>
               </span>
         </div>
         <div class="overflow-y-auto">
@@ -54,25 +54,25 @@
                   </a>
                 </li>
                 <li>
-                  <a @click="navigateTo('/clientes')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                  <a @click="navigateTo('/dashboard/clientes')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                     <i class="pi pi-users mr-2"></i>
                     <span class="font-medium">Clientes</span>
                   </a>
                 </li>
                 <li>
-                  <a @click="navigateTo('/espaços')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                  <a @click="navigateTo('/dashboard/espaços')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                     <i class="pi pi-home mr-2"></i>
                     <span class="font-medium">Espaços</span>
                   </a>
                 </li>
                 <li>
-                  <a @click="navigateTo('/calendario')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                  <a @click="navigateTo('/dashboard/calendario')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                     <i class="pi pi-calendar mr-2"></i>
                     <span class="font-medium">Calendário</span>
                   </a>
                 </li>
                 <li>
-                  <a @click="navigateTo('/financas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                  <a @click="navigateTo('/dashboard/financas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                     <i class="pi pi-wallet mr-2"></i>
                     <span class="font-medium">Finanças</span>
                   </a>
@@ -91,7 +91,7 @@
       </div>
     </template>
   </Sidebar>
-  <Button v-if="$route.path === '/dashboard'" v-show="visible === false" icon="pi pi-bars" @click="visible = true" style="border-radius: 9px; top: 10px; left: 10px;" />
+  <Button v-if="$route.path.startsWith('/dashboard')" v-show="visible === false" icon="pi pi-bars" @click="visible = true" style="border-radius: 9px; top: 10px; left: 10px;" />
   <router-view :class="['main-content', visible ? 'is-sidebar-visible' : '']"/>
 </template>
 
@@ -106,6 +106,9 @@ export default {
   methods: {
     navigateTo(route) {
       this.$router.push(route);
+    },
+    isDashboardRoute() {
+      return this.$route.path.startsWith('/dashboard') || this.$route.path === '/login' || this.$route.path === '/register';
     }
   }
 }
@@ -137,6 +140,10 @@ export default {
 .p-sidebar {
   border-radius: 30px !important;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+:deep(.p-button-icon-only) {
+  color: white !important;
 }
 
 .p-sidebar-mask {
