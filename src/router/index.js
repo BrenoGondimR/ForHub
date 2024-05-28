@@ -8,6 +8,7 @@ import Planos from '@/views/Planos/index.vue'
 import CoworkingInfo from '@/views/CoworkingsInfo/index.vue'
 import Dashboard from '@/views/Dashboard/index.vue'
 import Clientes from '@/views/Clientes/index.vue'
+import CadastroClientes from '@/views/Clientes/cadastro.vue'
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/dashboard/clientes',
     name: 'clientes',
     component: Clientes
+  },
+  {
+    path: '/dashboard/clientes/cadastro',
+    name: 'cadastro',
+    component: CadastroClientes
   },
 
 ]
