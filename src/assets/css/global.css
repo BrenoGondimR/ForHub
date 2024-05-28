@@ -12,6 +12,16 @@ body {
     height: 35px;
 }
 
+.p-tabview .p-tabview-ink-bar{
+    background-color: #007bff !important;
+}
+
+.title-dash {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: black;
+}
+
 .p-button{
     background: #007bff !important;
     border: 1px solid #d6eaff !important;
@@ -48,6 +58,7 @@ body {
     border-radius: 20px;
     background: #c6d4ec !important;
     color: #1AA3E5 !important;
+    border: 1px solid !important;
 }
 
 .p-rating .p-rating-item.p-focus{
