@@ -9,6 +9,9 @@ import CoworkingInfo from '@/views/CoworkingsInfo/index.vue'
 import Dashboard from '@/views/Dashboard/index.vue'
 import Clientes from '@/views/Clientes/index.vue'
 import CadastroClientes from '@/views/Clientes/cadastro.vue'
+import Reservas from '@/views/Reservas/index.vue'
+import CadastroCoworking from '@/views/Coworkings/cadastro.vue'
+
 
 const routes = [
   {
@@ -58,8 +61,18 @@ const routes = [
   },
   {
     path: '/dashboard/clientes/cadastro',
-    name: 'cadastro',
+    name: 'cadastro clientes',
     component: CadastroClientes
+  },
+  {
+    path: '/dashboard/reservas',
+    name: 'reservas',
+    component: Reservas
+  },
+  {
+    path: '/dashboard/coworkings/cadastro',
+    name: 'cadastro',
+    component: CadastroCoworking
   },
 
 ]

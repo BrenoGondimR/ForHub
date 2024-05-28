@@ -97,6 +97,12 @@
                     </a>
                   </li>
                   <li>
+                    <a @click="navigateTo('/dashboard/reservas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                      <i class="pi pi-calendar-plus mr-2"></i>
+                      <span class="font-medium">Reservas</span>
+                    </a>
+                  </li>
+                  <li>
                     <a @click="navigateTo('/dashboard/financas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
                       <i class="pi pi-wallet mr-2"></i>
                       <span class="font-medium">Finanças</span>
