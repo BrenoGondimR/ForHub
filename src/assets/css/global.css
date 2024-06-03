@@ -12,6 +12,16 @@ body {
     height: 35px;
 }
 
+.p-tabview .p-tabview-ink-bar{
+    background-color: #007bff !important;
+}
+
+.title-dash {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: black;
+}
+
 .p-button{
     background: #007bff !important;
     border: 1px solid #d6eaff !important;
@@ -35,6 +45,7 @@ body {
     border: none !important;
 }
 
+
 .button-dados {
     background: #1AA3E5 !important;
     box-shadow: 0 4px 9px -4px #1AA3E5 !important;
@@ -44,10 +55,22 @@ body {
     box-shadow: 0 4px 9px -4px #1AA3E5 !important;
 }
 
+.button-new{
+    border-radius: 8px;
+    background: none !important;
+    color: #1AA3E5;
+    border: 1.5px solid #1AA3E5 !important;
+}
+
+.button-new:hover{
+    box-shadow: 0 4px 6px -5px #1AA3E5 !important;
+}
+
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight{
     border-radius: 20px;
     background: #c6d4ec !important;
     color: #1AA3E5 !important;
+    border: 1px solid !important;
 }
 
 .p-rating .p-rating-item.p-focus{
