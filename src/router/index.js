@@ -11,8 +11,8 @@ import Clientes from '@/views/Clientes/index.vue'
 import CadastroClientes from '@/views/Clientes/cadastro.vue'
 import Reservas from '@/views/Reservas/index.vue'
 import CadastroCoworking from '@/views/Coworkings/cadastro.vue'
+import Financeiro from '@/views/Financeiro/index.vue'
 
-import Reservas from '@/views/Reservas/index.vue'
 
 const routes = [
   {
@@ -66,15 +66,16 @@ const routes = [
     component: CadastroClientes
   },
   {
-    path: '/dashboard/reservas',
-    name: 'reservas',
-    component: Reservas
-  },
-  {
     path: '/dashboard/coworkings/cadastro',
     name: 'cadastro',
     component: CadastroCoworking
   },
+  {
+    path: '/dashboard/financeiro',
+    name: 'financeiro',
+    component: Financeiro
+  },
+
 
 ]
 
