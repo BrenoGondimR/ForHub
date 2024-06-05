@@ -60,74 +60,13 @@
       <template #container="{ closeCallback }">
         <div class="flex flex-column h-full">
           <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
-  <Sidebar v-if="$route.path.startsWith('/dashboard')" v-model:visible="visible" :dismissable="false">
-    <template #container="{ closeCallback }">
-      <div class="flex flex-column h-full">
-        <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
               <span class="inline-flex align-items-center gap-2">
                 <img class="logo" src="@/assets/img/logoforhubnova.svg" alt="Your Logo">
                 <span class="font-semibold text-2xl text-primary" style="color: #007bff !important;">ForHub</span>
               </span>
-          <span>
+            <span>
                 <Button type="button" @click="closeCallback" icon="pi pi-times" rounded outlined class="h-2rem w-2rem" style="border-radius: 26px; color: white;"></Button>
               </span>
-        </div>
-        <div class="overflow-y-auto">
-          <ul class="list-none p-3 m-0">
-            <li>
-              <ul class="list-none p-0 m-0 overflow-hidden">
-                <li>
-                  <a @click="navigateTo('/dashboard')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-home mr-2"></i>
-                    <span class="font-medium">Dashboard</span>
-                  </a>
-                </li>
-                <li>
-                  <a @click="navigateTo('/dashboard/clientes')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-users mr-2"></i>
-                    <span class="font-medium">Clientes</span>
-                  </a>
-                </li>
-                <li>
-                  <a @click="navigateTo('/dashboard/espaços')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-home mr-2"></i>
-                    <span class="font-medium">Espaços</span>
-                  </a>
-                </li>
-                <li>
-                  <a @click="navigateTo('/dashboard/calendario')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-calendar mr-2"></i>
-                    <span class="font-medium">Calendário</span>
-                  </a>
-                </li>
-                <li>
-                  <a @click="navigateTo('/dashboard/reservas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-calendar-plus mr-2"></i>
-                    <span class="font-medium">Reservas</span>
-                  </a>
-                </li>
-                <li>
-                  <a @click="navigateTo('/dashboard/financas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                    <i class="pi pi-wallet mr-2"></i>
-                    <span class="font-medium">Finanças</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="mt-auto">
-          <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
-          <a v-ripple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-            <span class="font-bold">Amy Elsner</span>
-          </a>
-        </div>
-      </div>
-    </template>
-  </Sidebar>
-  <Button v-if="$route.path.startsWith('/dashboard')" v-show="visible === false" icon="pi pi-bars" @click="visible = true" style="border-radius: 9px; top: 10px; left: 10px;" />
-  <router-view :class="['main-content', visible ? 'is-sidebar-visible' : '']"/>
           </div>
           <div class="overflow-y-auto">
             <ul class="list-none p-3 m-0">

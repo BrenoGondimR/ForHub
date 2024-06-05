@@ -11,14 +11,12 @@
   </template>
   
   <script>
-  import { InputText } from 'primevue/inputtext';
-  import { Button } from 'primevue/button';
+
   
   export default {
     name: "QuickTransaction",
     components: {
-      InputText,
-      Button
+
     },
     props: {
       contacts: Array

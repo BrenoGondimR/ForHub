@@ -91,9 +91,7 @@ export default {
       ]
     };
   },
-  methods: {
-
-  },
+  methods: {},
   mounted() {
 
   }
@@ -105,6 +103,10 @@ export default {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   color: black;
+}
+
+.main-flux {
+  margin: 20px !important;
 }
 
 .subtitle-dash {

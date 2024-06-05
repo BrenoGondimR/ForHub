@@ -139,7 +139,7 @@ export default {
   display: grid !important;
 }
 
-::v-deep .p-accordion .p-accordion-header a {
+:deep(.p-accordion .p-accordion-header a){
   text-decoration: none !important;
   color: black;
 }

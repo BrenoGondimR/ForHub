@@ -56,9 +56,9 @@ const routes = [
     component: Dashboard
   },
   {
-    path: '/dashboard/reservas',
-    name: 'reservas',
-    component: Reservas
+    path: '/dashboard/clientes',
+    name: 'clientes',
+    component: Clientes
   },
   {
     path: '/dashboard/clientes/cadastro',
@@ -66,16 +66,20 @@ const routes = [
     component: CadastroClientes
   },
   {
+    path: '/dashboard/reservas',
+    name: 'reservas',
+    component: Reservas
+  },
+  {
+    path: '/dashboard/financas',
+    name: 'financas',
+    component: Financeiro
+  },
+  {
     path: '/dashboard/coworkings/cadastro',
     name: 'cadastro',
     component: CadastroCoworking
   },
-  {
-    path: '/dashboard/financeiro',
-    name: 'financeiro',
-    component: Financeiro
-  },
-
 
 ]
 

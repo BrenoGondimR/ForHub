@@ -9,12 +9,10 @@
   </template>
   
   <script>
-  import { ProgressBar } from 'primevue/progressbar';
   
   export default {
     name: "MyGoals",
     components: {
-      ProgressBar
     },
     props: {
       goals: Array

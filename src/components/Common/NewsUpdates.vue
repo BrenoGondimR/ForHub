@@ -15,12 +15,11 @@
 </template>
 
 <script>
-import { Card } from 'primevue/card';
 
 export default {
   name: 'NewsUpdates',
   components: {
-    Card,
+
   },
   data() {
     return {
