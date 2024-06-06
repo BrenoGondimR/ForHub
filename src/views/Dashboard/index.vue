@@ -1,8 +1,8 @@
 <template>
-  <b-row class="main-flux">
+  <b-row class="fluxo-principal">
     <b-colxx lg="12" class="mb-4">
-      <h2 class="title-dash">Overview</h2>
-      <span class="subtitle-dash">Todos os dados sobre a empresa aqui</span>
+      <h2 class="titulo-dash">Visão Geral</h2>
+      <span class="subtitulo-dash">Todos os dados sobre a empresa aqui</span>
     </b-colxx>
     <b-colxx lg="9">
       <b-row>
@@ -17,7 +17,7 @@
           />
         </b-colxx>
         <b-colxx lg="12" class="mb-4">
-          <GradientLineChart title="Grafico Financeiro" detail1="2023" detail2="Ganhos, Custos e Renda" />
+          <GradientLineChart title="Gráfico Financeiro" detail1="2023" detail2="Ganhos, Custos e Renda" />
         </b-colxx>
       </b-row>
     </b-colxx>
@@ -48,26 +48,26 @@ export default {
     return {
       cards: [
         {
-          title: "Today Arrival",
+          title: "Chegadas Hoje",
           icon: "pi pi-arrow-up-right",
           value: 340,
-          subDescription: "Last 7 days",
+          subDescription: "Últimos 7 dias",
           percentage: 3.15,
           color: "#FFA500" // cor laranja
         },
         {
-          title: "Today Departure",
+          title: "Partidas Hoje",
           icon: "pi pi-arrow-up-left",
           value: 234,
-          subDescription: "Last 7 days",
+          subDescription: "Últimos 7 dias",
           percentage: 3.15,
           color: "#0000FF" // cor azul
         },
         {
-          title: "Total Booked",
+          title: "Total Reservado",
           icon: "pi pi-check",
           value: 421,
-          subDescription: "Last 30 days",
+          subDescription: "Últimos 30 dias",
           percentage: 3.15,
           color: "#87CEEB" // cor azul claro
         }
@@ -75,17 +75,17 @@ export default {
       reservations: [
         {
           name: "Courtney Henry",
-          room: "Room 25A",
+          room: "Quarto 25A",
           dates: "24 Jul - 26 Jul",
         },
         {
           name: "Leslie Alexander",
-          room: "Room 25A",
+          room: "Quarto 25A",
           dates: "24 Jul - 26 Jul",
         },
         {
           name: "Savannah Nguyen",
-          room: "Room 25A",
+          room: "Quarto 25A",
           dates: "24 Jul - 26 Jul",
         }
       ]
@@ -99,17 +99,17 @@ export default {
 </script>
 
 <style scoped>
-.title-dash {
+.titulo-dash {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   color: black;
 }
 
-.main-flux {
+.fluxo-principal {
   margin: 20px !important;
 }
 
-.subtitle-dash {
+.subtitulo-dash {
   font-family: "Poppins", sans-serif;
 }
 </style>

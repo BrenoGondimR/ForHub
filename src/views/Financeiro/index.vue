@@ -70,8 +70,6 @@ export default {
     QuickTransaction,
     MyGoals,
     BColxx,
-    Button,
-    Dropdown,
   },
   data() {
     return {
