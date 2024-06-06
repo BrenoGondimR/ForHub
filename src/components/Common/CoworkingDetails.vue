@@ -53,7 +53,7 @@
           <input type="text" v-model="name" />
         </div>
         <div>
-          <p><strong>Data de Início:</strong> {{ startDate }}</p>
+          <p><strong>Data de Inícicddcdccdcdo:</strong> {{ startDate }}</p>
           <p><strong>Hora de Início:</strong> {{ startTime }}</p>
           <p v-if="addMoreDays"><strong>Data de Término:</strong> {{ endDate }}</p>
           <p><strong>Hora de Término:</strong> {{ endTime }}</p>

@@ -5,8 +5,10 @@
         <!-- Primeira Etapa: Informações -->
         <StepperPanel header="Informações">
           <template #content="{ nextCallback }">
+            <h4 class="mb-3"><strong>Informações</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsInfo" :key="index" :lg="field.col" class="p-field" style="display: grid; margin-bottom: 5px;">
+              <b-colxx v-for="(field, index) in fieldsInfo" :key="index" :lg="field.col" class="p-field"
+                       style="display: grid; margin-bottom: 20px;">
                 <label :for="field.key">{{ field.label }}</label>
                 <component
                     :is="getComponentType(field.type)"
@@ -20,7 +22,8 @@
               </b-colxx>
             </b-row>
             <div class="flex pt-4 justify-content-end">
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" @click="nextCallback" />
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"
+                      @click="nextCallback"/>
             </div>
           </template>
         </StepperPanel>
@@ -28,47 +31,61 @@
         <!-- Segunda Etapa: Valores -->
         <StepperPanel header="Valores">
           <template #content="{ prevCallback, nextCallback }">
+            <h4 class="mb-3"><strong>Valores</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsValores" :key="index" :lg="field.col" class="p-field" style="display: grid;">
-                <label :for="field.key">{{ field.label }}</label>
-                <component
-                    :is="getComponentType(field.type)"
-                    v-model="field.value"
-                    :id="field.key"
-                    v-bind="getComponentProps(field)"
-                    @keydown="field.error = false"
-                    style="max-height: 44px !important;"
-                />
+              <b-colxx v-for="(field, index) in fieldsValores" :key="index" :lg="field.col" class="p-field"
+                       style="display: grid; align-items: center; margin-bottom: 20px;">
+                <div class="field-label-checkbox">
+                  <label :for="field.key">{{ field.label }}</label>
+                  <b-form-checkbox class="checkbox-option" v-model="field.active" @input="toggleService(field.key)"/>
+                </div>
+                <div v-if="field.active" class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">R$</span>
+                  </div>
+                  <component
+                      :is="getComponentType(field.type)"
+                      v-model="field.value"
+                      :id="field.key"
+                      v-bind="getComponentProps(field)"
+                      @keydown="field.error = false"
+                      style="max-height: 44px !important; border-radius: 5px 0px 0px 5px; !important;"
+                  />
+                  <div class="input-group-append">
+                    <Dropdown style="height: 100%;" v-model="field.unit" :options="timeUnits" optionLabel="label"
+                              placeholder="Unidade" class="dropdown-inside"></Dropdown>
+                  </div>
+                </div>
                 <small v-if="field.error" class="text-danger">{{ field.errorMessage }}</small>
               </b-colxx>
             </b-row>
             <div class="flex pt-4 justify-content-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;" @click="prevCallback" />
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" @click="nextCallback" />
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                      style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;"
+                      @click="prevCallback"/>
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"
+                      @click="nextCallback"/>
             </div>
           </template>
         </StepperPanel>
 
-        <!-- Terceira Etapa: Datas -->
-        <StepperPanel header="Datas">
+        <!-- Terceira Etapa: Formas de Pagamento -->
+        <StepperPanel header="Formas de Pagamento">
           <template #content="{ prevCallback }">
+            <h4 class="mb-3"><strong>Formas de Pagamento</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsDatas" :key="index" :lg="field.col" class="p-field" style="display: grid;">
-                <label :for="field.key">{{ field.label }}</label>
-                <component
-                    :is="getComponentType(field.type)"
-                    v-model="field.value"
-                    :id="field.key"
-                    v-bind="getComponentProps(field)"
-                    @keydown="field.error = false"
-                    style="max-height: 44px !important;"
-                />
-                <small v-if="field.error" class="text-danger">{{ field.errorMessage }}</small>
+              <b-colxx v-for="(field, index) in fieldsPagamentos" :key="index" :lg="field.col" class="p-field"
+                       style="display: grid; align-items: center; margin-bottom: 20px;">
+                <b-form-checkbox v-model="field.value" :id="field.key">
+                  {{ field.label }}
+                </b-form-checkbox>
               </b-colxx>
             </b-row>
             <div class="flex pt-4 justify-content-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;" @click="prevCallback" />
-              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" />
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                      style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;"
+                      @click="prevCallback"/>
+              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"/>
             </div>
           </template>
         </StepperPanel>
@@ -87,49 +104,190 @@ export default {
   },
   data() {
     return {
+      timeUnits: [
+        {label: 'Por Hora', value: 'hora'},
+        {label: 'Por Dia', value: 'dia'},
+        {label: 'Por Mês', value: 'mes'}
+      ],
       fieldsInfo: [
-        { key: 'roomName', label: 'Nome da Sala', type: 'InputText', value: '', error: false, errorMessage: 'Nome da sala é obrigatório', col: '6' },
-        { key: 'companyName', label: 'Nome da Empresa', type: 'InputText', value: '', error: false, errorMessage: 'Nome da empresa é obrigatório', col: '6' },
-        { key: 'description', label: 'Descrição da Sala/Empresa', type: 'Textarea', value: '', error: false, errorMessage: 'Descrição é obrigatória', col: '12' },
-        { key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: '', error: false, errorMessage: '', col: '2' },
-        { key: 'impressora', label: 'Impressora', type: 'Checkbox', value: '', error: false, errorMessage: '', col: '2' },
-        { key: 'sala_reuniao', label: 'Sala de Reunião', type: 'Checkbox', value: '', error: false, errorMessage: '', col: '2' },
-        { key: 'cafe', label: 'Café', type: 'Checkbox', value: '', error: false, errorMessage: 'Descrição é obrigatória', col: '2' },
-        { key: 'estacionamento', label: 'Estacionemtno', type: 'Checkbox', value: '', error: false, errorMessage: '', col: '2' },
-        { key: 'area_relaxamento', label: 'Área de Relaxamento', type: 'Checkbox', value: '', error: false, errorMessage: '', col: '2' },
-        { key: 'address', label: 'Endereço', type: 'InputText', value: '', error: false, errorMessage: '', col: '12' },
+        {
+          key: 'roomName',
+          label: 'Nome da Sala',
+          type: 'InputText',
+          value: '',
+          error: false,
+          errorMessage: 'Nome da sala é obrigatório',
+          col: '6'
+        },
+        {
+          key: 'companyName',
+          label: 'Nome da Empresa',
+          type: 'InputText',
+          value: '',
+          error: false,
+          errorMessage: 'Nome da empresa é obrigatório',
+          col: '6'
+        },
+        {
+          key: 'description',
+          label: 'Descrição da Sala/Empresa',
+          type: 'TextArea',
+          value: '',
+          error: false,
+          errorMessage: 'Descrição é obrigatória',
+          col: '12'
+        },
+        {key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
+        {
+          key: 'impressora',
+          label: 'Impressora',
+          type: 'Checkbox',
+          value: false,
+          error: false,
+          errorMessage: '',
+          col: '2'
+        },
+        {
+          key: 'sala_reuniao',
+          label: 'Sala de Reunião',
+          type: 'Checkbox',
+          value: false,
+          error: false,
+          errorMessage: '',
+          col: '2'
+        },
+        {key: 'cafe', label: 'Café', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
+        {
+          key: 'estacionamento',
+          label: 'Estacionamento',
+          type: 'Checkbox',
+          value: false,
+          error: false,
+          errorMessage: '',
+          col: '2'
+        },
+        {
+          key: 'area_relaxamento',
+          label: 'Área de Relaxamento',
+          type: 'Checkbox',
+          value: false,
+          error: false,
+          errorMessage: '',
+          col: '2'
+        },
+        {key: 'address', label: 'Endereço', type: 'InputText', value: '', error: false, errorMessage: '', col: '12'},
       ],
       fieldsValores: [
-        { key: 'price', label: 'Preço por Hora', type: 'InputNumber', value: '', error: false, errorMessage: 'Preço é obrigatório', col: '6' },
+        {
+          key: 'domicilio_fiscal',
+          label: 'Domicílio Fiscal',
+          type: 'InputNumber',
+          value: 120.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'secretariado',
+          label: 'Secretariado',
+          type: 'InputNumber',
+          value: 179.90,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'coworking',
+          label: 'Estações de Trabalho - Coworking',
+          type: 'InputNumber',
+          value: 560.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'sala_exclusiva',
+          label: 'Sala Exclusiva',
+          type: 'InputNumber',
+          value: 3500.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'sala_reuniao',
+          label: 'Sala de Reunião',
+          type: 'InputNumber',
+          value: 80.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'sala_treinamento',
+          label: 'Sala de Treinamento',
+          type: 'InputNumber',
+          value: 670.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
+        {
+          key: 'auditorio',
+          label: 'Auditório',
+          type: 'InputNumber',
+          value: 900.00,
+          col: '12',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: ''
+        },
       ],
-      fieldsDatas: [
-        { key: 'startDate', label: 'Data de Início', type: 'Calendar', value: '', error: false, errorMessage: 'Data de início é obrigatória', col: '6' },
-        { key: 'startTime', label: 'Hora de Início', type: 'Calendar', value: '', error: false, errorMessage: 'Hora de início é obrigatória', col: '6', additionalProps: { timeOnly: true }},
-        { key: 'endTime', label: 'Hora de Término', type: 'Calendar', value: '', error: false, errorMessage: 'Hora de término é obrigatória', col: '6', additionalProps: { timeOnly: true }},
-        { key: 'endDate', label: 'Data de Término', type: 'Calendar', value: '', error: false, errorMessage: 'Data de término é obrigatória', col: '6' },
-        { key: 'guests', label: 'Número de Convidados', type: 'InputNumber', value: 1, error: false, errorMessage: 'Número de convidados é obrigatório', col: '6' }
+      fieldsPagamentos: [
+        {key: 'pix', label: 'PIX', value: false, col: '6'},
+        {key: 'boleto', label: 'Boleto Bancário', value: false, col: '6'},
+        {key: 'credito', label: 'Cartão de Crédito', value: false, col: '6'},
+        {key: 'debito', label: 'Cartão de Débito', value: false, col: '6'},
+        {key: 'transferencia', label: 'Transferência Bancária', value: false, col: '6'},
+        {key: 'paypal', label: 'PayPal', value: false, col: '6'},
+        {key: 'pagseguro', label: 'PagSeguro', value: false, col: '6'},
+        {key: 'mercadopago', label: 'Mercado Pago', value: false, col: '6'},
+        {key: 'picpay', label: 'PicPay', value: false, col: '6'},
       ],
     };
   },
   methods: {
     getComponentType(type) {
-      switch(type) {
+      switch (type) {
         case 'InputText':
-          return 'InputText';
-        case 'Textarea':
-          return 'Textarea';
+          return 'b-form-input';
+        case 'TextArea':
+          return 'b-form-textarea';
         case 'InputNumber':
-          return 'InputNumber';
+          return 'b-form-input';
         case 'Calendar':
-          return 'Calendar';
+          return 'b-form-datepicker';
         case 'Dropdown':
-          return 'Dropdown';
+          return 'b-form-select';
         case 'Checkbox':
-          return 'Checkbox'; // Use 'div' to wrap multiple checkboxes
+          return 'b-form-checkbox';
         case 'InputMask':
-          return 'InputMask';
+          return 'b-form-input';
         default:
-          return 'InputText';
+          return 'b-form-input';
       }
     },
     getComponentProps(field) {
@@ -148,16 +306,62 @@ export default {
       }
       return props;
     },
+    toggleService(key) {
+      const field = this.fieldsValores.find(f => f.key === key);
+      if (field) {
+        field.active = !field.active;
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
 .checkbox-option {
-  display: grid;
-  margin-right: 10px;
+  margin-left: 10px;
 }
-:deep(.p-stepper-nav){
-  padding: 0px
+
+.form-check {
+  min-height: 1.5rem;
+  margin-top: 5px;
+}
+
+:deep(.p-stepper-nav) {
+  padding: 0px;
+}
+
+.field-label-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-prepend {
+  margin-right: 5px;
+}
+
+.form-control {
+  border-radius: 5px;
+}
+
+.input-group-append {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.dropdown-inside .p-dropdown {
+  border-left: 0;
+  border-radius: 0 0.25rem 0.25rem 0;
+  height: 100%;
+}
+
+h4 {
+  font-weight: bold;
 }
 </style>
