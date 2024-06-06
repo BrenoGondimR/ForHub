@@ -134,7 +134,7 @@
             </b-row>
             <div class="flex pt-4 justify-content-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;" @click="prevCallback" />
-              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" />
+              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" @click="createCoworkingSpace" />
             </div>
           </template>
         </StepperPanel>
@@ -145,6 +145,7 @@
 
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
+import {createCoworking} from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: "CoworkingCreation",
@@ -184,7 +185,7 @@ export default {
           value: '',
           error: false,
           errorMessage: 'Descrição é obrigatória',
-          col: '12'
+          col: '6'
         },
         {
           key: 'phone',
@@ -400,6 +401,40 @@ export default {
       this.totalSizePercent = this.totalSize / 10;
       callback();
     },
+    createCoworkingSpace() {
+      const space = {
+        nome: this.fieldsInfo.find(f => f.key === 'roomName').value,
+        endereco: this.fieldsInfo.find(f => f.key === 'address').value,
+        descricao: this.fieldsInfo.find(f => f.key === 'description').value,
+        wifi: this.fieldsInfo.find(f => f.key === 'wifi').value,
+        quadro_branco: this.fieldsInfo.find(f => f.key === 'quadro').value,
+        sala_reuniao: this.fieldsInfo.find(f => f.key === 'sala_reuniao').value,
+        cafe: this.fieldsInfo.find(f => f.key === 'cafe').value,
+        estacionamento: this.fieldsInfo.find(f => f.key === 'estacionamento').value,
+        area_relaxamento: this.fieldsInfo.find(f => f.key === 'area_relaxamento').value,
+        valores: this.fieldsValores.filter(f => f.active).map(f => ({
+          servico: f.label,
+          preco: f.value,
+          unidade: f.unit ? f.unit.value : '',  // Certifique-se de que 'unit' é uma string
+          descricao: f.description
+        })),
+        imagens: this.files.map(file => ({
+          url: file.objectURL,
+          descricao: '' // Adicione aqui se tiver uma descrição
+        }))
+      };
+
+      createCoworking(space)
+          .then(response => {
+            if (response.status === 201) {
+              this.$toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Espaço de coworking criado com sucesso!', life: 3000 });
+              // Redirecionar ou limpar o formulário aqui, se necessário
+            }
+          })
+          .catch(error => {
+            this.$toast.add({ severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao criar o espaço de coworking.', life: 3000 });
+          });
+    },
     onTemplatedUpload() {
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
     },
@@ -458,6 +493,11 @@ export default {
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+.p-fileupload {
+  border: 1px dashed #cbc8c8 !important;
+  border-radius: 8px !important;
 }
 
 .dropdown-inside .p-dropdown {

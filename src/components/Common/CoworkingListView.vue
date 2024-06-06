@@ -7,15 +7,26 @@
     </div>
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
+      <p class="card-text" style="font-size: 1rem; font-weight: 600;">{{ endereco }}</p>
       <p class="card-text description">{{ description }}</p>
-      <Rating v-model="ratingValue" readonly :cancel="false" />
+      <div class="card-actions">
+        <div class="icons">
+          <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="editCard(id)" />
+          <i style="  font-size: 1.2rem;cursor: pointer; color: #007bff;" class="pi pi-calendar" @click="openCalendar(id)" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+
 export default {
   name: 'CoworkingListView',
+  components: {
+
+  },
   props: {
     images: {
       type: Array,
@@ -25,7 +36,7 @@ export default {
       type: String,
       required: true
     },
-    price: {
+    endereco: {
       type: String,
       required: true
     },
@@ -62,13 +73,13 @@ export default {
     prevImage() {
       this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
     },
-    editCard() {
-      // Função para editar o card
-      this.$emit('edit', this.id);
+    editCard(id) {
+      // Add your edit card logic here
+      console.log(`Edit card with id: ${id}`);
     },
-    openCalendar() {
-      // Função para abrir o calendário
-      this.$emit('open-calendar', this.id);
+    openCalendar(id) {
+      // Add your open calendar logic here
+      console.log(`Open calendar for card with id: ${id}`);
     }
   }
 };
@@ -78,7 +89,6 @@ export default {
 .custom-card {
   width: 100%;
   display: flex;
-  flex-direction: column;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -127,6 +137,7 @@ export default {
 
 .card-body {
   padding: 15px;
+  position: relative;
 }
 
 .card-title {
@@ -147,24 +158,22 @@ export default {
   color: #888888;
 }
 
-.actions {
+.card-actions {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.icons {
+  display: flex;
   gap: 10px;
 }
 
-.edit-icon,
-.calendar-icon {
-  cursor: pointer;
+.edit-icon, .calendar-icon {
   font-size: 1.2rem;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.edit-icon:hover,
-.calendar-icon:hover {
-  color: #333;
+  cursor: pointer;
+  color: #007bff;
 }
 
 @media screen and (max-width: 1220px) {

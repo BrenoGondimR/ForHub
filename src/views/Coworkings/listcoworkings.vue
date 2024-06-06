@@ -6,20 +6,28 @@
     </b-colxx>
     <b-colxx lg="12">
       <b-row>
-        <b-colxx lg="12"><AnimatedLogo :show-logo="showAnimatedLogo" v-if="showAnimatedLogo" /></b-colxx>
+        <b-colxx lg="12">
+          <AnimatedLogo :show-logo="showAnimatedLogo" v-if="showAnimatedLogo" />
+        </b-colxx>
         <b-colxx lg="12" v-if="showAnimatedLogo === false">
-          <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
+          <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in paginatedAcomodacoes" :key="index">
             <CoworkingListView
                 :images="acomodacao.imagens"
-                :title="acomodacao.title"
-                :price="acomodacao.price"
+                :title="acomodacao.nome"
+                :endereco="acomodacao.endereco"
                 :id="acomodacao.id"
                 :rating="acomodacao.rating"
-                :description="acomodacao.description"
+                :description="acomodacao.descricao"
             />
           </b-colxx>
           <b-colxx lg="12">
-            <Paginator class="mt-3" :rows="10" :totalRecords="120"></Paginator>
+            <Paginator
+                class="mt-3"
+                :rows="rowsPerPage"
+                :totalRecords="totalRecords"
+                :page="currentPage"
+                @page="onPageChange"
+            ></Paginator>
           </b-colxx>
         </b-colxx>
       </b-row>
@@ -28,37 +36,67 @@
 </template>
 
 <script>
+import axios from "axios";
 import BColxx from "@/components/Common/Colxx.vue";
 import CardCoworkings from "@/components/Common/CardCoworkings.vue";
 import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
-import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
-import escritorio2Img from "@/assets/img/escritorio2.jpg";
-import escritorio3Img from "@/assets/img/escritorio3.jpg";
-import escritorio4Img from "@/assets/img/escritorio4.jpg";
 import CoworkingListView from "@/components/Common/CoworkingListView.vue";
+import Paginator from "primevue/paginator";
+import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: "home",
   components: {
     CoworkingListView,
-    AnimatedLogo, CardCoworkings,
+    AnimatedLogo,
+    CardCoworkings,
     BColxx,
+    Paginator,
   },
   data() {
     return {
       showAnimatedLogo: true,
-      acomodacoesPatrocinadas: [
-        { id: '1', rating: 5, imagens: [escritorioMeirelesImg, escritorio2Img], title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '2', rating: 4, imagens: [escritorio2Img, escritorio3Img], title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '3', rating: 2, imagens: [escritorio3Img, escritorio4Img], title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '4', rating: 4, imagens: [escritorio4Img, escritorioMeirelesImg], title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-      ],
+      rowsPerPage: 4,
+      currentPage: 1,
+      acomodacoesPatrocinadas: [],
     };
   },
-  methods: {},
+  computed: {
+    totalRecords() {
+      return this.acomodacoesPatrocinadas.length;
+    },
+    paginatedAcomodacoes() {
+      const start = (this.currentPage - 1) * this.rowsPerPage;
+      const end = start + this.rowsPerPage;
+      return this.acomodacoesPatrocinadas.slice(start, end);
+    }
+  },
+  methods: {
+    onPageChange(event) {
+      this.currentPage = event.page + 1;
+      this.fetchCoworkings();
+    },
+    fetchCoworkings() {
+      getAllCoworking()
+          .then(response => {
+            const spaces = response.data.data;
+            this.acomodacoesPatrocinadas = spaces.map(space => ({
+              id: space.ID.toString(),
+              imagens: space.images || [], // Assuming 'images' is an array of image URLs
+              nome: space.Nome,
+              endereco: space.Endereco,
+              descricao: space.Descricao
+            }));
+          })
+          .catch(error => {
+            console.error("Error fetching coworking spaces:", error);
+          });
+    }
+  },
   mounted() {
     setTimeout(() => {
       this.showAnimatedLogo = false;
+      this.fetchCoworkings();
     }, 2500);
   }
 };
