@@ -16,7 +16,6 @@
                 :title="acomodacao.nome"
                 :endereco="acomodacao.endereco"
                 :id="acomodacao.id"
-                :rating="acomodacao.rating"
                 :description="acomodacao.descricao"
             />
           </b-colxx>
@@ -36,12 +35,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import BColxx from "@/components/Common/Colxx.vue";
 import CardCoworkings from "@/components/Common/CardCoworkings.vue";
 import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
 import CoworkingListView from "@/components/Common/CoworkingListView.vue";
-import Paginator from "primevue/paginator";
 import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
@@ -51,7 +48,6 @@ export default {
     AnimatedLogo,
     CardCoworkings,
     BColxx,
-    Paginator,
   },
   data() {
     return {
@@ -82,7 +78,7 @@ export default {
             const spaces = response.data.data;
             this.acomodacoesPatrocinadas = spaces.map(space => ({
               id: space.ID.toString(),
-              imagens: space.images || [], // Assuming 'images' is an array of image URLs
+              imagens: space.Imagens.map(img => img.url),
               nome: space.Nome,
               endereco: space.Endereco,
               descricao: space.Descricao

@@ -16,8 +16,8 @@
       <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
         <card-coworkings
             :images="acomodacao.imagens"
-            :title="acomodacao.title"
-            :price="acomodacao.price"
+            :title="acomodacao.nome"
+            :endereco="acomodacao.endereco"
             :id="acomodacao.id"
             :rating="acomodacao.rating"
             :button-info="true"
@@ -66,12 +66,9 @@ import CardCoworkings from "@/components/Common/CardCoworkings.vue";
 import FooterComp from "@/components/Common/FooterComp.vue";
 import InputAcomodacoes from "@/components/Common/InputAcomodacoes.vue";
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
-import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
-import escritorio2Img from "@/assets/img/escritorio2.jpg";
-import escritorio3Img from "@/assets/img/escritorio3.jpg";
-import escritorio4Img from "@/assets/img/escritorio4.jpg";
 import CoworkingMapCard from "@/components/Common/CoworkingMapCard.vue";
 import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
+import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: "home",
@@ -105,18 +102,8 @@ export default {
           ], placeholder: 'Tipo De Acomodação'
         },
       ],
-      acomodacoesPatrocinadas: [
-        { id: '1', rating: 5, imagens: [escritorioMeirelesImg, escritorio2Img], title: 'Escritório Meireles', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '2', rating: 4, imagens: [escritorio2Img, escritorio3Img], title: 'Escritório Aldeota', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '3', rating: 2, imagens: [escritorio3Img, escritorio4Img], title: 'Escritório Iguatemi', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-        { id: '4', rating: 4, imagens: [escritorio4Img, escritorioMeirelesImg], title: 'Coworking Cafeteria', price: 'R$120/dia', description: 'Ótima localização...mais texto aqui' },
-      ],
-      markers: [
-        { title: 'Escritório Meireles', position: { lat: -23.55052, lng: -46.633308 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorioMeirelesImg, alt: 'Escritório Meireles' }, { itemImageSrc: escritorio2Img, alt: 'Escritório Aldeota' }], description: 'Escritório em São Paulo' },
-        { title: 'Escritório Iguatemi', position: { lat: -22.906846, lng: -43.172896 }, info: 'R$120/dia', rating: 3, showInfo: false, images: [{ itemImageSrc: escritorio3Img, alt: 'Escritório Iguatemi' }, { itemImageSrc: escritorio4Img, alt: 'Coworking Cafeteria' }], description: 'Escritório no Rio de Janeiro' },
-        { title: 'Escritório Edson Queiroz', position: { lat: -19.924501, lng: -43.93524 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorioMeirelesImg, alt: 'Escritório Meireles' }, { itemImageSrc: escritorio4Img, alt: 'Coworking Cafeteria' }], description: 'Escritório em Belo Horizonte' },
-        { title: 'Escritório Aldeota', position: { lat: -12.9714, lng: -38.5014 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorio2Img, alt: 'Escritório Aldeota' }, { itemImageSrc: escritorio3Img, alt: 'Escritório Iguatemi' }], description: 'Escritório em Salvador' },
-      ],
+      acomodacoesPatrocinadas: [],
+      markers: [],
       mapStyles: [
         {
           "featureType": "all",
@@ -399,11 +386,42 @@ export default {
     hideInfoWindow(index) {
       this.markers[index].showInfo = false;
     },
+    fetchCoworkings() {
+      getAllCoworking()
+          .then(response => {
+            const spaces = response.data.data;
+            console.log(spaces)
+            this.acomodacoesPatrocinadas = spaces.map(space => ({
+              id: space.ID.toString(),
+              imagens: space.Imagens.map(img => img.url),
+              nome: space.Nome,
+              endereco: space.Endereco,
+              descricao: space.Descricao
+            }));
+
+            this.markers = spaces.map(space => ({
+              title: space.Nome,
+              position: {
+                lat: parseFloat(space.Latitude), // Adicione Latitude ao seu backend
+                lng: parseFloat(space.Longitude) // Adicione Longitude ao seu backend
+              },
+              info: `R$${space.Valores[0].preco}/${space.Valores[0].unidade}`,
+              rating: space.Rating, // Adicione Rating ao seu backend se necessário
+              showInfo: false,
+              images: space.Imagens.map(img => ({ itemImageSrc: img.url, alt: space.Nome })),
+              description: space.Descricao
+            }));
+          })
+          .catch(error => {
+            console.error("Error fetching coworking spaces:", error);
+          });
+    }
   },
   mounted() {
     this.getUserLocation();
     setTimeout(() => {
       this.showAnimatedLogo = false;
+      this.fetchCoworkings();
     }, 2500);
   }
 };

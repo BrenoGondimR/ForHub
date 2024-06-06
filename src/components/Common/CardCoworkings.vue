@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
-      <p class="card-text" style="font-size: 1rem; font-weight: 600;">{{ price }}</p>
+      <p class="card-text" style="font-size: 1rem; font-weight: 600;">{{ endereco }}</p>
       <p class="card-text description">{{ description }}</p>
       <Rating v-model="ratingValue" readonly :cancel="false" />
       <b-button v-if="buttonInfo === true" class="button-dados" type="button" @click="showInfo(id)" variant="success" block style="width: 100%; margin-top: 30px;">Saiba Mais</b-button>
@@ -31,7 +31,7 @@ export default {
       type: Boolean,
       required: true
     },
-    price: {
+    endereco: {
       type: String,
       required: true
     },

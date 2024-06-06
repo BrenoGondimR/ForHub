@@ -1,6 +1,6 @@
 <template>
   <b-row class="main-flux" style="margin: 20px !important;">
-    <b-colxx lg="12" class="card">
+    <b-colxx lg="12" class="card" style="padding: 30px;">
       <Stepper>
         <!-- Primeira Etapa: Informações -->
         <StepperPanel header="Informações">
@@ -70,7 +70,7 @@
                 <template #empty>
                   <div class="flex align-items-center justify-content-center flex-column">
                     <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
-                    <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+                    <p class="mt-4 mb-0 text-drag">Drag and drop files to here to upload.</p>
                   </div>
                 </template>
               </FileUpload>
@@ -122,7 +122,7 @@
         </StepperPanel>
 
         <!-- Terceira Etapa: Formas de Pagamento -->
-        <StepperPanel header="Formas de Pagamento">
+        <StepperPanel header="Pagamentos">
           <template #content="{ prevCallback }">
             <h4 class="mb-3"><strong>Formas de Pagamento</strong></h4>
             <b-row>
@@ -427,13 +427,17 @@ export default {
       createCoworking(space)
           .then(response => {
             if (response.status === 201) {
-              this.$toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Espaço de coworking criado com sucesso!', life: 3000 });
-              // Redirecionar ou limpar o formulário aqui, se necessário
+              this.$router.push('/dashboard/coworkings/espacos');
+              this.showSuccess(); // Chama a função showSuccess ao criar com sucesso
             }
+
           })
           .catch(error => {
             this.$toast.add({ severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao criar o espaço de coworking.', life: 3000 });
           });
+    },
+    showSuccess() {
+      this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
     },
     onTemplatedUpload() {
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
@@ -512,6 +516,10 @@ h4 {
 .custom-button.p-button {
   border: none!important;
   background: none!important;
+}
+
+.text-drag{
+  font-family: Poppins,sans-serif
 }
 
 </style>
