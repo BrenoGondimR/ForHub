@@ -55,6 +55,10 @@
                     <Dropdown style="height: 100%;" v-model="field.unit" :options="timeUnits" optionLabel="label"
                               placeholder="Unidade" class="dropdown-inside"></Dropdown>
                   </div>
+                  <!-- Campo de descrição -->
+                </div>
+                <div>
+                  <InputText style="width: 100%;" v-if="field.active" v-model="field.description" placeholder="Descrição adicional" class="mt-3"></InputText>
                 </div>
                 <small v-if="field.error" class="text-danger">{{ field.errorMessage }}</small>
               </b-colxx>
@@ -139,8 +143,8 @@ export default {
         },
         {key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
         {
-          key: 'impressora',
-          label: 'Impressora',
+          key: 'quadro',
+          label: 'Quadro Branco',
           type: 'Checkbox',
           value: false,
           error: false,
@@ -182,6 +186,7 @@ export default {
           key: 'domicilio_fiscal',
           label: 'Domicílio Fiscal',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 120.00,
           col: '6',
           active: true,
@@ -193,6 +198,7 @@ export default {
           key: 'secretariado',
           label: 'Secretariado',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 179.90,
           col: '6',
           active: true,
@@ -204,6 +210,7 @@ export default {
           key: 'coworking',
           label: 'Estações de Trabalho - Coworking',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 560.00,
           col: '6',
           active: true,
@@ -215,6 +222,7 @@ export default {
           key: 'sala_exclusiva',
           label: 'Sala Exclusiva',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 3500.00,
           col: '6',
           active: true,
@@ -226,6 +234,7 @@ export default {
           key: 'sala_reuniao',
           label: 'Sala de Reunião',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 80.00,
           col: '6',
           active: true,
@@ -237,6 +246,7 @@ export default {
           key: 'sala_treinamento',
           label: 'Sala de Treinamento',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 670.00,
           col: '6',
           active: true,
@@ -248,6 +258,7 @@ export default {
           key: 'auditorio',
           label: 'Auditório',
           type: 'InputNumber',
+          description: '', // Descrição adicional
           value: 900.00,
           col: '12',
           active: true,
