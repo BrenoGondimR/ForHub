@@ -7,43 +7,14 @@
       <CoworkingFacilities :facilities="facilities" />
     </div>
     <div class="details-right">
-      <div class="price">
-        <span>A partir de</span>
-        <strong>R$ {{ details.price }} /hora</strong>
-      </div>
-      <div class="availability">
-        <div class="date-time-picker">
-          <label for="inputDateStart" class="font-bold block mb-2">Data de Início</label>
-          <Calendar inputId="inputDateStart" v-model="startDate" dateFormat="dd/mm/yy" showIcon iconDisplay="input" />
-        </div>
-        <div class="date-time-picker">
-          <label for="inputTimeStart" class="font-bold block mb-2">Hora de Início</label>
-          <Calendar inputId="inputTimeStart" id="calendar-timeonly" v-model="startTime" timeOnly showIcon iconDisplay="input" :icon="'pi pi-clock cursor-pointer'"/>
-        </div>
-        <div class="date-time-picker">
-          <label for="inputTimeEnd" class="font-bold block mb-2">Hora de Termino</label>
-          <Calendar inputId="inputTimeEnd" id="calendar-timeonly" v-model="endTime" timeOnly showIcon iconDisplay="input" :icon="'pi pi-clock cursor-pointer'"/>
-        </div>
-        <div v-if="addMoreDays" class="date-time-picker">
-          <label for="inputDateStart" class="font-bold block mb-2">Data de Término</label>
-          <Calendar inputId="inputDateStart" v-model="endDate" dateFormat="dd/mm/yy" showIcon iconDisplay="input" />
-        </div>
-        <div class="add-day">
-          <label>
-            <input type="checkbox" v-model="addMoreDays" />
-            Ficar mais um dia
-          </label>
+      <h4>Valores cadastrados</h4>
+      <div v-for="(field, index) in fieldsValores" :key="index" class="value-row">
+        <div class="value-label">{{ field.label }}:</div>
+        <div class="value-content">
+          <span>R$ {{ field.value }} {{ field.unit }}</span>
+          <button class="rent-now" @click="rentNow(field)">Alugar</button>
         </div>
       </div>
-      <div class="guests">
-        <label>Convidados</label>
-        <div class="guest-control">
-          <button @click="decreaseGuests">-</button>
-          <span>{{ guests }}</span>
-          <button @click="increaseGuests">+</button>
-        </div>
-      </div>
-      <button class="book-now" @click="openModal">Reserve agora</button>
     </div>
 
     <b-modal v-model="showModal" title="Detalhes da Reserva" hide-footer>
@@ -53,9 +24,7 @@
           <input type="text" v-model="name" />
         </div>
         <div>
-          <p><strong>Data de Inícicddcdccdcdo:</strong> {{ startDate }}</p>
           <p><strong>Hora de Início:</strong> {{ startTime }}</p>
-          <p v-if="addMoreDays"><strong>Data de Término:</strong> {{ endDate }}</p>
           <p><strong>Hora de Término:</strong> {{ endTime }}</p>
           <p><strong>Total:</strong> R$ {{ totalCost.toFixed(2) }}</p>
         </div>
@@ -88,48 +57,104 @@ export default {
   },
   data() {
     return {
-      startDate: '',
       startTime: '',
-      endDate: '',
       endTime: '',
-      guests: 1,
       name: '',
       showModal: false,
-      addMoreDays: false,
-      totalCost: 0
+      totalCost: 0,
+      fieldsValores: [
+        {
+          key: 'domicilio_fiscal',
+          label: 'Domicílio Fiscal',
+          type: 'InputNumber',
+          value: 150.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'secretariado',
+          label: 'Secretariado',
+          type: 'InputNumber',
+          value: 200.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'coworking',
+          label: 'Estações de Trabalho - Coworking',
+          type: 'InputNumber',
+          value: 600.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'sala_exclusiva',
+          label: 'Sala Exclusiva',
+          type: 'InputNumber',
+          value: 4000.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'sala_reuniao',
+          label: 'Sala de Reunião',
+          type: 'InputNumber',
+          value: 100.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'sala_treinamento',
+          label: 'Sala de Treinamento',
+          type: 'InputNumber',
+          value: 750.00,
+          col: '6',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+        {
+          key: 'auditorio',
+          label: 'Auditório',
+          type: 'InputNumber',
+          value: 950.00,
+          col: '12',
+          active: true,
+          error: false,
+          errorMessage: 'Este campo é obrigatório',
+          unit: 'hora'
+        },
+      ],
     };
   },
   methods: {
-    openModal() {
-      this.calculateCost();
-      this.showModal = true;
-    },
     closeModal() {
       this.showModal = false;
-    },
-    increaseGuests() {
-      this.guests++;
-    },
-    decreaseGuests() {
-      if (this.guests > 1) {
-        this.guests--;
-      }
     },
     confirmReservation() {
       // Implementar a lógica de confirmação da reserva
       alert('Reserva confirmada!');
       this.closeModal();
     },
-    calculateCost() {
-      const start = new Date(`${this.startDate}T${this.startTime}`);
-      const end = new Date(`${this.endDate ? this.endDate : this.startDate}T${this.endTime}`);
-
-      // Calcular o total de horas
-      const diffTime = Math.abs(end - start);
-      const diffDays = this.addMoreDays ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : 1;
-      const hoursPerDay = Math.abs(new Date(`1970-01-01T${this.endTime}`) - new Date(`1970-01-01T${this.startTime}`)) / (1000 * 60 * 60);
-
-      this.totalCost = diffDays * hoursPerDay * this.details.price;
+    rentNow(field) {
+      // Implementar a lógica para alugar o item específico
+      alert(`Alugando ${field.label} por R$${field.value} ${field.unit}`);
     }
   }
 };
@@ -153,7 +178,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  max-height: 560px;
+  height: 100%;
 }
 
 h1 {
@@ -174,83 +199,50 @@ p {
   margin-bottom: 20px;
 }
 
-.price {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.availability {
+.value-row {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
-.date-time-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.value-row:last-child {
+  border-bottom: none;
 }
 
-label {
-  font-size: 0.875rem;
-  color: #666;
-}
-
-input[type="date"],
-input[type="time"],
-select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.value-label {
+  flex: 1;
   font-size: 1rem;
-  width: 100%;
+  color: #333;
+  font-weight: bold;
 }
 
-.add-day {
-  margin-bottom: 20px;
-}
-
-.guests,
-.type {
-  margin-bottom: 20px;
-}
-
-.guest-control {
+.value-content {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
-.guest-control button {
-  padding: 5px 10px;
-  border: none;
-  background-color: #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.guest-control button:hover {
-  background-color: #ccc;
-}
-
-.book-now {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background-color: #1aa3e4;
-  color: white;
-  border-radius: 5px;
+.value-content span {
   font-size: 1rem;
-  font-weight: bold;
+  color: #333;
+}
+
+.value-row button {
+  background-color: #1aa3e4;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.book-now:hover {
+.value-row button:hover {
   background-color: #007bff;
 }
 
@@ -298,6 +290,49 @@ select {
 @media (max-width: 768px) {
   .details-container {
     flex-direction: column;
+  }
+
+  .details-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-container {
+    gap: 10px;
+  }
+
+  .details-left,
+  .details-right {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 0.875rem;
+  }
+
+  .value-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .value-label,
+  .value-content span {
+    font-size: 0.875rem;
+  }
+
+  .value-row button {
+    width: 100%;
+    text-align: center;
   }
 }
 </style>
