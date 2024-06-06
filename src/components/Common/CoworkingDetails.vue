@@ -9,7 +9,10 @@
     <div class="details-right">
       <h4>Valores cadastrados</h4>
       <div v-for="(field, index) in fieldsValores" :key="index" class="value-row">
-        <div class="value-label">{{ field.label }}:</div>
+        <div class="value-info">
+          <div class="value-label">{{ field.label }}:</div>
+          <div class="value-description">{{ field.description }}</div>
+        </div>
         <div class="value-content">
           <span>R$ {{ field.value }} {{ field.unit }}</span>
           <button class="rent-now" @click="rentNow(field)">Alugar</button>
@@ -24,13 +27,16 @@
           <input type="text" v-model="name" />
         </div>
         <div>
-          <p><strong>Hora de Início:</strong> {{ startTime }}</p>
-          <p><strong>Hora de Término:</strong> {{ endTime }}</p>
-          <p><strong>Total:</strong> R$ {{ totalCost.toFixed(2) }}</p>
+          <label>Email</label>
+          <input type="email" v-model="email" />
+        </div>
+        <div>
+          <label>Telefone</label>
+          <input type="tel" v-model="phone" />
         </div>
       </div>
       <div class="modal-footer">
-        <b-button variant="primary" @click="confirmReservation" class="confirm-button">Confirmar Reserva</b-button>
+        <b-button variant="primary" @click="sendMessage" class="confirm-button">Enviar Mensagem</b-button>
         <b-button variant="secondary" @click="closeModal" class="close-button">Fechar</b-button>
       </div>
     </b-modal>
@@ -60,84 +66,58 @@ export default {
       startTime: '',
       endTime: '',
       name: '',
+      email: '',
+      phone: '',
       showModal: false,
       totalCost: 0,
       fieldsValores: [
         {
           key: 'domicilio_fiscal',
           label: 'Domicílio Fiscal',
-          type: 'InputNumber',
+          description: 'Serviço de endereço fiscal para sua empresa.',
           value: 150.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'secretariado',
           label: 'Secretariado',
-          type: 'InputNumber',
+          description: 'Serviço de secretariado para reuniões e eventos.',
           value: 200.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'coworking',
           label: 'Estações de Trabalho - Coworking',
-          type: 'InputNumber',
+          description: 'Espaço de coworking com todas as facilidades inclusas.',
           value: 600.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'sala_exclusiva',
           label: 'Sala Exclusiva',
-          type: 'InputNumber',
+          description: 'Sala exclusiva para reuniões privadas.',
           value: 4000.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'sala_reuniao',
           label: 'Sala de Reunião',
-          type: 'InputNumber',
+          description: 'Sala de reunião equipada para seus encontros profissionais.',
           value: 100.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'sala_treinamento',
           label: 'Sala de Treinamento',
-          type: 'InputNumber',
+          description: 'Espaço para treinamentos e workshops.',
           value: 750.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
         {
           key: 'auditorio',
           label: 'Auditório',
-          type: 'InputNumber',
+          description: 'Auditório completo para eventos e palestras.',
           value: 950.00,
-          col: '12',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
           unit: 'hora'
         },
       ],
@@ -147,14 +127,14 @@ export default {
     closeModal() {
       this.showModal = false;
     },
-    confirmReservation() {
-      // Implementar a lógica de confirmação da reserva
-      alert('Reserva confirmada!');
+    sendMessage() {
+      // Implementar a lógica de envio de mensagem
+      alert(`Mensagem enviada por ${this.name}`);
       this.closeModal();
     },
     rentNow(field) {
-      // Implementar a lógica para alugar o item específico
-      alert(`Alugando ${field.label} por R$${field.value} ${field.unit}`);
+      // Abrir o modal para solicitar os dados do usuário
+      this.showModal = true;
     }
   }
 };
@@ -178,17 +158,19 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  height: 100%;
+  height: auto;
+  background-color: #ffffff;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: bold;
   margin-bottom: 10px;
+  color: #333;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: #666;
   margin-bottom: 20px;
 }
@@ -199,10 +181,17 @@ p {
   margin-bottom: 20px;
 }
 
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
 .value-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 10px 0;
   border-bottom: 1px solid #eee;
 }
@@ -211,11 +200,20 @@ p {
   border-bottom: none;
 }
 
-.value-label {
+.value-info {
   flex: 1;
+}
+
+.value-label {
   font-size: 1rem;
   color: #333;
   font-weight: bold;
+}
+
+.value-description {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 5px;
 }
 
 .value-content {
@@ -232,18 +230,19 @@ p {
 }
 
 .value-row button {
-  background-color: #1aa3e4;
+  background-color: #007bff;
   border: none;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .value-row button:hover {
-  background-color: #007bff;
+  background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .modal-body p {
@@ -256,7 +255,7 @@ p {
 }
 
 .confirm-button {
-  background-color: #1aa3e4;
+  background-color: #007bff;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -268,7 +267,7 @@ p {
 }
 
 .confirm-button:hover {
-  background-color: #007bff;
+  background-color: #0056b3;
 }
 
 .close-button {

@@ -7,8 +7,7 @@
           <template #content="{ nextCallback }">
             <h4 class="mb-3"><strong>Informações</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsInfo" :key="index" :lg="field.col" class="p-field"
-                       style="display: grid; margin-bottom: 20px;">
+              <b-colxx v-for="(field, index) in fieldsInfo" :key="index" :lg="field.col" class="p-field" style="display: grid; margin-bottom: 20px;">
                 <label :for="field.key">{{ field.label }}</label>
                 <component
                     :is="getComponentType(field.type)"
@@ -21,9 +20,63 @@
                 <small v-if="field.error" class="text-danger">{{ field.errorMessage }}</small>
               </b-colxx>
             </b-row>
+            <!-- Componente de upload de arquivos -->
+            <div class="card mt-3">
+              <Toast />
+              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
+                <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
+                  <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                    <div class="flex gap-2">
+                      <Button @click="chooseCallback()" icon="pi pi-images" rounded outlined class="custom-button"></Button>
+                      <Button @click="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" rounded outlined severity="success" :disabled="!files || files.length === 0" class="custom-button"></Button>
+                      <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger" :disabled="!files || files.length === 0" class="custom-button"></Button>
+                    </div>
+                    <ProgressBar :value="totalSizePercent" :showValue="false" :class="['md:w-20rem h-1rem w-full md:ml-auto', { 'exceeded-progress-bar': totalSizePercent > 100 }]">
+                      <span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span>
+                    </ProgressBar>
+                  </div>
+                </template>
+                <template #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback }">
+                  <div v-if="files.length > 0">
+                    <h5>Pending</h5>
+                    <div class="flex flex-wrap p-0 sm:p-5 gap-5">
+                      <div v-for="(file, index) of files" :key="file.name + file.type + file.size" class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                        <div>
+                          <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
+                        </div>
+                        <span class="font-semibold">{{ file.name }}</span>
+                        <div>{{ formatSize(file.size) }}</div>
+                        <Badge value="Pending" severity="warning" />
+                        <Button icon="pi pi-times" @click="onRemoveTemplatingFile(file, removeFileCallback, index)" outlined rounded severity="danger" class="custom-button" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="uploadedFiles.length > 0">
+                    <h5>Completed</h5>
+                    <div class="flex flex-wrap p-0 sm:p-5 gap-5">
+                      <div v-for="(file, index) of uploadedFiles" :key="file.name + file.type + file.size" class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                        <div>
+                          <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
+                        </div>
+                        <span class="font-semibold">{{ file.name }}</span>
+                        <div>{{ formatSize(file.size) }}</div>
+                        <Badge value="Completed" class="mt-3" severity="success" />
+                        <Button icon="pi pi-times" @click="removeUploadedFileCallback(index)" outlined rounded severity="danger" class="custom-button" />
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template #empty>
+                  <div class="flex align-items-center justify-content-center flex-column">
+                    <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
+                    <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+                  </div>
+                </template>
+              </FileUpload>
+            </div>
             <div class="flex pt-4 justify-content-end">
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"
-                      @click="nextCallback"/>
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" @click="nextCallback" />
             </div>
           </template>
         </StepperPanel>
@@ -33,11 +86,10 @@
           <template #content="{ prevCallback, nextCallback }">
             <h4 class="mb-3"><strong>Valores</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsValores" :key="index" :lg="field.col" class="p-field"
-                       style="display: grid; align-items: center; margin-bottom: 20px;">
+              <b-colxx v-for="(field, index) in fieldsValores" :key="index" :lg="field.col" class="p-field" style="display: grid; align-items: center; margin-bottom: 20px;">
                 <div class="field-label-checkbox">
                   <label :for="field.key">{{ field.label }}</label>
-                  <b-form-checkbox class="checkbox-option" v-model="field.active" @input="toggleService(field.key)"/>
+                  <b-form-checkbox class="checkbox-option" v-model="field.active" @input="toggleService(field.key)" />
                 </div>
                 <div v-if="field.active" class="input-group">
                   <div class="input-group-prepend">
@@ -52,11 +104,10 @@
                       style="max-height: 44px !important; border-radius: 5px 0px 0px 5px; !important;"
                   />
                   <div class="input-group-append">
-                    <Dropdown style="height: 100%;" v-model="field.unit" :options="timeUnits" optionLabel="label"
-                              placeholder="Unidade" class="dropdown-inside"></Dropdown>
+                    <Dropdown style="height: 100%;" v-model="field.unit" :options="timeUnits" optionLabel="label" placeholder="Unidade" class="dropdown-inside"></Dropdown>
                   </div>
-                  <!-- Campo de descrição -->
                 </div>
+                <!-- Campo de descrição -->
                 <div>
                   <InputText style="width: 100%;" v-if="field.active" v-model="field.description" placeholder="Descrição adicional" class="mt-3"></InputText>
                 </div>
@@ -64,11 +115,8 @@
               </b-colxx>
             </b-row>
             <div class="flex pt-4 justify-content-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
-                      style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;"
-                      @click="prevCallback"/>
-              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"
-                      @click="nextCallback"/>
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;" @click="prevCallback" />
+              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" @click="nextCallback" />
             </div>
           </template>
         </StepperPanel>
@@ -78,18 +126,15 @@
           <template #content="{ prevCallback }">
             <h4 class="mb-3"><strong>Formas de Pagamento</strong></h4>
             <b-row>
-              <b-colxx v-for="(field, index) in fieldsPagamentos" :key="index" :lg="field.col" class="p-field"
-                       style="display: grid; align-items: center; margin-bottom: 20px;">
+              <b-colxx v-for="(field, index) in fieldsPagamentos" :key="index" :lg="field.col" class="p-field" style="display: grid; align-items: center; margin-bottom: 20px;">
                 <b-form-checkbox v-model="field.value" :id="field.key">
                   {{ field.label }}
                 </b-form-checkbox>
               </b-colxx>
             </b-row>
             <div class="flex pt-4 justify-content-between">
-              <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
-                      style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;"
-                      @click="prevCallback"/>
-              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;"/>
+              <Button label="Back" severity="secondary" icon="pi pi-arrow-left" style="border-radius: 8px; background: none !important; border: 1px solid #007bff !important; color: #007bff;" @click="prevCallback" />
+              <Button label="Cadastrar" icon="pi pi-arrow-right" iconPos="right" style="border-radius: 8px;" />
             </div>
           </template>
         </StepperPanel>
@@ -104,7 +149,7 @@ import BColxx from "@/components/Common/Colxx.vue";
 export default {
   name: "CoworkingCreation",
   components: {
-    BColxx,
+    BColxx
   },
   data() {
     return {
@@ -140,6 +185,15 @@ export default {
           error: false,
           errorMessage: 'Descrição é obrigatória',
           col: '12'
+        },
+        {
+          key: 'phone',
+          label: 'Telefone/WhatsApp',
+          type: 'InputText',
+          value: '',
+          error: false,
+          errorMessage: 'Telefone/WhatsApp é obrigatório',
+          col: '6'
         },
         {key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
         {
@@ -278,6 +332,9 @@ export default {
         {key: 'mercadopago', label: 'Mercado Pago', value: false, col: '6'},
         {key: 'picpay', label: 'PicPay', value: false, col: '6'},
       ],
+      files: [],
+      totalSize: 0,
+      totalSizePercent: 0,
     };
   },
   methods: {
@@ -323,6 +380,43 @@ export default {
         field.active = !field.active;
       }
     },
+    onRemoveTemplatingFile(file, removeFileCallback, index) {
+      removeFileCallback(index);
+      this.totalSize -= parseInt(this.formatSize(file.size));
+      this.totalSizePercent = this.totalSize / 10;
+    },
+    onClearTemplatingUpload(clear) {
+      clear();
+      this.totalSize = 0;
+      this.totalSizePercent = 0;
+    },
+    onSelectedFiles(event) {
+      this.files = event.files;
+      this.files.forEach((file) => {
+        this.totalSize += parseInt(this.formatSize(file.size));
+      });
+    },
+    uploadEvent(callback) {
+      this.totalSizePercent = this.totalSize / 10;
+      callback();
+    },
+    onTemplatedUpload() {
+      this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+    },
+    formatSize(bytes) {
+      const k = 1024;
+      const dm = 3;
+      const sizes = this.$primevue.config.locale.fileSizeTypes;
+
+      if (bytes === 0) {
+        return `0 ${sizes[0]}`;
+      }
+
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+
+      return `${formattedSize} ${sizes[i]}`;
+    }
   },
 };
 </script>
@@ -375,4 +469,9 @@ export default {
 h4 {
   font-weight: bold;
 }
+.custom-button.p-button {
+  border: none!important;
+  background: none!important;
+}
+
 </style>
