@@ -11,7 +11,7 @@
       <p class="card-text description">{{ description }}</p>
       <div class="card-actions">
         <div class="icons">
-          <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="editCard(id)" />
+          <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="onEditClick" />
           <i style="  font-size: 1.2rem;cursor: pointer; color: #007bff;" class="pi pi-calendar" @click="openCalendar(id)" />
         </div>
       </div>
@@ -46,7 +46,8 @@ export default {
     },
     description: {
       type: String,
-    }
+    },
+    onEdit: Function
   },
   data() {
     return {
@@ -62,6 +63,9 @@ export default {
   methods: {
     showInfo(id) {
       this.$router.push(`/coworkinginfo/${id}`);
+    },
+    onEditClick() {
+      this.onEdit(this.id);
     },
     nextImage() {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
