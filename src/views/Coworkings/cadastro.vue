@@ -24,7 +24,7 @@
             <!-- Componente de upload de arquivos -->
             <div class="card mt-3">
               <Toast />
-              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
+              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" customUpload @uploader="customBase64Uploader" :maxFileSize="1000000" @select="onSelectedFiles">
                 <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
                   <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
                     <div class="flex gap-2">
@@ -160,6 +160,8 @@ export default {
         {label: 'Por Dia', value: 'dia'},
         {label: 'Por Mês', value: 'mes'}
       ],
+      imageFilenames: [], // Armazena os filenames das imagens
+      imageBase64Strings: [], // Armazena as strings base64 das imagens
       fieldsInfo: [
         {
           key: 'roomName',
@@ -242,90 +244,13 @@ export default {
         {key: 'numero', label: 'Numero', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
       ],
       fieldsValores: [
-        {
-          key: 'domicilio_fiscal',
-          label: 'Domicílio Fiscal',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 120.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'secretariado',
-          label: 'Secretariado',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 179.90,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'coworking',
-          label: 'Estações de Trabalho - Coworking',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 560.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'sala_exclusiva',
-          label: 'Sala Exclusiva',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 3500.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'sala_reuniao',
-          label: 'Sala de Reunião',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 80.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'sala_treinamento',
-          label: 'Sala de Treinamento',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 670.00,
-          col: '6',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
-        {
-          key: 'auditorio',
-          label: 'Auditório',
-          type: 'InputNumber',
-          description: '', // Descrição adicional
-          value: 900.00,
-          col: '12',
-          active: true,
-          error: false,
-          errorMessage: 'Este campo é obrigatório',
-          unit: ''
-        },
+        {key: 'domicilio_fiscal', label: 'Domicílio Fiscal', type: 'InputNumber', description: '', value: 120.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'secretariado', label: 'Secretariado', type: 'InputNumber', description: '', value: 179.90, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'coworking', label: 'Estações de Trabalho - Coworking', type: 'InputNumber', description: '', value: 560.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'sala_exclusiva', label: 'Sala Exclusiva', type: 'InputNumber', description: '', value: 3500.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'sala_reuniao', label: 'Sala de Reunião', type: 'InputNumber', description: '', value: 80.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'sala_treinamento', label: 'Sala de Treinamento', type: 'InputNumber', description: '', value: 670.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        {key: 'auditorio', label: 'Auditório', type: 'InputNumber', description: '', value: 900.00, col: '12', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
       ],
       fieldsPagamentos: [
         {key: 'pix', label: 'PIX', value: false, col: '6'},
@@ -344,6 +269,20 @@ export default {
     };
   },
   methods: {
+    async customBase64Uploader(event) {
+      for (const file of event.files) { // Processa cada arquivo individualmente
+        const reader = new FileReader();
+        let blob = await fetch(file.objectURL).then(r => r.blob()); // Converte o URL do objeto em blob
+
+        reader.readAsDataURL(blob); // Lê o blob como base64
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          this.imageBase64Strings.push(base64data); // Armazena a string base64 no array
+          this.imageFilenames.push(file.name); // Armazena o filename no array
+          console.log(base64data);
+        };
+      }
+    },
     getComponentType(type) {
       switch (type) {
         case 'InputText':
@@ -428,6 +367,7 @@ export default {
     },
     uploadEvent(callback) {
       this.totalSizePercent = this.totalSize / 10;
+      console.log(this.files);
       callback();
     },
     createCoworkingSpace() {
@@ -450,9 +390,9 @@ export default {
           unidade: f.unit ? f.unit.value : '',  // Certifique-se de que 'unit' é uma string
           descricao: f.description
         })),
-        imagens: this.files.map(file => ({
-          url: file.objectURL,
-          descricao: '' // Adicione aqui se tiver uma descrição
+        imagens: this.imageBase64Strings.map((base64, index) => ({
+          base64,
+          filename: this.imageFilenames[index] // Adiciona o filename
         }))
       };
 

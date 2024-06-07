@@ -25,6 +25,8 @@
     "primevue": "^3.49.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue2-dropzone": "^3.6.0",
+    "vue3-dropzone": "^2.2.1",
     "vue3-google-map": "^0.20.0",
     "vuetify": "^3.5.11"
   },
