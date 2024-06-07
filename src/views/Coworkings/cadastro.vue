@@ -15,6 +15,7 @@
                     :id="field.key"
                     v-bind="getComponentProps(field)"
                     @keydown="field.error = false"
+                    @blur="field.key === 'cep' ? fetchAddress() : null"
                     style="max-height: 44px !important;"
                 />
                 <small v-if="field.error" class="text-danger">{{ field.errorMessage }}</small>
@@ -234,7 +235,11 @@ export default {
           errorMessage: '',
           col: '2'
         },
-        {key: 'address', label: 'Endereço', type: 'InputText', value: '', error: false, errorMessage: '', col: '12'},
+        {key: 'cep', label: 'CEP', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
+        {key: 'logradouro', label: 'Logradouro', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
+        {key: 'complemento', label: 'Complemento', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
+        {key: 'bairro', label: 'Bairro', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
+        {key: 'numero', label: 'Numero', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
       ],
       fieldsValores: [
         {
@@ -359,6 +364,30 @@ export default {
           return 'b-form-input';
       }
     },
+    async fetchAddress() {
+      const cepField = this.fieldsInfo.find(f => f.key === 'cep');
+      if (cepField.value.length === 8) {  // Verifica se o CEP tem 8 dígitos
+        try {
+          const response = await fetch(`https://viacep.com.br/ws/${cepField.value}/json/`);
+          const addressData = await response.json();
+          if (addressData && !addressData.erro) {
+            this.updateField('logradouro', addressData.logradouro);
+            this.updateField('bairro', addressData.bairro);
+          } else {
+            this.$toast.add({ severity: 'error', summary: 'Erro', detail: 'CEP não encontrado.', life: 3000 });
+          }
+        } catch (error) {
+          console.error('Erro ao buscar o CEP:', error);
+          this.$toast.add({ severity: 'error', summary: 'Erro de Rede', detail: 'Não foi possível buscar o CEP.', life: 3000 });
+        }
+      }
+    },
+    updateField(key, value) {
+      const field = this.fieldsInfo.find(f => f.key === key);
+      if (field) {
+        field.value = value;
+      }
+    },
     getComponentProps(field) {
       const props = {};
       if (field.type === 'InputMask') {
@@ -404,7 +433,10 @@ export default {
     createCoworkingSpace() {
       const space = {
         nome: this.fieldsInfo.find(f => f.key === 'roomName').value,
-        endereco: this.fieldsInfo.find(f => f.key === 'address').value,
+        logradouro: this.fieldsInfo.find(f => f.key === 'logradouro').value,
+        cep: parseInt(this.fieldsInfo.find(f => f.key === 'cep').value),
+        numero: parseInt(this.fieldsInfo.find(f => f.key === 'numero').value),
+        complemento: this.fieldsInfo.find(f => f.key === 'complemento').value,
         descricao: this.fieldsInfo.find(f => f.key === 'description').value,
         wifi: this.fieldsInfo.find(f => f.key === 'wifi').value,
         quadro_branco: this.fieldsInfo.find(f => f.key === 'quadro').value,
