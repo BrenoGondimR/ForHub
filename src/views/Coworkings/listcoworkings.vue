@@ -25,6 +25,7 @@
                 :complemento="acomodacao.complemento"
                 :id="acomodacao.id"
                 :description="acomodacao.descricao"
+                :onEdit="navigateToEdit"
             />
           </b-colxx>
           <b-colxx lg="12">
@@ -77,6 +78,9 @@ export default {
     onPageChange(event) {
       this.currentPage = event.page + 1;
       this.fetchCoworkings();
+    },
+    navigateToEdit(coworkingId) {
+      this.$router.push(`/dashboard/coworkings/edit/${coworkingId}`);
     },
     fetchCoworkings() {
       getAllCoworking()

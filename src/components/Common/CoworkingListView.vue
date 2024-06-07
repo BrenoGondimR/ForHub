@@ -13,7 +13,7 @@
       <p class="card-text complemento">Complemento: {{ complemento }}</p>
     </div>
     <div class="icons-container">
-      <i class="pi pi-pencil edit-icon" @click="editCard(id)" />
+      <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="onEditClick" />
       <i class="pi pi-trash delete-icon" @click="deleteCard(id)" />
     </div>
   </div>
@@ -50,7 +50,8 @@ export default {
     id: {
       type: String,
       required: true
-    }
+    },
+    onEdit: Function
   },
   data() {
     return {
@@ -63,6 +64,12 @@ export default {
     }
   },
   methods: {
+    showInfo(id) {
+      this.$router.push(`/coworkinginfo/${id}`);
+    },
+    onEditClick() {
+      this.onEdit(this.id);
+    },
     nextImage() {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
     },

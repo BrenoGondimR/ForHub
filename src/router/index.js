@@ -11,6 +11,7 @@ import Clientes from '@/views/Clientes/index.vue'
 import CadastroClientes from '@/views/Clientes/cadastro.vue'
 import Reservas from '@/views/Reservas/index.vue'
 import CadastroCoworking from '@/views/Coworkings/cadastro.vue'
+import EditCoworking from '@/views/Coworkings/editar.vue'
 import Financeiro from '@/views/Financeiro/index.vue'
 import ListCoworkings from '@/views/Coworkings/listcoworkings.vue'
 
@@ -80,6 +81,11 @@ const routes = [
     path: '/dashboard/coworkings/cadastro',
     name: 'cadastro',
     component: CadastroCoworking
+  },
+  {
+    path: '/dashboard/coworkings/edit/:id',
+    name: 'edit',
+    component: EditCoworking
   },
   {
     path: '/dashboard/coworkings/espacos',
