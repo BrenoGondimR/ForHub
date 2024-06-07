@@ -1,32 +1,27 @@
 <template>
   <div class="custom-card">
     <div class="image-container">
-      <img :src="currentImage" class="card-img-top" alt="Imagem do Espaço">
+      <img :src="currentImage" class="card-img" alt="Imagem do Espaço">
       <button class="nav-button left" @click="prevImage">&#10094;</button>
       <button class="nav-button right" @click="nextImage">&#10095;</button>
     </div>
-    <div class="card-body">
+    <div class="info-container">
       <h5 class="card-title">{{ title }}</h5>
-      <p class="card-text" style="font-size: 1rem; font-weight: 600;">{{ endereco }}</p>
-      <p class="card-text description">{{ description }}</p>
-      <div class="card-actions">
-        <div class="icons">
-          <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="onEditClick" />
-          <i style="  font-size: 1.2rem;cursor: pointer; color: #007bff;" class="pi pi-calendar" @click="openCalendar(id)" />
-        </div>
-      </div>
+      <p class="card-text endereco">{{ endereco }}</p>
+      <p class="card-text cep">CEP: {{ cep }}</p>
+      <p class="card-text numero">Número: {{ numero }}</p>
+      <p class="card-text complemento">Complemento: {{ complemento }}</p>
+    </div>
+    <div class="icons-container">
+      <i style="  font-size: 1.2rem; cursor: pointer; color: #007bff;" class="pi pi-pencil" @click="onEditClick" />
+      <i class="pi pi-trash delete-icon" @click="deleteCard(id)" />
     </div>
   </div>
 </template>
 
 <script>
-
-
 export default {
   name: 'CoworkingListView',
-  components: {
-
-  },
   props: {
     images: {
       type: Array,
@@ -40,19 +35,27 @@ export default {
       type: String,
       required: true
     },
-    id: {
+    cep: {
+      type: Number,
+      required: true
+    },
+    numero: {
+      type: Number,
+      required: true
+    },
+    complemento: {
       type: String,
       required: true
     },
-    description: {
+    id: {
       type: String,
+      required: true
     },
     onEdit: Function
   },
   data() {
     return {
       currentIndex: 0,
-      ratingValue: this.rating,
     };
   },
   computed: {
@@ -74,12 +77,10 @@ export default {
       this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
     },
     editCard(id) {
-      // Add your edit card logic here
       console.log(`Edit card with id: ${id}`);
     },
-    openCalendar(id) {
-      // Add your open calendar logic here
-      console.log(`Open calendar for card with id: ${id}`);
+    deleteCard(id) {
+      console.log(`Delete card with id: ${id}`);
     }
   }
 };
@@ -87,12 +88,14 @@ export default {
 
 <style scoped>
 .custom-card {
-  width: 100%;
   display: flex;
+  align-items: flex-start;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .custom-card:hover {
@@ -100,6 +103,7 @@ export default {
 }
 
 .image-container {
+  flex: 1;
   position: relative;
 }
 
@@ -107,11 +111,8 @@ export default {
   width: 100%;
   height: auto;
   max-height: 197px;
-  min-width: 292px;
-  max-width: 300px;
-  border-top-right-radius: 12px;
   border-top-left-radius: 12px;
-  min-height: 180px;
+  border-bottom-left-radius: 12px;
 }
 
 .nav-button {
@@ -135,45 +136,54 @@ export default {
   right: 10px;
 }
 
-.card-body {
+.info-container {
+  flex: 2;
   padding: 15px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .card-title {
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 1.2rem;
+  font-weight: 600;
   font-family: "Poppins", sans-serif;
   margin-bottom: 0.5rem;
 }
 
 .card-text {
-  font-size: 0.9rem;
-  color: #666666;
+  font-size: 1rem;
+  color: #333;
   margin-bottom: 5px !important;
 }
 
-.description {
-  font-size: 0.875rem;
-  color: #888888;
+.endereco, .cep, .numero, .complemento {
+  font-size: 0.9rem;
+  color: #777;
 }
 
-.card-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.icons {
+.icons-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
   gap: 10px;
 }
 
-.edit-icon, .calendar-icon {
+.edit-icon {
   font-size: 1.2rem;
   cursor: pointer;
-  color: #007bff;
+  color: #777;
+}
+
+.delete-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #777;
+}
+
+.edit-icon:hover, .delete-icon:hover {
+  color: #000;
 }
 
 @media screen and (max-width: 1220px) {
