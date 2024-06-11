@@ -15,6 +15,7 @@ import escritorioMeirelesImg from '@/assets/img/escritorio1.jpg';
 import escritorio2Img from '@/assets/img/escritorio2.jpg';
 import escritorio3Img from '@/assets/img/escritorio3.jpg';
 import escritorio4Img from '@/assets/img/escritorio4.jpg';
+import {getAllCoworking} from "@/views/Coworkings/coworkings_service";
 
 
 export default {
@@ -75,6 +76,21 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    fetchCoworkings() {
+      getAllCoworking()
+          .then(response => {
+            const spaces = response.data.data;
+            console.log(spaces);
+          })
+          .catch(error => {
+            console.error("Error fetching coworking spaces:", error);
+          });
+    },
+  },
+  created() {
+    this.fetchCoworkings()
   }
 };
 </script>

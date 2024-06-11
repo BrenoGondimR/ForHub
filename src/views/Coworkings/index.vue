@@ -361,6 +361,59 @@ export default {
     };
   },
   methods: {
+    async getCoordinates(address) {
+      try {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const data = await response.json();
+        if (data.status === 'OK') {
+          const location = data.results[0].geometry.location;
+          return { lat: location.lat, lng: location.lng };
+        } else {
+          console.error('Geocoding error:', data.status);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        return null;
+      }
+    },
+    async fetchCoworkings() {
+      try {
+        const response = await getAllCoworking();
+        const spaces = response.data.data;
+        console.log(spaces);
+
+        this.acomodacoesPatrocinadas = spaces.map(space => ({
+          id: space.ID.toString(),
+          imagens: space.Imagens.map(img => img.url),
+          nome: space.Nome,
+          endereco: space.Endereco,
+          descricao: space.Descricao
+        }));
+
+        const markers = await Promise.all(spaces.map(async (space) => {
+          const address = `${space.Logradouro}, ${space.Numero}`;
+          const coordinates = await this.getCoordinates(address);
+          if (coordinates) {
+            return {
+              title: space.Nome,
+              position: coordinates,
+              info: `R$${space.Valores[0].preco}/${space.Valores[0].unidade}`,
+              rating: space.Rating, // Adicione Rating ao seu backend se necessário
+              showInfo: false,
+              images: space.Imagens.map(img => ({ itemImageSrc: img.url, alt: space.Nome })),
+              description: space.Descricao
+            };
+          } else {
+            return null;
+          }
+        }));
+
+        this.markers = markers.filter(marker => marker !== null);
+      } catch (error) {
+        console.error("Error fetching coworking spaces:", error);
+      }
+    },
     getUserLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -385,36 +438,6 @@ export default {
     },
     hideInfoWindow(index) {
       this.markers[index].showInfo = false;
-    },
-    fetchCoworkings() {
-      getAllCoworking()
-          .then(response => {
-            const spaces = response.data.data;
-            console.log(spaces)
-            this.acomodacoesPatrocinadas = spaces.map(space => ({
-              id: space.ID.toString(),
-              imagens: space.Imagens.map(img => img.url),
-              nome: space.Nome,
-              endereco: space.Endereco,
-              descricao: space.Descricao
-            }));
-
-            this.markers = spaces.map(space => ({
-              title: space.Nome,
-              position: {
-                lat: parseFloat(space.Latitude), // Adicione Latitude ao seu backend
-                lng: parseFloat(space.Longitude) // Adicione Longitude ao seu backend
-              },
-              info: `R$${space.Valores[0].preco}/${space.Valores[0].unidade}`,
-              rating: space.Rating, // Adicione Rating ao seu backend se necessário
-              showInfo: false,
-              images: space.Imagens.map(img => ({ itemImageSrc: img.url, alt: space.Nome })),
-              description: space.Descricao
-            }));
-          })
-          .catch(error => {
-            console.error("Error fetching coworking spaces:", error);
-          });
     }
   },
   mounted() {

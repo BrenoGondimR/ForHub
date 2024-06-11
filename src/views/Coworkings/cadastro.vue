@@ -24,7 +24,7 @@
             <!-- Componente de upload de arquivos -->
             <div class="card mt-3">
               <Toast />
-              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" customUpload @uploader="customBase64Uploader" :maxFileSize="1000000" @select="onSelectedFiles">
+              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload" :multiple="true" accept="image/*" customUpload @uploader="customBase64Uploader" :maxFileSize="1000000" @select="onSelectedFiles">
                 <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
                   <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
                     <div class="flex gap-2">
@@ -37,7 +37,7 @@
                     </ProgressBar>
                   </div>
                 </template>
-                <template #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback }">
+                <template #content="{ files, removeUploadedFileCallback, removeFileCallback }">
                   <div v-if="files.length > 0">
                     <h5>Pending</h5>
                     <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -47,23 +47,8 @@
                         </div>
                         <span class="font-semibold">{{ file.name }}</span>
                         <div>{{ formatSize(file.size) }}</div>
-                        <Badge value="Pending" severity="warning" />
+                        <Badge :value="file.status" :severity="file.status === 'Completed' ? 'success' : 'warning'" />
                         <Button icon="pi pi-times" @click="onRemoveTemplatingFile(file, removeFileCallback, index)" outlined rounded severity="danger" class="custom-button" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-if="uploadedFiles.length > 0">
-                    <h5>Completed</h5>
-                    <div class="flex flex-wrap p-0 sm:p-5 gap-5">
-                      <div v-for="(file, index) of uploadedFiles" :key="file.name + file.type + file.size" class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
-                        <div>
-                          <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
-                        </div>
-                        <span class="font-semibold">{{ file.name }}</span>
-                        <div>{{ formatSize(file.size) }}</div>
-                        <Badge value="Completed" class="mt-3" severity="success" />
-                        <Button icon="pi pi-times" @click="removeUploadedFileCallback(index)" outlined rounded severity="danger" class="custom-button" />
                       </div>
                     </div>
                   </div>
@@ -146,7 +131,7 @@
 
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
-import {createCoworking} from "@/views/Coworkings/coworkings_service";
+import { createCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: "CoworkingCreation",
@@ -156,9 +141,9 @@ export default {
   data() {
     return {
       timeUnits: [
-        {label: 'Por Hora', value: 'hora'},
-        {label: 'Por Dia', value: 'dia'},
-        {label: 'Por Mês', value: 'mes'}
+        { label: 'Por Hora', value: 'hora' },
+        { label: 'Por Dia', value: 'dia' },
+        { label: 'Por Mês', value: 'mes' }
       ],
       imageFilenames: [], // Armazena os filenames das imagens
       imageBase64Strings: [], // Armazena as strings base64 das imagens
@@ -199,7 +184,7 @@ export default {
           errorMessage: 'Telefone/WhatsApp é obrigatório',
           col: '6'
         },
-        {key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
+        { key: 'wifi', label: 'Wi-Fi', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2' },
         {
           key: 'quadro',
           label: 'Quadro Branco',
@@ -218,7 +203,7 @@ export default {
           errorMessage: '',
           col: '2'
         },
-        {key: 'cafe', label: 'Café', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2'},
+        { key: 'cafe', label: 'Café', type: 'Checkbox', value: false, error: false, errorMessage: '', col: '2' },
         {
           key: 'estacionamento',
           label: 'Estacionamento',
@@ -237,31 +222,31 @@ export default {
           errorMessage: '',
           col: '2'
         },
-        {key: 'cep', label: 'CEP', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
-        {key: 'logradouro', label: 'Logradouro', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
-        {key: 'complemento', label: 'Complemento', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
-        {key: 'bairro', label: 'Bairro', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
-        {key: 'numero', label: 'Numero', type: 'InputText', value: '', error: false, errorMessage: '', col: '4'},
+        { key: 'cep', label: 'CEP', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
+        { key: 'logradouro', label: 'Logradouro', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
+        { key: 'complemento', label: 'Complemento', type: 'InputText', value: '', error: false, errorMessage: '', col: '4' },
+        { key: 'bairro', label: 'Bairro', type: 'InputText', value: '', error: false, errorMessage: '', col: '4' },
+        { key: 'numero', label: 'Numero', type: 'InputText', value: '', error: false, errorMessage: '', col: '4' },
       ],
       fieldsValores: [
-        {key: 'domicilio_fiscal', label: 'Domicílio Fiscal', type: 'InputNumber', description: '', value: 120.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'secretariado', label: 'Secretariado', type: 'InputNumber', description: '', value: 179.90, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'coworking', label: 'Estações de Trabalho - Coworking', type: 'InputNumber', description: '', value: 560.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'sala_exclusiva', label: 'Sala Exclusiva', type: 'InputNumber', description: '', value: 3500.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'sala_reuniao', label: 'Sala de Reunião', type: 'InputNumber', description: '', value: 80.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'sala_treinamento', label: 'Sala de Treinamento', type: 'InputNumber', description: '', value: 670.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
-        {key: 'auditorio', label: 'Auditório', type: 'InputNumber', description: '', value: 900.00, col: '12', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: ''},
+        { key: 'domicilio_fiscal', label: 'Domicílio Fiscal', type: 'InputNumber', description: '', value: 120.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'secretariado', label: 'Secretariado', type: 'InputNumber', description: '', value: 179.90, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'coworking', label: 'Estações de Trabalho - Coworking', type: 'InputNumber', description: '', value: 560.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'sala_exclusiva', label: 'Sala Exclusiva', type: 'InputNumber', description: '', value: 3500.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'sala_reuniao', label: 'Sala de Reunião', type: 'InputNumber', description: '', value: 80.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'sala_treinamento', label: 'Sala de Treinamento', type: 'InputNumber', description: '', value: 670.00, col: '6', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
+        { key: 'auditorio', label: 'Auditório', type: 'InputNumber', description: '', value: 900.00, col: '12', active: true, error: false, errorMessage: 'Este campo é obrigatório', unit: '' },
       ],
       fieldsPagamentos: [
-        {key: 'pix', label: 'PIX', value: false, col: '6'},
-        {key: 'boleto', label: 'Boleto Bancário', value: false, col: '6'},
-        {key: 'credito', label: 'Cartão de Crédito', value: false, col: '6'},
-        {key: 'debito', label: 'Cartão de Débito', value: false, col: '6'},
-        {key: 'transferencia', label: 'Transferência Bancária', value: false, col: '6'},
-        {key: 'paypal', label: 'PayPal', value: false, col: '6'},
-        {key: 'pagseguro', label: 'PagSeguro', value: false, col: '6'},
-        {key: 'mercadopago', label: 'Mercado Pago', value: false, col: '6'},
-        {key: 'picpay', label: 'PicPay', value: false, col: '6'},
+        { key: 'pix', label: 'PIX', value: false, col: '6' },
+        { key: 'boleto', label: 'Boleto Bancário', value: false, col: '6' },
+        { key: 'credito', label: 'Cartão de Crédito', value: false, col: '6' },
+        { key: 'debito', label: 'Cartão de Débito', value: false, col: '6' },
+        { key: 'transferencia', label: 'Transferência Bancária', value: false, col: '6' },
+        { key: 'paypal', label: 'PayPal', value: false, col: '6' },
+        { key: 'pagseguro', label: 'PagSeguro', value: false, col: '6' },
+        { key: 'mercadopago', label: 'Mercado Pago', value: false, col: '6' },
+        { key: 'picpay', label: 'PicPay', value: false, col: '6' },
       ],
       files: [],
       totalSize: 0,
@@ -270,18 +255,24 @@ export default {
   },
   methods: {
     async customBase64Uploader(event) {
-      for (const file of event.files) { // Processa cada arquivo individualmente
-        const reader = new FileReader();
-        let blob = await fetch(file.objectURL).then(r => r.blob()); // Converte o URL do objeto em blob
+      const promises = event.files.map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            this.imageBase64Strings.push(reader.result);
+            this.imageFilenames.push(file.name);
+            resolve();
+          };
+        });
+      });
 
-        reader.readAsDataURL(blob); // Lê o blob como base64
-        reader.onloadend = () => {
-          const base64data = reader.result;
-          this.imageBase64Strings.push(base64data); // Armazena a string base64 no array
-          this.imageFilenames.push(file.name); // Armazena o filename no array
-          console.log(base64data);
-        };
-      }
+      await Promise.all(promises);
+      this.files = this.files.map(file => ({
+        ...file,
+        status: 'Completed'
+      }));
+      this.onTemplatedUpload();
     },
     getComponentType(type) {
       switch (type) {
@@ -360,14 +351,16 @@ export default {
       this.totalSizePercent = 0;
     },
     onSelectedFiles(event) {
-      this.files = event.files;
+      this.files = event.files.map(file => ({
+        ...file,
+        status: 'Pending'
+      }));
       this.files.forEach((file) => {
         this.totalSize += parseInt(this.formatSize(file.size));
       });
     },
     uploadEvent(callback) {
       this.totalSizePercent = this.totalSize / 10;
-      console.log(this.files);
       callback();
     },
     createCoworkingSpace() {
@@ -412,6 +405,10 @@ export default {
       this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
     },
     onTemplatedUpload() {
+      this.files = this.files.map(file => ({
+        ...file,
+        status: 'Completed'
+      }));
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
     },
     formatSize(bytes) {
@@ -485,13 +482,13 @@ export default {
 h4 {
   font-weight: bold;
 }
+
 .custom-button.p-button {
   border: none!important;
   background: none!important;
 }
 
-.text-drag{
-  font-family: Poppins,sans-serif
+.text-drag {
+  font-family: Poppins, sans-serif
 }
-
 </style>

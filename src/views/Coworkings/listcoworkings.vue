@@ -102,7 +102,7 @@ export default {
           });
     },
     navigateToAddSpace() {
-      this.$router.push('/add-space');
+      this.$router.push('/dashboard/coworkings/cadastro');
     }
   },
   mounted() {
