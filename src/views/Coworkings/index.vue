@@ -24,8 +24,8 @@
             :description="acomodacao.description"
         />
       </b-colxx>
-      <b-colxx lg="12">
-        <Paginator class="mt-3" :rows="10" :totalRecords="120"></Paginator>
+      <b-colxx lg="12" class="mt-4">
+        <Paginator :rows="cardsPerPage" :totalRecords="totalRecords" @page-change="onPageChange" />
       </b-colxx>
     </b-colxx>
     <b-colxx lg="6">
@@ -88,8 +88,11 @@ export default {
       dates: null,
       selectedCity: null,
       showAnimatedLogo: true,
+      cardsPerPage: 5,
+      currentPage: 1,
+      totalRecords: 0,
       apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
-      center: { lat: -14.235004, lng: -51.92528 }, // Centro do Brasil
+      center: { },
       filtros: [
         { name: 'Pesquisa', type: 'search', value: '' },
         { name: 'Data', type: 'date', value: '', placeholder: 'Período' },
@@ -360,6 +363,12 @@ export default {
       ]
     };
   },
+  computed: {
+    paginatedAcomodacoes() {
+      const startIndex = (this.currentPage - 1) * this.cardsPerPage;
+      return this.acomodacoesPatrocinadas.slice(startIndex, startIndex + this.cardsPerPage);
+    }
+  },
   methods: {
     async getCoordinates(address) {
       try {
@@ -377,6 +386,27 @@ export default {
         return null;
       }
     },
+    async getCenter() {
+      const address = localStorage.getItem('lastSearchedLocation');  // Obter o endereço do localStorage
+      console.log(address)
+      if (!address) {
+        console.log("Nenhum endereço armazenado encontrado.");
+        return;
+      }
+      try {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const data = await response.json();
+        if (data.status === 'OK') {
+          const location = data.results[0].geometry.location;
+          console.log(location)
+          this.center = { lat: location.lat, lng: location.lng };  // Atualiza o centro do mapa
+        } else {
+          console.error('Geocoding error:', data.status);
+        }
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+      }
+    },
     async fetchCoworkings() {
       try {
         const response = await getAllCoworking();
@@ -387,7 +417,7 @@ export default {
           id: space.ID.toString(),
           imagens: space.Imagens.map(img => img.url),
           nome: space.Nome,
-          endereco: space.Endereco,
+          endereco: space.Logradouro,
           descricao: space.Descricao
         }));
 
@@ -410,9 +440,13 @@ export default {
         }));
 
         this.markers = markers.filter(marker => marker !== null);
+        this.totalRecords = this.acomodacoesPatrocinadas.length; // Atualiza o total de registros
       } catch (error) {
         console.error("Error fetching coworking spaces:", error);
       }
+    },
+    onPageChange(event) {
+      this.currentPage = event.page + 1; // Atualiza a página atual com base no evento do paginador
     },
     getUserLocation() {
       if (navigator.geolocation) {
@@ -442,6 +476,7 @@ export default {
   },
   mounted() {
     this.getUserLocation();
+    this.getCenter();
     setTimeout(() => {
       this.showAnimatedLogo = false;
       this.fetchCoworkings();

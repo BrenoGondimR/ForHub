@@ -45,6 +45,7 @@
 
 <script>
 import CoworkingFacilities from '@/components/Common/CoworkingFacilities.vue';
+import {getAllCoworking, getCoworking} from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: 'CoworkingDetails',
@@ -70,62 +71,33 @@ export default {
       phone: '',
       showModal: false,
       totalCost: 0,
-      fieldsValores: [
-        {
-          key: 'domicilio_fiscal',
-          label: 'Domicílio Fiscal',
-          description: 'Serviço de endereço fiscal para sua empresa.',
-          value: 150.00,
-          unit: 'hora'
-        },
-        {
-          key: 'secretariado',
-          label: 'Secretariado',
-          description: 'Serviço de secretariado para reuniões e eventos.',
-          value: 200.00,
-          unit: 'hora'
-        },
-        {
-          key: 'coworking',
-          label: 'Estações de Trabalho - Coworking',
-          description: 'Espaço de coworking com todas as facilidades inclusas.',
-          value: 600.00,
-          unit: 'hora'
-        },
-        {
-          key: 'sala_exclusiva',
-          label: 'Sala Exclusiva',
-          description: 'Sala exclusiva para reuniões privadas.',
-          value: 4000.00,
-          unit: 'hora'
-        },
-        {
-          key: 'sala_reuniao',
-          label: 'Sala de Reunião',
-          description: 'Sala de reunião equipada para seus encontros profissionais.',
-          value: 100.00,
-          unit: 'hora'
-        },
-        {
-          key: 'sala_treinamento',
-          label: 'Sala de Treinamento',
-          description: 'Espaço para treinamentos e workshops.',
-          value: 750.00,
-          unit: 'hora'
-        },
-        {
-          key: 'auditorio',
-          label: 'Auditório',
-          description: 'Auditório completo para eventos e palestras.',
-          value: 950.00,
-          unit: 'hora'
-        },
-      ],
+      fieldsValores: [],
     };
   },
   methods: {
     closeModal() {
       this.showModal = false;
+    },
+    fetchCoworkings() {
+      const coworkingId = this.$route.params.id || this.coworkingId; // Usando Vue Router ou prop
+      getCoworking(coworkingId)
+          .then(response => {
+            debugger
+            const spaces = response.data.data;
+            console.log(spaces);
+
+            this.fieldsValores = spaces.Valores.map(space => ({
+              key: space.servico.toLowerCase().replace(/\s+/g, '_'), // transforma "Auditório" em "auditorio"
+              label: space.servico,
+              description: space.descricao,
+              value: space.preco,
+              unit: space.unidade
+            }));
+            console.log(this.fieldsValores)
+          })
+          .catch(error => {
+            console.error("Error fetching coworking spaces:", error);
+          });
     },
     sendMessage() {
       // Implementar a lógica de envio de mensagem
@@ -136,6 +108,9 @@ export default {
       // Abrir o modal para solicitar os dados do usuário
       this.showModal = true;
     }
+  },
+  created() {
+    this.fetchCoworkings()
   }
 };
 </script>

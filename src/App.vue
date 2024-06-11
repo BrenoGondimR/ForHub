@@ -14,9 +14,6 @@
             <router-link class="nav-link" to="/planos">Planos</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/eventos">Eventos</router-link>
-          </li>
-          <li class="nav-item">
             <router-link class="nav-link" to="/support">Ajuda</router-link>
           </li>
           <li class="nav-item d-flex align-items-center" style="gap: 5px">

@@ -18,27 +18,21 @@
             v-for="(marker, index) in markers"
             :key="index"
             :options="{ position: marker.position }"
-        >
-        </Marker>
+        />
       </GoogleMap>
     </div>
   </div>
 </template>
 
 <script>
-
-import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
-import CoworkingMapCard from './CoworkingMapCard';
-import escritorioMeirelesImg from "@/assets/img/escritorio1.jpg";
-import escritorio2Img from "@/assets/img/escritorio2.jpg";
+import { GoogleMap, Marker } from 'vue3-google-map';
+import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: 'CoworkingFacilities',
   components: {
     GoogleMap,
-    Marker,
-    InfoWindow,
-    CoworkingMapCard
+    Marker
   },
   props: {
     facilities: {
@@ -49,14 +43,53 @@ export default {
   data() {
     return {
       apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
-      center: { lat: -23.55052, lng: -46.633308 },
-      markers: [
-        { title: 'Escritório Meireles', position: { lat: -23.55052, lng: -46.633308 }, info: 'R$120/dia', rating: 4, showInfo: false, images: [{ itemImageSrc: escritorioMeirelesImg, alt: 'Escritório Meireles' }, { itemImageSrc: escritorio2Img, alt: 'Escritório Aldeota' }], description: 'Escritório em São Paulo' },
-      ]
-    }
+      center: {},
+      markers: []
+    };
   },
   methods: {
+    async getCoordinates(address) {
+      try {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const data = await response.json();
+        if (data.status === 'OK') {
+          return data.results[0].geometry.location;
+        } else {
+          console.error('Geocoding error:', data.status);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching geocoding data:', error);
+        return null;
+      }
+    },
 
+    async fetchCoworkings() {
+      try {
+        const response = await getAllCoworking();
+        const coworkings = response.data.data; // Ajuste conforme a estrutura real da resposta da sua API
+        for (const coworking of coworkings) {
+          const coordinates = await this.getCoordinates(coworking.Logradouro + ', ' + coworking.Numero + ', ' + coworking.Cep);
+          if (coordinates) {
+            this.markers.push({
+              title: coworking.Nome,
+              position: coordinates,
+              info: `R$${coworking.Valores[0].preco}/${coworking.Valores[0].unidade}`,
+              description: coworking.Descricao
+            });
+
+            if (!this.center.lat && !this.center.lng) { // Se o centro ainda não foi definido, defina-o aqui
+              this.center = coordinates;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching coworking spaces:", error);
+      }
+    }
+  },
+  created() {
+    this.fetchCoworkings();
   }
 };
 </script>
