@@ -43,10 +43,9 @@
   </div>
 </template>
 
-
 <script>
 import CoworkingFacilities from '@/components/Common/CoworkingFacilities.vue';
-import {getAllCoworking, getCoworking} from "@/views/Coworkings/coworkings_service";
+import { getCoworking } from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: 'CoworkingDetails',
@@ -65,13 +64,10 @@ export default {
   },
   data() {
     return {
-      startTime: '',
-      endTime: '',
       name: '',
       email: '',
       phone: '',
       showModal: false,
-      totalCost: 0,
       fieldsValores: [],
     };
   },
@@ -83,10 +79,7 @@ export default {
       const coworkingId = this.$route.params.id || this.coworkingId; // Usando Vue Router ou prop
       getCoworking(coworkingId)
           .then(response => {
-            debugger
             const spaces = response.data.data;
-            console.log(spaces);
-
             this.fieldsValores = spaces.Valores.map(space => ({
               key: space.servico.toLowerCase().replace(/\s+/g, '_'), // transforma "Auditório" em "auditorio"
               label: space.servico,
@@ -94,24 +87,24 @@ export default {
               value: space.preco,
               unit: space.unidade
             }));
-            console.log(this.fieldsValores)
           })
           .catch(error => {
             console.error("Error fetching coworking spaces:", error);
           });
     },
     sendMessage() {
-      // Implementar a lógica de envio de mensagem
-      alert(`Mensagem enviada por ${this.name}`);
+      const message = `Olá, meu nome é ${this.name}. Gostaria de mais informações sobre o espaço ${this.details.name}.`;
+      const phoneNumber = this.details.phone.replace(/\D/g, ''); // Remove caracteres não numéricos
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
       this.closeModal();
     },
     rentNow(field) {
-      // Abrir o modal para solicitar os dados do usuário
       this.showModal = true;
     }
   },
   created() {
-    this.fetchCoworkings()
+    this.fetchCoworkings();
   }
 };
 </script>

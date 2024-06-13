@@ -371,6 +371,7 @@ export default {
         numero: parseInt(this.fieldsInfo.find(f => f.key === 'numero').value),
         complemento: this.fieldsInfo.find(f => f.key === 'complemento').value,
         descricao: this.fieldsInfo.find(f => f.key === 'description').value,
+        telefone: this.fieldsInfo.find(f => f.key === 'phone').value,
         wifi: this.fieldsInfo.find(f => f.key === 'wifi').value,
         quadro_branco: this.fieldsInfo.find(f => f.key === 'quadro').value,
         sala_reuniao: this.fieldsInfo.find(f => f.key === 'sala_reuniao').value,

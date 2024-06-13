@@ -11,7 +11,7 @@ import CoworkingGallery from '@/components/Common/CoworkingGallery.vue';
 import CoworkingDetails from '@/components/Common/CoworkingDetails.vue';
 import CoworkingReviews from '@/components/Common/CoworkingReviews.vue';
 
-import {getAllCoworking, getCoworking} from "@/views/Coworkings/coworkings_service";
+import {getCoworking} from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: 'CoworkingInfoPage',
@@ -26,6 +26,7 @@ export default {
       details: {
         name: '',
         provider: '',
+        phone: '',
         price: 0,
         description: '',
         availability: {
@@ -45,7 +46,6 @@ export default {
     async fetchCoworkings() {
       try {
         // Uso do Vue Router para obter o ID
-        debugger
         const coworkingId = this.$route.params.id || this.coworkingId; // Usando Vue Router ou prop
         const response = await getCoworking(coworkingId);
         const space = response.data.data;
@@ -54,6 +54,7 @@ export default {
         this.details = {
           name: space.Nome,
           provider: space.Descricao,
+          phone: space.Telefone,
           price: space.Valores[0].preco,
           description: space.Descricao,
           availability: {
