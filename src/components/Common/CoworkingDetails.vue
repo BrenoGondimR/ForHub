@@ -22,17 +22,17 @@
 
     <b-modal v-model="showModal" title="Detalhes da Reserva" hide-footer>
       <div class="modal-body">
-        <div>
+        <div class="form-group">
           <label>Nome</label>
-          <input type="text" v-model="name" />
+          <input type="text" v-model="name" class="form-control" />
         </div>
-        <div>
+        <div class="form-group">
           <label>Email</label>
-          <input type="email" v-model="email" />
+          <input type="email" v-model="email" class="form-control" />
         </div>
-        <div>
+        <div class="form-group">
           <label>Telefone</label>
-          <input type="tel" v-model="phone" />
+          <input type="tel" v-model="phone" class="form-control" />
         </div>
       </div>
       <div class="modal-footer">
@@ -42,6 +42,7 @@
     </b-modal>
   </div>
 </template>
+
 
 <script>
 import CoworkingFacilities from '@/components/Common/CoworkingFacilities.vue';
@@ -220,13 +221,34 @@ h4 {
   transform: scale(1.05);
 }
 
-.modal-body p {
-  margin: 5px 0;
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body .form-group {
+  margin-bottom: 15px;
+}
+
+.modal-body .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-body .form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
 .modal-footer {
   display: flex;
   justify-content: space-between;
+  padding: 20px;
+  border-top: 1px solid #e9ecef;
 }
 
 .confirm-button {
