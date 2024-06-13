@@ -30,13 +30,9 @@
           <label>Email</label>
           <input type="email" v-model="email" class="form-control" />
         </div>
-        <div class="form-group">
-          <label>Telefone</label>
-          <input type="tel" v-model="phone" class="form-control" />
-        </div>
       </div>
       <div class="modal-footer">
-        <b-button variant="primary" @click="sendMessage" class="confirm-button">Enviar Mensagem</b-button>
+        <b-button :disabled="!isFormValid" variant="primary" @click="sendMessage" class="confirm-button">Enviar Mensagem</b-button>
         <b-button variant="secondary" @click="closeModal" class="close-button">Fechar</b-button>
       </div>
     </b-modal>
@@ -66,22 +62,27 @@ export default {
     return {
       name: '',
       email: '',
-      phone: '',
       showModal: false,
+      selectedField: null,
       fieldsValores: [],
     };
+  },
+  computed: {
+    isFormValid() {
+      return this.name && this.email;
+    }
   },
   methods: {
     closeModal() {
       this.showModal = false;
     },
     fetchCoworkings() {
-      const coworkingId = this.$route.params.id || this.coworkingId; // Usando Vue Router ou prop
+      const coworkingId = this.$route.params.id || this.coworkingId;
       getCoworking(coworkingId)
           .then(response => {
             const spaces = response.data.data;
             this.fieldsValores = spaces.Valores.map(space => ({
-              key: space.servico.toLowerCase().replace(/\s+/g, '_'), // transforma "Auditório" em "auditorio"
+              key: space.servico.toLowerCase().replace(/\s+/g, '_'),
               label: space.servico,
               description: space.descricao,
               value: space.preco,
@@ -93,13 +94,18 @@ export default {
           });
     },
     sendMessage() {
-      const message = `Olá, meu nome é ${this.name}. Gostaria de mais informações sobre o espaço ${this.details.name}.`;
-      const phoneNumber = this.details.phone.replace(/\D/g, ''); // Remove caracteres não numéricos
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      if (!this.isFormValid || !this.selectedField) {
+        return;
+      }
+
+      const message = `Olá! Meu nome é ${this.name}. Estou interessado(a) no pacote ${this.selectedField.label} oferecido no espaço de coworking ${this.details.name}. Gostaria de mais informações sobre as opções de reserva e preços. Poderíamos conversar? Obrigado(a)!`;
+      const phoneNumber = `55${this.details.phone.replace(/\D/g, '')}`; // Remove caracteres não numéricos e adiciona o código do país
+      const whatsappUrl = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
       window.open(whatsappUrl, '_blank');
       this.closeModal();
     },
     rentNow(field) {
+      this.selectedField = field;
       this.showModal = true;
     }
   },
@@ -127,7 +133,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  height: auto;
+  height: 100%;
   background-color: #ffffff;
 }
 
@@ -258,6 +264,11 @@ h4 {
 
 .confirm-button:hover {
   background-color: #0056b3;
+}
+
+.confirm-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
 }
 
 .close-button {
