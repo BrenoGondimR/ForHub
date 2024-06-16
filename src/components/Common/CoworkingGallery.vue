@@ -26,8 +26,18 @@ export default {
   },
   data() {
     return {
-      currentImage: this.images[0]
+      currentImage: ''
     };
+  },
+  watch: {
+    images: {
+      immediate: true,
+      handler(newImages) {
+        if (newImages && newImages.length > 0) {
+          this.currentImage = newImages[0];
+        }
+      }
+    }
   },
   methods: {
     updateMainImage(image) {
@@ -47,7 +57,7 @@ export default {
 .main-image img {
   width: 100%;
   height: 400px; /* Ajusta a altura da imagem principal */
-  object-fit: cover;
+  object-fit: fill;;
   border-radius: 10px;
 }
 

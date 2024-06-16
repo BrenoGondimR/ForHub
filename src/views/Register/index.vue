@@ -104,7 +104,7 @@ export default {
 
       createAccount(userData)
           .then(() => {
-            this.$router.push("/home");
+            this.$router.push("/login");
           })
           .catch(error => {
             console.error("Falha ao registrar:", error);

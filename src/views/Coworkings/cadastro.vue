@@ -366,6 +366,7 @@ export default {
     createCoworkingSpace() {
       const space = {
         nome: this.fieldsInfo.find(f => f.key === 'roomName').value,
+        nomehub: this.fieldsInfo.find(f => f.key === 'companyName').value,
         logradouro: this.fieldsInfo.find(f => f.key === 'logradouro').value,
         cep: parseInt(this.fieldsInfo.find(f => f.key === 'cep').value),
         numero: parseInt(this.fieldsInfo.find(f => f.key === 'numero').value),

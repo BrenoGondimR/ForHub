@@ -99,7 +99,7 @@ export default {
       }
 
       const message = `Olá! Meu nome é ${this.name}. Estou interessado(a) no pacote ${this.selectedField.label} oferecido no espaço de coworking ${this.details.name}. Gostaria de mais informações sobre as opções de reserva e preços. Poderíamos conversar? Obrigado(a)!`;
-      const phoneNumber = `55${this.details.phone.replace(/\D/g, '')}`; // Remove caracteres não numéricos e adiciona o código do país
+      const phoneNumber = `55${this.details.phone}`; // Remove caracteres não numéricos e adiciona o código do país
       const whatsappUrl = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
       window.open(whatsappUrl, '_blank');
       this.closeModal();

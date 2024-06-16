@@ -53,7 +53,7 @@ export default {
         this.images = space.Imagens.map(img => img.url);
         this.details = {
           name: space.Nome,
-          provider: space.Descricao,
+          provider: space.NomeHub,
           phone: space.Telefone,
           price: space.Valores[0].preco,
           description: space.Descricao,
