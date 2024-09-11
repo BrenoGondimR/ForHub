@@ -14,7 +14,8 @@ import CadastroCoworking from '@/views/Coworkings/cadastro.vue'
 import EditCoworking from '@/views/Coworkings/editar.vue'
 import Financeiro from '@/views/Financeiro/index.vue'
 import ListCoworkings from '@/views/Coworkings/listcoworkings.vue'
-
+import ReservasCadastro from '@/views/Reservas/cadastro.vue';
+import ReservasIndex from '@/views/Reservas/index.vue';
 
 const routes = [
   {
@@ -69,6 +70,16 @@ const routes = [
   },
   {
     path: '/dashboard/reservas',
+    name: 'ReservasIndex',
+    component: ReservasIndex
+  },
+  {
+    path: '/dashboard/reservas/cadastro',
+    name: 'ReservasCadastro',
+    component: ReservasCadastro
+  },
+  {
+    path: '/dashboard/reservas',
     name: 'reservas',
     component: Reservas
   },
@@ -100,7 +111,5 @@ const router = createRouter({
   routes,
   linkActiveClass: "active",
 });
-
-
 
 export default router

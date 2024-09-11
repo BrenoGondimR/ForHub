@@ -160,7 +160,7 @@ export default {
       let isValid = true;
       this.fields.forEach(field => {
         if (!this.validateField(field)) {
-          isValid = false;
+          isValid = false; 
         }
       });
       if (isValid) {

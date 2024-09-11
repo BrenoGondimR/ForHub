@@ -3,55 +3,56 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Adicionar Reserva</h5>
-          <button type="button" class="close" @click="close" aria-label="Close">
+          <h5 class="modal-title">Nova Reserva</h5>
+          <button type="button" class="close" @click="close" aria-label="Fechar">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <form @submit.prevent="submit">
-            <div class="form-group">
-              <label for="clientName">Nome do Cliente</label>
-              <input type="text" class="form-control" id="clientName" v-model="newReservation.clientName" required>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="clientName">Nome do Cliente</label>
+                <InputText id="clientName" v-model="newReservation.clientName" class="form-control" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="space">Espaço</label>
+                <Dropdown id="space" v-model="newReservation.space" :options="spaces" optionLabel="name" optionValue="name" placeholder="Selecione um espaço" class="form-control" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="space">Espaço</label>
-              <select class="form-control" id="space" v-model="newReservation.space" required>
-                <option value="Sala de Reunião A">Sala de Reunião A</option>
-                <option value="Escritório B">Escritório B</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="startDate">Data de Início</label>
+                <Calendar id="startDate" v-model="newReservation.startDate" dateFormat="dd/mm/yy" class="form-control" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="endDate">Data de Término</label>
+                <Calendar id="endDate" v-model="newReservation.endDate" dateFormat="dd/mm/yy" class="form-control" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="status">Status</label>
-              <select class="form-control" id="status" v-model="newReservation.status" required>
-                <option value="Confirmada">Confirmada</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Cancelada">Cancelada</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="startTime">Hora de Início</label>
+                <InputMask id="startTime" v-model="newReservation.startTime" mask="99:99" placeholder="HH:MM" class="form-control" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="endTime">Hora de Término</label>
+                <InputMask id="endTime" v-model="newReservation.endTime" mask="99:99" placeholder="HH:MM" class="form-control" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="startDate">Data de Início</label>
-              <input type="date" class="form-control" id="startDate" v-model="newReservation.startDate" required>
-            </div>
-            <div class="form-group">
-              <label for="endDate">Data de Término</label>
-              <input type="date" class="form-control" id="endDate" v-model="newReservation.endDate" required>
-            </div>
-            <div class="form-group">
-              <label for="startTime">Hora de Início</label>
-              <input type="time" class="form-control" id="startTime" v-model="newReservation.startTime" required>
-            </div>
-            <div class="form-group">
-              <label for="endTime">Hora de Término</label>
-              <input type="time" class="form-control" id="endTime" v-model="newReservation.endTime" required>
-            </div>
-            <div class="form-group">
-              <label for="totalAmount">Valor Total</label>
-              <input type="text" class="form-control" id="totalAmount" v-model="newReservation.totalAmount" required>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="status">Status</label>
+                <Dropdown id="status" v-model="newReservation.status" :options="statusOptions" optionLabel="name" optionValue="value" placeholder="Selecione um status" class="form-control" required />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="totalAmount">Valor Total</label>
+                <InputNumber id="totalAmount" v-model="newReservation.totalAmount" mode="currency" currency="BRL" locale="pt-BR" class="form-control" required />
+              </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="close">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Adicionar</button>
+              <Button label="Cancelar" class="p-button-secondary" @click="close" />
+              <Button label="Adicionar" class="p-button-primary" type="submit" />
             </div>
           </form>
         </div>
@@ -68,12 +69,24 @@ export default {
         clientName: '',
         space: '',
         status: '',
-        startDate: '',
-        endDate: '',
+        startDate: null,
+        endDate: null,
         startTime: '',
         endTime: '',
-        totalAmount: ''
-      }
+        totalAmount: null
+      },
+      spaces: [
+        { name: 'Sala de Reunião A' },
+        { name: 'Escritório B' },
+        { name: 'Auditório C' },
+        { name: 'Sala de Treinamento D' },
+        { name: 'Sala de Conferência E' }
+      ],
+      statusOptions: [
+        { name: 'Confirmada', value: 'Confirmada' },
+        { name: 'Pendente', value: 'Pendente' },
+        { name: 'Cancelada', value: 'Cancelada' }
+      ]
     };
   },
   methods: {
@@ -86,11 +99,11 @@ export default {
         clientName: '',
         space: '',
         status: '',
-        startDate: '',
-        endDate: '',
+        startDate: null,
+        endDate: null,
         startTime: '',
         endTime: '',
-        totalAmount: ''
+        totalAmount: null
       };
     }
   }
@@ -104,10 +117,11 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 
 .modal-dialog {
@@ -115,14 +129,11 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 500px;
-  transition: all 0.3s ease;
+  max-width: 600px;
 }
 
 .modal-content {
   padding: 20px;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .modal-header {
@@ -131,73 +142,48 @@ export default {
   align-items: center;
   border-bottom: 1px solid #e9ecef;
   padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .modal-title {
-  margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #007bff;
+  color: #495057;
+  margin: 0;
 }
 
 .close {
-  border: none;
   background: none;
+  border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  color: #6c757d;
 }
 
-.modal-body {
-  padding-top: 10px;
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control {
+  width: 100%;
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
+  padding-top: 1rem;
   border-top: 1px solid #e9ecef;
-  padding-top: 10px;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: #495057;
-}
-
-.form-control {
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  padding: 8px 12px;
-  width: 100%;
-}
-
-.btn {
-  padding: 8px 20px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-  border: none;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
+.modal-footer .p-button {
+  margin-left: 0.5rem;
 }
 </style>
