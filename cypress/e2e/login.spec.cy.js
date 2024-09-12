@@ -1,6 +1,6 @@
 describe('Login Page', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8080/login'); // Ajuste o caminho da URL de login
+    cy.visit('http://localhost:8081/login'); // Ajuste o caminho da URL de login
   });
 
   it('Deve exibir a imagem e o texto corretamente', () => {
@@ -10,8 +10,8 @@ describe('Login Page', () => {
   });
 
   it('Deve preencher o formulário de login', () => {
-    cy.get('#username').type('usuario_teste');
-    cy.get('#password').type('senha_teste');
+    cy.get('#username').type('novo_usuario');
+    cy.get('#password').type('SenhaForte@123');
     cy.get('body').click();
     cy.get('button[type="submit"]').click();  
     

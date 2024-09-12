@@ -1,6 +1,6 @@
 describe('Register Page', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8080/register'); // Ajuste o caminho da URL de registro
+    cy.visit('http://localhost:8081/register'); // Ajuste o caminho da URL de registro
   });
 
   it('Deve preencher o formulário de registro', () => {

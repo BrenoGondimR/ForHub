@@ -372,13 +372,13 @@ export default {
   methods: {
     async getCoordinates(address) {
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
         const data = await response.json();
-        if (data.status === 'OK') {
-          const location = data.results[0].geometry.location;
-          return { lat: location.lat, lng: location.lng };
+        if (data.length > 0) {
+          const location = data[0];
+          return { lat: parseFloat(location.lat), lng: parseFloat(location.lon) };
         } else {
-          console.error('Geocoding error:', data.status);
+          console.error('No results found for the given address.');
           return null;
         }
       } catch (error) {
