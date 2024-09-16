@@ -1,148 +1,169 @@
 <template>
-  <b-row class="main-flux" style="margin: 20px !important;">
-    <b-colxx lg="12" class="mb-4">
-      <h2 class="title-dash">Financeiro</h2>
-    </b-colxx>
-    <b-colxx lg="12" class="mb-4">
-      <Button
-          label="Adicionar Finanças"
-          icon="pi pi-plus"
-          class="p-button-success rounded-button"
-          @click="showAddFinanceModal = true"
-      />
-    </b-colxx>
-    <b-colxx lg="9" md="8" sm="12">
-      <b-row>
-        <b-colxx lg="3" md="6" sm="12" v-for="card in cards" :key="card.title" class="mb-4">
-          <CardDashboard
-              :title="card.title"
-              :value="card.value"
-              :color="card.color"
+  <b-container fluid>
+    <b-row class="financeiro-header">
+      <b-colxx lg="12" class="mb-4">
+        <h2 class="titulo-financeiro">Financeiro</h2>
+        <span class="subtitulo-financeiro">Visão geral das finanças da empresa</span>
+      </b-colxx>
+    </b-row>
+    <b-row>
+      <b-colxx lg="4" class="mb-4">
+        <b-card class="card-resumo">
+          <div class="card-content">
+            <i class="pi pi-dollar icon-resumo"></i> <!-- Alterado para PrimeVue -->
+            <div>
+              <h3>Total de Ganhos</h3>
+              <p class="valor">R$ {{ totalGanhos }}</p> <!-- Adicionado classe valor -->
+            </div>
+          </div>
+        </b-card>
+      </b-colxx>
+      <b-colxx lg="4" class="mb-4">
+        <b-card class="card-resumo">
+          <div class="card-content">
+            <i class="pi pi-dollar icon-resumo"></i> <!-- Alterado para PrimeVue -->
+            <div>
+              <h3>Total de Custos</h3>
+              <p class="valor">R$ {{ totalCustos }}</p> <!-- Adicionado classe valor -->
+            </div>
+          </div>
+        </b-card>
+      </b-colxx>
+      <b-colxx lg="4" class="mb-4">
+        <b-card class="card-resumo">
+          <div class="card-content">
+            <i class="pi pi-dollar icon-resumo"></i> <!-- Alterado para PrimeVue -->
+            <div>
+              <h3>Renda Líquida</h3>
+              <p class="valor">R$ {{ rendaLiquida }}</p> <!-- Adicionado classe valor -->
+            </div>
+          </div>
+        </b-card>
+      </b-colxx>
+    </b-row>
+    <b-row>
+      <b-colxx lg="8">
+        <b-card class="card-financeiro mb-4">
+          <GradientLineChart 
+            title="Gráfico Financeiro" 
+            detail1="2023" 
+            detail2="Ganhos, Custos e Renda" 
+            :ganhos="totalGanhos" 
+            :custos="totalCustos" 
+            :renda="rendaLiquida" 
           />
-        </b-colxx>
-        <b-colxx lg="12" md="12" sm="12" class="mb-4">
-          <GradientLineChart title="Finances" :data="chartData" />
-        </b-colxx>
-        <b-colxx lg="12" md="12" sm="12" class="mb-4">
-          <TransactionHistory :transactions="transactions" />
-        </b-colxx>
-      </b-row>
-    </b-colxx>
-    <b-colxx lg="3" md="4" sm="12">
-      <QuickTransaction :contacts="quickContacts" />
-      <MyGoals :goals="goals" class="mt-4" />
-    </b-colxx>
-
-    <Dialog header="Adicionar Finanças" :visible.sync="showAddFinanceModal" modal class="p-fluid" :style="{ width: '90vw', maxWidth: '500px' }" @hide="closeModal">
-      <div class="p-field">
-        <label for="finance-type">Tipo</label>
-        <Dropdown id="finance-type" v-model="financeType" :options="financeOptions" optionLabel="label" optionValue="value" placeholder="Selecione o tipo" />
-      </div>
-      <div class="p-field">
-        <label for="finance-value">Valor</label>
-        <span class="p-inputgroup">
-          <span class="p-inputgroup-addon">R$</span>
-          <InputNumber id="finance-value" v-model="financeValue" mode="currency" currency="BRL" locale="pt-BR" :minFractionDigits="2" />
-        </span>
-      </div>
-      <template #footer>
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="showAddFinanceModal = false" />
-        <Button label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveFinance" />
-      </template>
-    </Dialog>
-  </b-row>
+        </b-card>
+      </b-colxx>
+      <b-colxx lg="4">
+        <b-card class="card-transacoes mb-4">
+          <h3>Transações Recentes</h3>
+          <ul class="transacoes-lista">
+            <li v-for="transacao in transacoesRecentes" :key="transacao.id" class="transacao-item">
+              <span>{{ transacao.descricao }}</span>
+              <span class="valor">R$ {{ transacao.valor }}</span>
+            </li>
+          </ul>
+        </b-card>
+      </b-colxx>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-import BColxx from "@/components/Common/Colxx.vue";
-import CardDashboard from "@/components/Common/CardDashboard.vue";
 import GradientLineChart from "@/components/Common/GradientLineChart.vue";
-import TransactionHistory from "@/components/Common/TransactionHistory.vue";
-import QuickTransaction from "@/components/Common/QuickTransaction.vue";
-import MyGoals from "@/components/Common/MyGoals.vue";
 
 export default {
-  name: "FinancialDashboard",
+  name: "Financeiro",
   components: {
-    CardDashboard,
     GradientLineChart,
-    TransactionHistory,
-    QuickTransaction,
-    MyGoals,
-    BColxx,
   },
   data() {
     return {
-      cards: [
-        { title: "Saldo", value: "$3,596", color: "#00BFFF" },
-        { title: "Renda", value: "$421", color: "#32CD32" },
-        { title: "Despesas", value: "$164", color: "#FF6347" },
-        { title: "Gastos", value: "$257", color: "#9370DB" }
+      totalGanhos: 50000,
+      totalCustos: 20000,
+      rendaLiquida: 30000,
+      transacoesRecentes: [
+        { id: 1, descricao: "Pagamento de Assinatura", valor: 150 },
+        { id: 2, descricao: "Compra de Equipamentos", valor: 2000 },
+        { id: 3, descricao: "Recebimento de Aluguel", valor: 5000 },
       ],
-      chartData: {
-        labels: ['3 Apr', '4 Apr', '5 Apr', '6 Apr', '7 Apr', '8 Apr'],
-        datasets: [
-          {
-            label: 'Renda',
-            borderColor: '#36a2eb',
-            data: [200, 178, 198, 224, 276, 297]
-          },
-          {
-            label: 'Despesas',
-            borderColor: '#ff6384',
-            data: [180, 623, 286, 391, 444, 374]
-          }
-        ]
-      },
-      transactions: [
-        { name: "Aaron Evans", type: "Comida", date: "March 29, 2022", amount: "$45" },
-        { name: "Clement Stewart", type: "Compras", date: "March 27, 2022", amount: "-$241" },
-        { name: "Jessica Johanne", type: "Outros", date: "March 25, 2022", amount: "$100" }
-      ],
-      quickContacts: [
-        { name: "Michael Jordan", image: "path/to/image1.jpg" },
-        { name: "Edelyn Sandra", image: "path/to/image2.jpg" },
-        { name: "Ahmed Azhar", image: "path/to/image3.jpg" },
-        { name: "Celyn Gustav", image: "path/to/image4.jpg" }
-      ],
-      goals: [
-        { name: "New iMac", progress: 50 },
-        { name: "New Macbook 14\"", progress: 60 }
-      ],
-      showAddFinanceModal: false,
-      financeType: null,
-      financeValue: null,
-      financeOptions: [
-        { label: "Renda", value: "renda" },
-        { label: "Despesa", value: "despesa" }
-      ]
     };
   },
-  methods: {
-    closeModal() {
-      this.showAddFinanceModal = false;
-    },
-    saveFinance() {
-      if (this.financeType && this.financeValue !== null) {
-        console.log('Finance Type:', this.financeType);
-        console.log('Finance Value:', this.financeValue);
-        this.showAddFinanceModal = false;
-      } else {
-        alert('Por favor, preencha todos os campos.');
-      }
-    }
-  }
 };
 </script>
 
 <style scoped>
-.title-dash {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  color: black;
+.financeiro-header {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
 }
 
-.rounded-button {
-  border-radius: 25px;
+.titulo-financeiro {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: black; /* Cor preta */
+}
+
+.subtitulo-financeiro {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  color: black; /* Cor preta */
+}
+
+.card-resumo {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Alterado para coluna */
+  align-items: center;
+  text-align: center; /* Centraliza o texto */
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column; /* Alterado para coluna */
+  align-items: center;
+}
+
+.icon-resumo {
+  font-size: 2rem;
+  color: black; /* Cor preta */
+  margin-bottom: 10px; /* Espaço abaixo do ícone */
+}
+
+.card-financeiro, .card-transacoes {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-transacoes {
+  padding: 20px;
+}
+
+.transacoes-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.transacao-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.transacao-item:last-child {
+  border-bottom: none;
+}
+
+.valor {
+  font-weight: bold;
+  color: black; /* Cor preta */
+  font-size: 1.2rem; /* Aumenta o tamanho da fonte */
 }
 </style>
+
+
