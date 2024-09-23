@@ -1,7 +1,7 @@
 let apisUrl;
 
-if (window.location.host === "easymanagepro.com.br") {
-  apisUrl = 'https://apiseasymanage.online/'; // Usando 'https' após configurar SSL
+if (window.location.host === "https://for-hub.vercel.app") {
+  apisUrl = 'https://apisforhub.onrender.com'; // Usando 'https' após configurar SSL
 } else {
   apisUrl = 'http://localhost:5001/'; // 'http' está correto apenas para desenvolvimento local
 }
