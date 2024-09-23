@@ -24,7 +24,5 @@ export const deleteCoworking = (id) => {
 };
 
 export const getAllCoworking = () => {
-    console.log(getAllCoworkingUrl);
-    console.log(window.location.host);
     return axios.get(getAllCoworkingUrl);
 };
