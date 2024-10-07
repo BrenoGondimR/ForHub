@@ -13,3 +13,10 @@ export const getCoworkingUrl = (id) => `${apisUrl}coworking-spaces/${id}`;
 export const updateCoworkingUrl = (id) => `${apisUrl}coworking-spaces/${id}`;
 export const deleteCoworkingUrl = (id) => `${apisUrl}coworking-spaces/${id}`;
 export const getAllCoworkingUrl = apisUrl + 'coworking-spaces';
+
+// Adicionando rotas para operações de clientes
+export const createClientUrl = apisUrl + 'clients';
+export const getClientUrl = (id) => `${apisUrl}clients/${id}`;
+export const updateClientUrl = (id) => `${apisUrl}clients/${id}`;
+export const deleteClientUrl = (id) => `${apisUrl}clients/${id}`;
+export const getAllClientsUrl = apisUrl + 'clients';

@@ -38,11 +38,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import FloatLabel from 'primevue/floatlabel';
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import {userLogin} from "@/views/Login/login_service";
+import { userLogin } from "@/views/Login/login_service";
 
 export default {
   data() {
@@ -58,7 +54,14 @@ export default {
         senha: this.password
       };
       userLogin(userData)
-          .then(() => {
+          .then(response => {
+            // Recebe o ID do usuário após o login
+            const userId = response.data.id;
+            console.log("Login bem-sucedido, ID do usuário:", userId);
+            // Salva o ID em algum lugar, como no localStorage ou vuex, se necessário
+            localStorage.setItem('userId', userId);
+
+            // Redireciona para o dashboard
             this.$router.push("/dashboard");
           })
           .catch(error => {

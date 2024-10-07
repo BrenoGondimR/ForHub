@@ -27,6 +27,7 @@
 
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
+import { createClient } from "@/views/Clientes/clientes_service";
 
 export default {
   name: "cadastro",
@@ -36,11 +37,29 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'name', label: 'Nome de Cliente', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
-        { key: 'email', label: 'Email', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
-        { key: 'phone', label: 'Telefone', type: 'InputMask', value: '', error: false, errorMessage: '', mask: '(99) 99999-9999', col: '6' },
-        { key: 'address', label: 'CPF/CNPJ', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
-        { key: 'status', label: 'Status', type: 'Dropdown', value: '', error: false, errorMessage: '', options: [{ label: 'Ativo', value: 'ativo' }, { label: 'Inativo', value: 'inativo' }], col: '12' }
+        {key: 'nome', label: 'Nome de Cliente', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
+        {key: 'email', label: 'Email', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
+        {
+          key: 'telefonewpp',
+          label: 'Telefone',
+          type: 'InputMask',
+          value: '',
+          error: false,
+          errorMessage: '',
+          mask: '(99) 99999-9999',
+          col: '6'
+        },
+        {key: 'cpfcnpj', label: 'CPF/CNPJ', type: 'InputText', value: '', error: false, errorMessage: '', col: '6'},
+        {
+          key: 'statusconta',
+          label: 'Status',
+          type: 'Dropdown',
+          value: '',
+          error: false,
+          errorMessage: '',
+          options: [{label: 'Ativo', value: 'ativo'}, {label: 'Inativo', value: 'inativo'}],
+          col: '12'
+        }
       ]
     };
   },
@@ -59,77 +78,12 @@ export default {
     },
     getComponentProps(field) {
       if (field.type === 'Dropdown') {
-        return { options: field.options, optionLabel: 'label', optionValue: 'value' };
+        return {options: field.options, optionLabel: 'label', optionValue: 'value'};
       } else if (field.type === 'InputMask') {
-        return { mask: field.mask };
+        return {mask: field.mask};
       } else {
         return {};
       }
-    },
-    validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(String(email).toLowerCase());
-    },
-    validatePhone(phone) {
-      const re = /^\(\d{2}\) \d{5}-\d{4}$/;
-      return re.test(String(phone));
-    },
-    validateCPF(value) {
-      value = value.replace(/\D/g, '');
-      if (value.length !== 11) return false;
-
-      let sum = 0;
-      let remainder;
-
-      if (value === "00000000000") return false;
-
-      for (let i = 1; i <= 9; i++) sum += parseInt(value.substring(i - 1, i)) * (11 - i);
-      remainder = (sum * 10) % 11;
-
-      if ((remainder === 10) || (remainder === 11)) remainder = 0;
-      if (remainder !== parseInt(value.substring(9, 10))) return false;
-
-      sum = 0;
-      for (let i = 1; i <= 10; i++) sum += parseInt(value.substring(i - 1, i)) * (12 - i);
-      remainder = (sum * 10) % 11;
-
-      if ((remainder === 10) || (remainder === 11)) remainder = 0;
-      if (remainder !== parseInt(value.substring(10, 11))) return false;
-
-      return true;
-    },
-    validateCNPJ(value) {
-      value = value.replace(/\D/g, '');
-      if (value.length !== 14) return false;
-
-      let length = value.length - 2;
-      let numbers = value.substring(0, length);
-      let digits = value.substring(length);
-      let sum = 0;
-      let pos = length - 7;
-
-      for (let i = length; i >= 1; i--) {
-        sum += numbers.charAt(length - i) * pos--;
-        if (pos < 2) pos = 9;
-      }
-      let result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-      if (result !== parseInt(digits.charAt(0))) return false;
-
-      length++;
-      numbers = value.substring(0, length);
-      sum = 0;
-      pos = length - 7;
-      for (let i = length; i >= 1; i--) {
-        sum += numbers.charAt(length - i) * pos--;
-        if (pos < 2) pos = 9;
-      }
-      result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-      if (result !== parseInt(digits.charAt(1))) return false;
-
-      return true;
-    },
-    validateCPF_CNPJ(value) {
-      return this.validateCPF(value) || this.validateCNPJ(value);
     },
     validateField(field) {
       if (!field.value) {
@@ -137,36 +91,78 @@ export default {
         field.errorMessage = 'Campo obrigatório';
         return false;
       }
-      if (field.key === 'email' && !this.validateEmail(field.value)) {
-        field.error = true;
-        field.errorMessage = 'Email inválido';
-        return false;
-      }
-      if (field.key === 'phone' && !this.validatePhone(field.value)) {
-        field.error = true;
-        field.errorMessage = 'Telefone inválido';
-        return false;
-      }
-      if (field.key === 'address' && !this.validateCPF_CNPJ(field.value)) {
-        field.error = true;
-        field.errorMessage = 'CPF/CNPJ inválido';
-        return false;
+      switch (field.key) {
+        case 'email':
+          if (!this.validateEmail(field.value)) {
+            field.error = true;
+            field.errorMessage = 'Email inválido';
+            return false;
+          }
+          break;
+        case 'phone':
+          if (!this.validatePhone(field.value)) {
+            field.error = true;
+            field.errorMessage = 'Telefone inválido';
+            return false;
+          }
+          break;
+        case 'cpfcnpj':
+          if (!this.validateCPF_CNPJ(field.value)) {
+            field.error = true;
+            field.errorMessage = 'CPF/CNPJ inválido';
+            return false;
+          }
+          break;
       }
       field.error = false;
       field.errorMessage = '';
       return true;
     },
+    validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email.toLowerCase());
+    },
+    validatePhone(phone) {
+      const re = /^\(\d{2}\) \d{5}-\d{4}$/;
+      return re.test(phone);
+    },
+    validateCPF_CNPJ(value) {
+      return value.length === 11 || value.length === 14;
+    },
     submitForm() {
       let isValid = true;
+      let formData = {};
+
+      // Pega o ID do usuário do localStorage e converte para número
+      const userId = parseInt(localStorage.getItem('userId'), 10);
+      if (!userId) {
+        alert('Usuário não autenticado. Faça login novamente.');
+        return;
+      }
+
       this.fields.forEach(field => {
         if (!this.validateField(field)) {
-          isValid = false; 
+          isValid = false;
+        } else {
+          formData[field.key] = field.value;
         }
       });
+
       if (isValid) {
-        console.log('Form data:', this.fields);
+        // Adiciona o IDUsuario ao formData (convertido para número)
+        formData.IDUsuario = userId;
+
+        createClient(formData) // Chama o serviço para criar o cliente
+            .then(response => {
+              alert('Cliente criado com sucesso!');
+              this.$router.push("/dashboard/clientes")
+            })
+            .catch(error => {
+              alert('Erro ao criar o cliente');
+              console.error('Erro:', error.response.data);
+            });
       } else {
-        console.log('Formulário inválido');
+        alert('Por favor, corrija os erros antes de enviar.');
       }
     }
   }
@@ -193,6 +189,7 @@ export default {
 .p-fluid .p-field .p-dropdown {
   width: 100%;
 }
+
 .text-danger {
   color: #ff0000;
 }

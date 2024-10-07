@@ -21,7 +21,7 @@
       <TabView>
         <TabPanel header="Ativos">
           <DataTable :value="filteredActiveCustomers" paginator :rows="5" tableStyle="min-width: 50rem">
-            <Column field="name" header="Nome" style="width: 16%">
+            <Column field="nome" header="Nome" style="width: 16%">
               <template #body="slotProps">
                 <div class="customer-badge" :class="slotProps.data.badgeClass">
                   <span class="customer-initials">{{ getInitials(slotProps.data.name) }}</span>
@@ -81,6 +81,7 @@
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
 import CardComponent from "@/components/Common/ClientsCard.vue";
+import {getAllClients} from "@/views/Clientes/clientes_service";
 
 export default {
   name: "clients",
@@ -92,13 +93,7 @@ export default {
     return {
       searchQuery: '',
       customers: [
-        { name: 'Makenna Kenter', telefone: '85 981382732', start_date: '22/03/2023', stage: 'teste@hotmail.com', progress: 75, status: 'Ativo' },
-        { name: 'Breno Andre', telefone: '85 981382732', start_date: '22/03/2023', stage: 'teste@hotmail.com', progress: 100, status: 'Ativo' },
-        { name: 'Leonardo Gondim', telefone: '85 981382732', start_date: '22/03/2023', stage: 'teste@hotmail.com', progress: 25, status: 'Ativo' },
-        { name: 'Heset Luca', telefone: '85 981382732', start_date: '12/03/2023', stage: 'teste@gmail.com', progress: 100, status: 'Inativo' },
-        { name: 'Joao Pedro', telefone: '85 981382732', start_date: '12/03/2023', stage: 'teste@gmail.com', progress: 42, status: 'Inativo' },
-        { name: 'Hanna Culhane', telefone: '85 981382732', start_date: '12/03/2023', stage: 'teste@gmail.com', progress: 10, status: 'Inativo' },
-        // Adicione mais dados conforme necessário
+
       ],
       cards: [
         { title: 'Novos Clientes', icon: 'pi pi-user-plus', quantity: 20 },
@@ -109,10 +104,10 @@ export default {
   },
   computed: {
     activeCustomers() {
-      return this.customers.filter(customer => customer.status === 'Ativo');
+      return this.customers.filter(customer => customer.status === 'ativo');
     },
     inactiveCustomers() {
-      return this.customers.filter(customer => customer.status === 'Inativo');
+      return this.customers.filter(customer => customer.status === 'inativo');
     },
     filteredActiveCustomers() {
       return this.activeCustomers.filter(customer =>
@@ -142,13 +137,36 @@ export default {
       });
     },
     getStatusClass(status) {
-      return status === 'Ativo' ? 'status-active' : 'status-inactive';
+      return status === 'ativo' ? 'status-active' : 'status-inactive';
     },
     redirectToCadastro() {
       this.$router.push('/dashboard/clientes/cadastro');
+    },
+    fetchClients() {
+      const userId = parseInt(localStorage.getItem('userId'), 10); // Obtém o userId do localStorage
+      getAllClients(userId) // Faz a chamada à API passando o userID
+          .then(response => {
+            const clientsFromApi = response.data.data; // Dados dos clientes da API
+            clientsFromApi.forEach(client => {
+              debugger
+              this.customers.push({
+                name: client.Nome, // Mapeia os dados conforme necessário
+                telefone: client.TelefoneWpp,
+                start_date: client.DataCriacao, // Data de criação do cliente
+                stage: client.Email, // Email do cliente
+                status: client.StatusConta, // Status da conta
+                progress: 100 // Progresso (você pode ajustar essa lógica conforme a necessidade)
+              });
+            });
+            this.assignRandomBadgeClass(); // Atribui uma classe de badge aleatória a cada cliente
+          })
+          .catch(error => {
+            console.error('Erro ao buscar clientes:', error);
+          });
     }
   },
   mounted() {
+    this.fetchClients()
     this.assignRandomBadgeClass();
   }
 };
