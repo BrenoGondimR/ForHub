@@ -14,9 +14,17 @@ export const updateCoworkingUrl = (id) => `${apisUrl}coworking-spaces/${id}`;
 export const deleteCoworkingUrl = (id) => `${apisUrl}coworking-spaces/${id}`;
 export const getAllCoworkingUrl = apisUrl + 'coworking-spaces';
 
-// Adicionando rotas para operações de clientes
+// Rotas para operações de clientes
 export const createClientUrl = apisUrl + 'clients';
 export const getClientUrl = (id) => `${apisUrl}clients/${id}`;
 export const updateClientUrl = (id) => `${apisUrl}clients/${id}`;
 export const deleteClientUrl = (id) => `${apisUrl}clients/${id}`;
 export const getAllClientsUrl = apisUrl + 'clients';
+
+// Novas rotas para operações de reservas
+export const createReservaUrl = apisUrl + 'reservas';
+export const getReservaUrl = (id) => `${apisUrl}reservas/${id}`;
+export const updateReservaUrl = (id) => `${apisUrl}reservas/${id}`;
+export const deleteReservaUrl = (id) => `${apisUrl}reservas/${id}`;
+export const getAllReservasUrl = apisUrl + 'reservas';
+export const getReservasByUserUrl = (userId) => `${apisUrl}reservas/user/${userId}`;

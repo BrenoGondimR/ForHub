@@ -8,7 +8,7 @@
         <b-colxx v-for="(card, index) in cards" :key="index" md="4">
           <CardComponent :title="card.title" :icon="card.icon" :quantity="card.quantity" />
         </b-colxx>
-      </b-row>
+      </b-row> 
     </b-colxx>
     <b-colxx lg="12" style="display: flex; justify-content: space-between;" class="mt-2 mb-2">
       <IconField iconPosition="left">

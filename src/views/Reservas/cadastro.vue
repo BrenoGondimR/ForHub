@@ -27,6 +27,9 @@
 
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
+import { createReserva } from '@/views/Reservas/reservas_service';
+import { getAllCoworking } from '@/views/Coworkings/coworkings_service';
+import {getAllClients} from "@/views/Clientes/clientes_service"; // Certifique-se de ajustar o caminho de importação
 
 export default {
   name: "cadastroReserva",
@@ -36,26 +39,24 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'clientName', label: 'Nome do Cliente', type: 'InputText', value: '', error: false, errorMessage: '', col: '6' },
-        { key: 'space', label: 'Espaço', type: 'Dropdown', value: '', error: false, errorMessage: '', options: [
-          { label: 'Sala de Reunião A', value: 'Sala de Reunião A' },
-          { label: 'Escritório B', value: 'Escritório B' },
-          { label: 'Auditório C', value: 'Auditório C' },
-          { label: 'Sala de Treinamento D', value: 'Sala de Treinamento D' },
-          { label: 'Sala de Conferência E', value: 'Sala de Conferência E' }
-        ], col: '6' },
+        { key: 'client', label: 'Cliente', type: 'Dropdown', value: '', error: false, errorMessage: '', options: [], col: '6' },
+        { key: 'space', label: 'Espaço', type: 'Dropdown', value: '', error: false, errorMessage: '', options: [], col: '6' },
         { key: 'startDate', label: 'Data de Início', type: 'Calendar', value: null, error: false, errorMessage: '', col: '6' },
         { key: 'endDate', label: 'Data de Término', type: 'Calendar', value: null, error: false, errorMessage: '', col: '6' },
         { key: 'startTime', label: 'Hora de Início', type: 'InputMask', value: '', error: false, errorMessage: '', mask: '99:99', col: '6' },
         { key: 'endTime', label: 'Hora de Término', type: 'InputMask', value: '', error: false, errorMessage: '', mask: '99:99', col: '6' },
         { key: 'status', label: 'Status', type: 'Dropdown', value: '', error: false, errorMessage: '', options: [
-          { label: 'Confirmada', value: 'Confirmada' },
-          { label: 'Pendente', value: 'Pendente' },
-          { label: 'Cancelada', value: 'Cancelada' }
-        ], col: '6' },
+            { label: 'Confirmada', value: 'Confirmada' },
+            { label: 'Pendente', value: 'Pendente' },
+            { label: 'Cancelada', value: 'Cancelada' }
+          ], col: '6' },
         { key: 'totalAmount', label: 'Valor Total', type: 'InputNumber', value: null, error: false, errorMessage: '', col: '6' }
       ]
     };
+  },
+  created() {
+    this.loadCoworkings();
+    this.loadClients();
   },
   methods: {
     getComponentType(type) {
@@ -74,6 +75,25 @@ export default {
           return 'InputText';
       }
     },
+    async loadClients() {
+      try {
+        const userID = this.getUserId();
+        const response = await getAllClients(userID);
+        const clients = response.data.data; // Ajuste conforme a estrutura de dados retornada pela API
+        const options = clients.map(client => ({
+          label: client.Nome, // Supondo que o cliente tenha uma propriedade 'Nome'
+          value: client.ID,   // Supondo que o cliente tenha uma propriedade 'ID'
+        }));
+        // Atualiza as opções do campo "Cliente"
+        const clientField = this.fields.find(field => field.key === 'client');
+        if (clientField) {
+          clientField.options = options;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+        // Lógica para lidar com o erro
+      }
+    },
     getComponentProps(field) {
       switch (field.type) {
         case 'Dropdown':
@@ -86,6 +106,25 @@ export default {
           return { mode: 'currency', currency: 'BRL', locale: 'pt-BR' };
         default:
           return {};
+      }
+    },
+    async loadCoworkings() {
+      try {
+        const response = await getAllCoworking();
+        const coworkings = response.data.data; // Supondo que a resposta é um array de coworkings
+        const options = coworkings.map(coworking => ({
+          label: coworking.Nome,
+          value: coworking.ID,
+        }));
+        debugger;
+        // Atualiza as opções do campo "Espaço"
+        const spaceField = this.fields.find(field => field.key === 'space');
+        if (spaceField) {
+          spaceField.options = options;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar coworkings:', error);
+        // Adicione aqui a lógica para lidar com o erro
       }
     },
     validateField(field) {
@@ -103,22 +142,84 @@ export default {
       field.errorMessage = '';
       return true;
     },
-    submitForm() {
+    async submitForm() {
       let isValid = true;
       this.fields.forEach(field => {
         if (!this.validateField(field)) {
-          isValid = false; 
+          isValid = false;
         }
       });
       if (isValid) {
-        console.log('Dados da reserva:', this.fields.reduce((acc, field) => {
-          acc[field.key] = field.value;
-          return acc;
-        }, {}));
-        // Aqui você pode adicionar a lógica para enviar os dados para o backend
+        try {
+          const reservaData = this.fields.reduce((acc, field) => {
+            acc[field.key] = field.value;
+            return acc;
+          }, {});
+
+          // Converter IDs para números inteiros
+          reservaData.UserID = this.getUserId();
+          reservaData.CoworkingSpaceID = parseInt(reservaData.space, 10);
+          reservaData.ClienteID = parseInt(reservaData.client, 10);
+
+          // Converter valores numéricos
+          reservaData.ValorTotal = parseFloat(reservaData.totalAmount);
+
+          // Converter datas e horas
+          reservaData.DataInicio = this.parseDate(reservaData.startDate);
+          reservaData.DataFim = this.parseDate(reservaData.endDate);
+          reservaData.HoraInicio = this.parseTime(reservaData.startTime);
+          reservaData.HoraFim = this.parseTime(reservaData.endTime);
+
+          // Mapear o status
+          reservaData.Status = reservaData.status;
+
+          // Remover campos não necessários
+          delete reservaData.space;
+          delete reservaData.client;
+          delete reservaData.startDate;
+          delete reservaData.endDate;
+          delete reservaData.startTime;
+          delete reservaData.endTime;
+          delete reservaData.status;
+          delete reservaData.totalAmount;
+
+          const response = await createReserva(reservaData);
+          console.log('Reserva criada com sucesso:', response.data);
+          // Lógica de sucesso (ex: redirecionar ou mostrar mensagem)
+        } catch (error) {
+          console.error('Erro ao criar reserva:', error);
+          // Lógica para lidar com o erro (ex: mostrar mensagem de erro)
+        }
       } else {
         console.log('Formulário inválido');
       }
+    },
+    parseDate(date) {
+      if (!date) return null;
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    },
+    parseTime(time) {
+      if (!time) return null;
+      const [hours, minutes] = time.split(':');
+      const date = new Date();
+      date.setHours(parseInt(hours, 10));
+      date.setMinutes(parseInt(minutes, 10));
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      // Zerar a data para 1970-01-01
+      date.setFullYear(1970, 0, 1);
+      return date;
+    },
+    getUserId() {
+      return parseInt(localStorage.getItem('userId'), 10);
+    },
+
+    combineDateTime(date, time) {
+      if (!date || !time) return null;
+      const [hours, minutes] = time.split(':');
+      const combinedDate = new Date(date);
+      combinedDate.setHours(parseInt(hours), parseInt(minutes));
+      return combinedDate;
     }
   }
 };
