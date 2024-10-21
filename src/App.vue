@@ -23,6 +23,9 @@
             <button class="button-secondary">
               <router-link class="nav-link" to="/login" style="color: black">Login</router-link>
             </button>
+            <div class="avatar-circle">
+              <span class="initials">{{ getUserInitials(userName) }}</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -47,8 +50,11 @@
 
     <template #end>
       <div class="flex align-items-center gap-2">
-        <Button  v-show="visible === false" icon="pi pi-bars" @click="visible = true" style="border-radius: 9px;" />
-        <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" style="width: 32px; height: 32px" />
+        <Button v-show="visible === false" icon="pi pi-bars" @click="visible = true" style="border-radius: 9px;" />
+        <div class="avatar-circle">
+          <span class="initials">{{ getUserInitials(userName) }}</span>
+        </div>
+        <span class="font-bold">{{ truncateUsername(userName) }}</span> <!-- Exibe o nome do usuário truncado -->
       </div>
     </template>
   </Toolbar>
@@ -105,10 +111,12 @@
           </div>
           <div class="mt-auto">
             <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
-            <a v-ripple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-              <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-              <span class="font-bold">{{ userName }}</span> <!-- Exibe o nome do usuário -->
-            </a>
+            <div class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+              <div class="avatar-circle">
+                <span class="initials">{{ getUserInitials(userName) }}</span>
+              </div>
+              <span class="font-bold">{{ truncateUsername(userName) }}</span> <!-- Exibe o nome do usuário -->
+            </div>
           </div>
         </div>
       </template>
@@ -187,6 +195,12 @@ export default {
             alert("Erro ao Logar. Verifique os dados e tente novamente.");
           });
     },
+    truncateUsername(username) {
+      return username.length > 20 ? username.substring(0, 20) + '...' : username;
+    },
+    getUserInitials(name) {
+      return name.substring(0, 2).toUpperCase();
+    },
   },
   mounted() {
     this.fetchUserName();
@@ -255,4 +269,15 @@ export default {
   left: 13px !important;
 }
 
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
 </style>
