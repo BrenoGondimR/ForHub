@@ -19,7 +19,7 @@
         </b-colxx>
         <b-colxx lg="12">
           <Button style="width: 100%; border-radius: 7px;" label="Cadastrar Reserva" icon="pi pi-check" @click="submitForm" />
-        </b-colxx>
+        </b-colxx> 
       </b-row>
     </b-colxx>
   </b-row>
@@ -185,7 +185,10 @@ export default {
 
           const response = await createReserva(reservaData);
           console.log('Reserva criada com sucesso:', response.data);
-          // Lógica de sucesso (ex: redirecionar ou mostrar mensagem)
+          
+          // Redirecionar para a tela de index após o sucesso
+          this.$router.push('/dashboard/reservas');
+          
         } catch (error) {
           console.error('Erro ao criar reserva:', error);
           // Lógica para lidar com o erro (ex: mostrar mensagem de erro)

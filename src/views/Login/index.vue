@@ -24,7 +24,7 @@
             </b-form-group>
             <b-form-group label-for="input-password">
               <FloatLabel>
-                <Password style="width: 100%" id="password" v-model="password" toggleMask />
+                <Password style="width: 100%" id="password" v-model="password" toggleMask :feedback="false" />
                 <label for="password">Password</label>
               </FloatLabel>
             </b-form-group>

@@ -23,6 +23,7 @@
                          v-model="field.value"
                          @input="clearError(field.id)"
                          :required="field.required"
+                         :feedback="false"
                          :toggle-mask="field.toggleMask || false" />
               <label :for="field.id">{{ field.label }}</label>
               <small id="username-help" v-if="field.error" class="text-danger">{{ field.error }}</small>

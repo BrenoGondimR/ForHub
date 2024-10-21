@@ -8,7 +8,7 @@
         <b-colxx v-for="(card, index) in cards" :key="index" md="4">
           <CardComponent :title="card.title" :icon="card.icon" :quantity="card.quantity" />
         </b-colxx>
-      </b-row> 
+      </b-row>  
     </b-colxx>
     <b-colxx lg="12" style="display: flex; justify-content: space-between;" class="mt-2 mb-2">
       <IconField iconPosition="left">
@@ -50,6 +50,7 @@
 <script>
 import BColxx from "@/components/Common/Colxx.vue";
 import CardComponent from "@/components/Common/ClientsCard.vue";
+import { getAllReservas } from "@/views/Reservas/reservas_service"; // Importar o método
 
 export default {
   name: "reservations",
@@ -61,11 +62,7 @@ export default {
     return {
       searchQuery: '',
       reservations: [
-        { clientName: 'Leonardo', initials: 'LE', space: 'Sala de Reunião A', status: 'Confirmada', startDate: '2024-05-01', endDate: '2024-05-10', startTime: '08:00', endTime: '12:00', totalAmount: 'R$ 560.00' },
-        { clientName: 'Maria', initials: 'MA', space: 'Escritório B', status: 'Pendente', startDate: '2024-04-15', endDate: '2024-04-20', startTime: '09:00', endTime: '17:00', totalAmount: 'R$ 1120.00' },
-        { clientName: 'João', initials: 'JO', space: 'Auditório C', status: 'Confirmada', startDate: '2024-03-01', endDate: '2024-03-05', startTime: '10:00', endTime: '14:00', totalAmount: 'R$ 280.00' },
-        { clientName: 'Ana', initials: 'AN', space: 'Sala de Treinamento D', status: 'Confirmada', startDate: '2024-02-10', endDate: '2024-02-15', startTime: '11:00', endTime: '15:00', totalAmount: 'R$ 350.00' },
-        { clientName: 'Carlos', initials: 'CA', space: 'Sala de Conferência E', status: 'Cancelada', startDate: '2024-05-20', endDate: '2024-05-25', startTime: '10:00', endTime: '16:00', totalAmount: 'R$ 800.00' }
+        
       ],
       cards: [
         { title: 'Reservas Ativas', icon: 'pi pi-check-circle', quantity: 3 },
@@ -74,12 +71,15 @@ export default {
       ]
     };
   },
+  created() {
+    this.fetchReservas(); // Chamar o método ao criar o componente
+  },
   computed: {
     filteredReservations() {
-      return this.reservations.filter(reservation =>
-        reservation.clientName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        reservation.space.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      // return this.reservations.filter(reservation =>
+      //   // reservation.clientName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      //   // reservation.space.toLowerCase().includes(this.searchQuery.toLowerCase())
+      // );
     }
   },
   methods: {
@@ -97,6 +97,32 @@ export default {
     },
     redirectToCadastro() {
       this.$router.push('/dashboard/reservas/cadastro');
+    },
+    fetchReservas() {
+      const userId = parseInt(localStorage.getItem('userId'), 10); // Obtém o userId do localStorage
+      console.log(userId)
+      getAllReservas(userId) // Faz a chamada à API passando o userID
+          .then(response => {
+            const reservasFromApi = response.data.data; // Dados dos clientes da API
+            reservasFromApi.forEach(reserva => {
+              console.log(reserva)
+              this.reservations.push({
+                clientName: reserva.ClienteID, // Mapeia os dados conforme necessário
+                space: reserva.CoworkingSpaceID,
+                status: reserva.Status, // Data de criação do cliente
+                startDate: reserva.DataInicio, // Email do cliente
+                endDate: reserva.DataFim, // Status da conta
+                totalAmount: reserva.ValorTotal, // Progresso (você pode ajustar essa lógica conforme a necessidade)
+                horaInicio: reserva.HoraInicio, // Novo campo HoraInicio
+                horaFim: reserva.HoraFim // Novo campo HoraFim
+              });
+            });
+            // Remova a linha abaixo se a função não for necessária
+            // this.assignRandomBadgeClass();
+          })
+          .catch(error => {
+            console.error('Erro ao buscar clientes:', error);
+          });
     }
   }
 };

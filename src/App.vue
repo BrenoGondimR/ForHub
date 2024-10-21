@@ -101,13 +101,13 @@
                   </li>
                 </ul>
               </li>
-            </ul>
+            </ul> 
           </div>
           <div class="mt-auto">
             <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
             <a v-ripple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
               <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-              <span class="font-bold">Amy Elsner</span>
+              <span class="font-bold">{{ userName }}</span> <!-- Exibe o nome do usuário -->
             </a>
           </div>
         </div>
@@ -118,14 +118,19 @@
 </template>
 
 <script>
+import {getUserName, getUserNameById} from '@/services/userService';
+
 export default {
   name: 'App',
   data() {
     return {
       visible: true,
       home: { icon: 'pi pi-home', to: '/dashboard' },
-      breadcrumbItems: []
-    }
+      breadcrumbItems: [],
+      userId: parseInt(localStorage.getItem('userId'), 10),
+      userName: '',
+
+    };
   },
   computed: {
     shouldApplyClass() {
@@ -167,9 +172,26 @@ export default {
     },
     isDashboardRoute() {
       return this.$route.path.startsWith('/dashboard')
-    }
-  }
-}
+    },
+
+    fetchUserName() {
+      getUserName(this.userId)
+          .then(response => {
+            console.log("Login bem-sucedido, ID do usuário:");
+            this.userName = response.data.data.Nome;
+            // Redireciona para o dashboard
+            this.$router.push("/dashboard");
+          })
+          .catch(error => {
+            console.error("Falha ao Logar:", error);
+            alert("Erro ao Logar. Verifique os dados e tente novamente.");
+          });
+    },
+  },
+  mounted() {
+    this.fetchUserName();
+  },
+};
 </script>
 
 <style>

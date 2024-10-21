@@ -24,8 +24,8 @@ export const deleteReserva = (id) => {
     return axios.delete(deleteReservaUrl(id));
 };
 
-export const getAllReservas = () => {
-    return axios.get(getAllReservasUrl);
+export const getAllReservas = (userID) => {
+    return axios.get(getAllReservasUrl, { params: { userID } });
 };
 
 export const getReservasByUser = (userId) => {

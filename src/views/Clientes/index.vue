@@ -122,8 +122,7 @@ export default {
   },
   methods: {
     getInitials(name) {
-      const initials = name.split(' ').map(n => n[0]).join('');
-      return initials.toUpperCase();
+      return name.substring(0, 2).toUpperCase();
     },
     assignRandomBadgeClass() {
       const badgeClasses = [
@@ -148,7 +147,6 @@ export default {
           .then(response => {
             const clientsFromApi = response.data.data; // Dados dos clientes da API
             clientsFromApi.forEach(client => {
-              debugger
               this.customers.push({
                 name: client.Nome, // Mapeia os dados conforme necessário
                 telefone: client.TelefoneWpp,
