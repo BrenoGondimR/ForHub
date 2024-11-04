@@ -26,6 +26,13 @@
                 :id="acomodacao.id"
                 :description="acomodacao.descricao"
                 :onEdit="navigateToEdit"
+                :wifi="acomodacao.wifi"
+                :telefone="acomodacao.telefone"
+                :quadroBranco="acomodacao.quadro_branco"
+                :salaReuniao="acomodacao.sala_reuniao"
+                :cafe="acomodacao.cafe"
+                :estacionamento="acomodacao.estacionamento"
+                :areaRelaxamento="acomodacao.area_relaxamento"
             />
           </b-colxx>
           <b-colxx lg="12">
@@ -95,7 +102,14 @@ export default {
               cep: space.Cep,
               numero: space.Numero,
               complemento: space.Complemento,
-              descricao: space.Descricao
+              descricao: space.Descricao,
+              wifi: space.Wifi,
+              telefone: space.Telefone,
+              quadro_branco: space.QuadroBranco,
+              sala_reuniao: space.SalaReuniao,
+              cafe: space.Cafe,
+              estacionamento: space.Estacionamento,
+              area_relaxamento: space.AreaRelaxamento
             }));
           })
           .catch(error => {
