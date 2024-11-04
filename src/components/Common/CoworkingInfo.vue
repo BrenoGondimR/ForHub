@@ -2,21 +2,18 @@
   <div class="coworking-info">
     <CoworkingGallery :images="images" />
     <CoworkingDetails :details="details" />
-    <CoworkingReviews :reviews="reviews" />
   </div>
 </template>
 
 <script>
 import CoworkingGallery from '@/components/Common/CoworkingGallery.vue';
 import CoworkingDetails from '@/components/Common/CoworkingDetails.vue';
-import CoworkingReviews from '@/components/Common/CoworkingReviews.vue';
 
 export default {
   name: 'CoworkingInfo',
   components: {
     CoworkingGallery,
     CoworkingDetails,
-    CoworkingReviews
   },
   data() {
     return {

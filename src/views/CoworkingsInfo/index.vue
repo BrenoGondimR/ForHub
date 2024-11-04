@@ -2,15 +2,12 @@
   <div class="coworking-info-page">
     <CoworkingGallery :images="images" />
     <CoworkingDetails :details="details" :facilities="facilities" />
-    <CoworkingReviews :reviews="reviews" />
   </div>
 </template>
 
 <script>
 import CoworkingGallery from '@/components/Common/CoworkingGallery.vue';
 import CoworkingDetails from '@/components/Common/CoworkingDetails.vue';
-import CoworkingReviews from '@/components/Common/CoworkingReviews.vue';
-
 import {getCoworking} from "@/views/Coworkings/coworkings_service";
 
 export default {
@@ -18,7 +15,6 @@ export default {
   components: {
     CoworkingGallery,
     CoworkingDetails,
-    CoworkingReviews
   },
   data() {
     return {
