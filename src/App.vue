@@ -76,31 +76,41 @@
               <li>
                 <ul class="list-none p-0 m-0 overflow-hidden">
                   <li>
-                    <a @click="navigateTo('/dashboard')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
-                      <i class="pi pi-home mr-2"></i>
+                    <a @click="navigateTo('/dashboard')" 
+                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
+                       :class="{ 'active-link': $route.path === '/dashboard' }">
+                      <i class="pi pi-chart-line mr-2"></i>
                       <span class="font-medium">Dashboard</span>
                     </a>
                   </li>
                   <li>
-                    <a @click="navigateTo('/dashboard/clientes')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                    <a @click="navigateTo('/dashboard/clientes')" 
+                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
+                       :class="{ 'active-link': $route.path.includes('/dashboard/clientes') }">
                       <i class="pi pi-users mr-2"></i>
                       <span class="font-medium">Clientes</span>
                     </a>
                   </li>
                   <li>
-                    <a @click="navigateTo('/dashboard/coworkings/espacos')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                    <a @click="navigateTo('/dashboard/coworkings/espacos')" 
+                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
+                       :class="{ 'active-link': $route.path.includes('/dashboard/coworkings') }">
                       <i class="pi pi-home mr-2"></i>
                       <span class="font-medium">Espaços</span>
                     </a>
                   </li>
                   <li>
-                    <a @click="navigateTo('/dashboard/reservas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                    <a @click="navigateTo('/dashboard/reservas')" 
+                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
+                       :class="{ 'active-link': $route.path.includes('/dashboard/reservas') }">
                       <i class="pi pi-calendar-plus mr-2"></i>
                       <span class="font-medium">Reservas</span>
                     </a>
                   </li>
                   <li>
-                    <a @click="navigateTo('/dashboard/financas')" class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors">
+                    <a @click="navigateTo('/dashboard/financas')" 
+                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
+                       :class="{ 'active-link': $route.path.includes('/dashboard/financas') }">
                       <i class="pi pi-wallet mr-2"></i>
                       <span class="font-medium">Finanças</span>
                     </a>
@@ -314,5 +324,20 @@ export default {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+}
+
+.active-link {
+  background-color: #E6F4FF !important;
+  color: #1AA3E5 !important;
+  border-radius: 8px;
+}
+
+.active-link i {
+  color: #1AA3E5 !important;
+}
+
+.active-link .font-medium {
+  color: #1AA3E5 !important;
+  font-weight: 600 !important;
 }
 </style>
