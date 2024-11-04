@@ -111,11 +111,17 @@
           </div>
           <div class="mt-auto">
             <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
-            <div class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-              <div class="avatar-circle">
-                <span class="initials">{{ getUserInitials(userName) }}</span>
+            <div class="m-3 flex align-items-center justify-content-between p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+              <div class="flex align-items-center gap-2">
+                <div class="avatar-circle">
+                  <span class="initials">{{ getUserInitials(userName) }}</span>
+                </div>
+                <span class="font-bold">{{ truncateUsername(userName) }}</span>
               </div>
-              <span class="font-bold">{{ truncateUsername(userName) }}</span> <!-- Exibe o nome do usuário -->
+              <a @click="logout" class="flex align-items-center cursor-pointer text-700">
+                <i class="pi pi-sign-out mr-2"></i>
+                <span class="font-medium">Sair</span>
+              </a>
             </div>
           </div>
         </div>
@@ -200,6 +206,35 @@ export default {
     },
     getUserInitials(name) {
       return name.substring(0, 2).toUpperCase();
+    },
+    login() {
+      const userData = {
+        nome: this.username,
+        senha: this.password
+      };
+      userLogin(userData)
+          .then(response => {
+            // Recebe o ID do usuário após o login
+            const userId = response.data.id;
+            console.log("Login bem-sucedido, ID do usuário:", userId);
+            // Salva o ID em algum lugar, como no localStorage ou vuex, se necessário
+            localStorage.setItem('userId', userId);
+
+            // Redireciona para o dashboard
+            this.$router.push("/dashboard");
+          })
+          .catch(error => {
+            console.error("Falha ao Logar:", error);
+            alert("Erro ao Logar. Verifique os dados e tente novamente.");
+          });
+    },
+    logout() {
+      // Limpa os dados do usuário
+      localStorage.removeItem('userId');
+      this.userName = '';
+      
+      // Redireciona para a página de login
+      this.$router.push('/login');
     },
   },
   mounted() {

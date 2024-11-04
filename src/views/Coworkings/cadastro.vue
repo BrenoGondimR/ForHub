@@ -364,7 +364,14 @@ export default {
       callback();
     },
     createCoworkingSpace() {
+      // Pega o ID do usuário do localStorage e converte para número
+      const userId = parseInt(localStorage.getItem('userId'), 10);
+      if (!userId) {
+        alert('Usuário não autenticado. Faça login novamente.');
+        return;
+      }
       const space = {
+        id_usuario: userId,
         nome: this.fieldsInfo.find(f => f.key === 'roomName').value,
         nomehub: this.fieldsInfo.find(f => f.key === 'companyName').value,
         logradouro: this.fieldsInfo.find(f => f.key === 'logradouro').value,

@@ -83,7 +83,8 @@ export default {
       this.$router.push(`/dashboard/coworkings/edit/${coworkingId}`);
     },
     fetchCoworkings() {
-      getAllCoworking()
+      const userId = parseInt(localStorage.getItem('userId'), 10); // Obtém o userId do localStorage
+      getAllCoworking(userId)
           .then(response => {
             const spaces = response.data.data;
             this.acomodacoesPatrocinadas = spaces.map(space => ({
