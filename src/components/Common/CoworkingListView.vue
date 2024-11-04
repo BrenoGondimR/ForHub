@@ -367,6 +367,13 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.info-badge:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .features-container {
@@ -384,6 +391,13 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.feature-badge:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .actions-container {
