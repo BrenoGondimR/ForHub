@@ -65,17 +65,17 @@ const routes = [
   },
   {
     path: '/dashboard/clientes/cadastro',
-    name: 'cadastro clientes',
+    name: 'cadastro_clientes',
     component: CadastroClientes
   },
   {
     path: '/dashboard/reservas',
-    name: 'ReservasIndex',
+    name: 'reservas_index',
     component: ReservasIndex
   },
   {
     path: '/dashboard/reservas/cadastro',
-    name: 'ReservasCadastro',
+    name: 'reservas_cadastro',
     component: ReservasCadastro
   },
   {
@@ -90,7 +90,7 @@ const routes = [
   },
   {
     path: '/dashboard/coworkings/cadastro',
-    name: 'cadastro',
+    name: 'cadastro_coworking',
     component: CadastroCoworking
   },
   {
@@ -100,7 +100,7 @@ const routes = [
   },
   {
     path: '/dashboard/coworkings/espacos',
-    name: 'Espaços',
+    name: 'espacos',
     component: ListCoworkings
   },
 

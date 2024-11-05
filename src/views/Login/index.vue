@@ -7,7 +7,7 @@
           <img :src="'https://i.imgur.com/YB2cezI.jpg'" alt="Img" class="full-width-img">
           <div class="overlay-text">
             <h3>ForHub</h3>
-            <p>Texto exemplo falando sobre a empresa e sua ideia.</p>
+            <p>O site ideal para você encontrar o espaço perfeito para trabalhar.</p>
           </div>
         </div>
       </b-colxx>
@@ -55,14 +55,20 @@ export default {
       };
       userLogin(userData)
           .then(response => {
-            // Recebe o ID do usuário após o login
+            console.log("Resposta do login:", response);
+            // Verifique a estrutura da resposta
             const userId = response.data.id;
-            console.log("Login bem-sucedido, ID do usuário:", userId);
-            // Salva o ID em algum lugar, como no localStorage ou vuex, se necessário
-            localStorage.setItem('userId', userId);
+            if (userId) {
+              console.log("Login bem-sucedido, ID do usuário:", userId);
+              // Salva o ID em localStorage
+              localStorage.setItem('userId', userId);
 
-            // Redireciona para o dashboard
-            this.$router.push("/dashboard");
+              // Redireciona para o dashboard
+              this.$router.push("/dashboard");
+            } else {
+              console.error("ID do usuário não encontrado na resposta.");
+              alert("Erro ao Logar. Dados inválidos.");
+            }
           })
           .catch(error => {
             console.error("Falha ao Logar:", error);
@@ -73,6 +79,7 @@ export default {
       this.$router.push('/register');
     }
   }
+
 };
 </script>
 

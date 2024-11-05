@@ -23,7 +23,7 @@
             <button class="button-secondary">
               <router-link class="nav-link" to="/login" style="color: black">Login</router-link>
             </button>
-            <div class="avatar-circle">
+            <div v-if="$route.path.startsWith('/dashboard')" class="avatar-circle">
               <span class="initials">{{ getUserInitials(userName) }}</span>
             </div>
           </li>
@@ -96,7 +96,7 @@
                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
                        :class="{ 'active-link': $route.path.includes('/dashboard/coworkings') }">
                       <i class="pi pi-home mr-2"></i>
-                      <span class="font-medium">Espaços</span>
+                      <span class="font-medium">Coworkings</span>
                     </a>
                   </li>
                   <li>
@@ -105,14 +105,6 @@
                        :class="{ 'active-link': $route.path.includes('/dashboard/reservas') }">
                       <i class="pi pi-calendar-plus mr-2"></i>
                       <span class="font-medium">Reservas</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a @click="navigateTo('/dashboard/financas')" 
-                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors"
-                       :class="{ 'active-link': $route.path.includes('/dashboard/financas') }">
-                      <i class="pi pi-wallet mr-2"></i>
-                      <span class="font-medium">Finanças</span>
                     </a>
                   </li>
                 </ul>
@@ -166,6 +158,9 @@ export default {
       immediate: true,
       handler(newRoute) {
         this.updateBreadcrumb(newRoute);
+        if (newRoute.path.startsWith('/dashboard')) {
+          this.fetchUserName();
+        }
       }
     }
   },
@@ -184,6 +179,11 @@ export default {
         planos: 'Planos',
         coworkinginfo: 'Detalhes do Coworking',
         dashboard: 'Dashboard',
+        espacos: 'Coworkings',
+        reservas_cadastro: 'Cadastro de Reserva',
+        reservas_index: 'Reservas',
+        cadastro_coworking: 'Cadastro de Coworking',
+        cadastro_clientes: 'Cadastro de Clientes',
         clientes: 'Clientes'
       };
 
@@ -199,17 +199,20 @@ export default {
     },
 
     fetchUserName() {
-      getUserName(this.userId)
+      debugger
+      console.log("Rota atual:", this.$route.path);
+      console.log("Verificação da rota dashboard:", this.$route.path.startsWith('/dashboard'));
+      // Verifica se a rota atual começa com /dashboard
+      if (this.$route.path.startsWith('/dashboard')) {
+        getUserName(this.userId)
           .then(response => {
-            console.log("Login bem-sucedido, ID do usuário:");
+            console.log("Dados do usuário carregados com sucesso");
             this.userName = response.data.data.Nome;
-            // Redireciona para o dashboard
-            this.$router.push("/dashboard");
           })
           .catch(error => {
-            console.error("Falha ao Logar:", error);
-            alert("Erro ao Logar. Verifique os dados e tente novamente.");
+            window.location.reload(); // Recarrega a página em caso de erro
           });
+      }
     },
     truncateUsername(username) {
       return username.length > 20 ? username.substring(0, 20) + '...' : username;
@@ -217,27 +220,7 @@ export default {
     getUserInitials(name) {
       return name.substring(0, 2).toUpperCase();
     },
-    login() {
-      const userData = {
-        nome: this.username,
-        senha: this.password
-      };
-      userLogin(userData)
-          .then(response => {
-            // Recebe o ID do usuário após o login
-            const userId = response.data.id;
-            console.log("Login bem-sucedido, ID do usuário:", userId);
-            // Salva o ID em algum lugar, como no localStorage ou vuex, se necessário
-            localStorage.setItem('userId', userId);
-
-            // Redireciona para o dashboard
-            this.$router.push("/dashboard");
-          })
-          .catch(error => {
-            console.error("Falha ao Logar:", error);
-            alert("Erro ao Logar. Verifique os dados e tente novamente.");
-          });
-    },
+    
     logout() {
       // Limpa os dados do usuário
       localStorage.removeItem('userId');
@@ -246,9 +229,6 @@ export default {
       // Redireciona para a página de login
       this.$router.push('/login');
     },
-  },
-  mounted() {
-    this.fetchUserName();
   },
 };
 </script>

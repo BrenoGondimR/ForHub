@@ -6,7 +6,7 @@
           <img :src="'https://i.imgur.com/YB2cezI.jpg'" alt="Img" class="full-width-img" style="height: 100%; width: 100%;">
           <div class="overlay-text">
             <h3>ForHub</h3>
-            <p>Texto exemplo falando sobre a empresa e sua ideia.</p>
+            <p>O site ideal para você encontrar o espaço perfeito para trabalhar.</p>
           </div>
         </div>
       </b-colxx>
