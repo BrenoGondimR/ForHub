@@ -92,13 +92,10 @@ export default {
   data() {
     return {
       searchQuery: '',
-      customers: [
-
-      ],
+      customers: [],
       cards: [
-        { title: 'Novos Clientes', icon: 'pi pi-user-plus', quantity: 20 },
-        { title: 'Clientes Inativos', icon: 'pi pi-user-minus', quantity: 15 },
-        { title: 'Clientes Hospedados', icon: 'pi pi-home', quantity: 10 }
+        { title: 'Clientes Ativos', icon: 'pi pi-user-plus', quantity: 0 },
+        { title: 'Clientes Inativos', icon: 'pi pi-user-minus', quantity: 0 }
       ]
     };
   },
@@ -141,26 +138,34 @@ export default {
     redirectToCadastro() {
       this.$router.push('/dashboard/clientes/cadastro');
     },
+    updateCardQuantities() {
+      this.cards[0].quantity = this.customers.filter(customer => 
+        customer.status === 'ativo'
+      ).length;
+      
+      this.cards[1].quantity = this.customers.filter(customer => 
+        customer.status === 'inativo'
+      ).length;
+    },
     fetchClients() {
-      const userId = parseInt(localStorage.getItem('userId'), 10); // Obtém o userId do localStorage
-      getAllClients(userId) // Faz a chamada à API passando o userID
-          .then(response => {
-            const clientsFromApi = response.data.data; // Dados dos clientes da API
-            clientsFromApi.forEach(client => {
-              this.customers.push({
-                name: client.Nome, // Mapeia os dados conforme necessário
-                telefone: client.TelefoneWpp,
-                start_date: client.DataCriacao, // Data de criação do cliente
-                stage: client.Email, // Email do cliente
-                status: client.StatusConta, // Status da conta
-                progress: 100 // Progresso (você pode ajustar essa lógica conforme a necessidade)
-              });
-            });
-            this.assignRandomBadgeClass(); // Atribui uma classe de badge aleatória a cada cliente
-          })
-          .catch(error => {
-            console.error('Erro ao buscar clientes:', error);
-          });
+      const userId = parseInt(localStorage.getItem('userId'), 10);
+      getAllClients(userId)
+        .then(response => {
+          const clientsFromApi = response.data.data;
+          this.customers = clientsFromApi.map(client => ({
+            name: client.Nome,
+            telefone: client.TelefoneWpp,
+            start_date: client.DataCriacao,
+            stage: client.Email,
+            status: client.StatusConta,
+            progress: 100
+          }));
+          this.assignRandomBadgeClass();
+          this.updateCardQuantities();
+        })
+        .catch(error => {
+          console.error('Erro ao buscar clientes:', error);
+        });
     }
   },
   mounted() {

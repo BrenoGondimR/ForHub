@@ -54,12 +54,12 @@ export default {
   },
   data() {
     return {
-      searchQuery: '', // Pode ser mantido caso você queira adicionar o filtro de volta no futuro
+      searchQuery: '',
       reservations: [],
       cards: [
-        { title: 'Reservas Ativas', icon: 'pi pi-check-circle', quantity: 3 },
-        { title: 'Reservas Pendentes', icon: 'pi pi-hourglass', quantity: 1 },
-        { title: 'Reservas Canceladas', icon: 'pi pi-calendar-times', quantity: 1 }
+        { title: 'Reservas Ativas', icon: 'pi pi-check-circle', quantity: 0 },
+        { title: 'Reservas Pendentes', icon: 'pi pi-clock', quantity: 0 },
+        { title: 'Reservas Inativas', icon: 'pi pi-times-circle', quantity: 0 }
       ]
     };
   },
@@ -103,29 +103,43 @@ export default {
       // Retornar a data formatada no formato DD/MM/YYYY
       return `${dia}/${mes}/${ano}`;
     },
+    updateCardQuantities() {
+      this.cards[0].quantity = this.reservations.filter(reservation => 
+        reservation.status === 'Confirmada'
+      ).length;
+      
+      this.cards[1].quantity = this.reservations.filter(reservation => 
+        reservation.status === 'Pendente'
+      ).length;
+      
+      this.cards[2].quantity = this.reservations.filter(reservation => 
+        reservation.status === 'Cancelada'
+      ).length;
+    },
     async fetchReservas() {
-      const userId = parseInt(localStorage.getItem('userId'), 10); // Obtém o userId do localStorage
-      console.log(userId);
+      const userId = parseInt(localStorage.getItem('userId'), 10);
       try {
-        const response = await getAllReservas(userId); // Faz a chamada à API passando o userID
-        const reservasFromApi = response.data.data; // Dados dos clientes da API
-        console.log(reservasFromApi);
+        const response = await getAllReservas(userId);
+        const reservasFromApi = response.data.data;
+        this.reservations = []; // Limpa o array antes de adicionar novos dados
 
         for (let reserva of reservasFromApi) {
-          const clientName = await this.fetchUserName(reserva.ClienteID); // Aguarda a resolução da Promise para obter o nome do cliente
+          const clientName = await this.fetchUserName(reserva.ClienteID);
           this.reservations.push({
-            clientName: clientName || "Nome não disponível", // Mapeia os dados conforme necessário
+            clientName: clientName || "Nome não disponível",
             space: reserva.CoworkingSpaceID,
             status: reserva.Status,
-            startDate: this.formatarData(reserva.DataInicio), // Formatar data de início
-            endDate: this.formatarData(reserva.DataFim), // Formatar data de fim
+            startDate: this.formatarData(reserva.DataInicio),
+            endDate: this.formatarData(reserva.DataFim),
             totalAmount: reserva.ValorTotal,
             horaInicio: reserva.HoraInicio,
             horaFim: reserva.HoraFim
           });
         }
+        
+        this.updateCardQuantities(); // Atualiza as quantidades após carregar as reservas
       } catch (error) {
-        console.error('Erro ao buscar clientes:', error);
+        console.error('Erro ao buscar reservas:', error);
       }
     },
 

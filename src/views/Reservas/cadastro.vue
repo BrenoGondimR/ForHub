@@ -110,7 +110,8 @@ export default {
     },
     async loadCoworkings() {
       try {
-        const response = await getAllCoworking();
+        const userID = this.getUserId();
+        const response = await getAllCoworking(userID);
         const coworkings = response.data.data; // Supondo que a resposta é um array de coworkings
         const options = coworkings.map(coworking => ({
           label: coworking.Nome,
