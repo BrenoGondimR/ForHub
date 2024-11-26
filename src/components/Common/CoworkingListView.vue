@@ -237,7 +237,7 @@ export default {
 .info-container {
   flex: 1;
   min-width: 250px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .card-title {

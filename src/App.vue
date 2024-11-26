@@ -17,9 +17,6 @@
             <router-link class="nav-link" to="/support">Ajuda</router-link>
           </li>
           <li class="nav-item d-flex align-items-center" style="gap: 5px">
-            <button class="button-primary">
-              <router-link class="nav-link" to="/liste-seu-espaco" style="color: white">Liste seu espaço</router-link>
-            </button>
             <button class="button-secondary">
               <router-link class="nav-link" to="/login" style="color: black">Login</router-link>
             </button>

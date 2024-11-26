@@ -32,8 +32,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <b-button :disabled="!isFormValid" variant="primary" @click="sendMessage" class="confirm-button">Enviar Mensagem</b-button>
-        <b-button variant="secondary" @click="closeModal" class="close-button">Fechar</b-button>
+        <button :disabled="!isFormValid" variant="primary" @click="sendMessage" class="rent-now">Enviar Mensagem</button>
+        <button variant="primary" @click="closeModal" class="rent-now">Fechar</button>
       </div>
     </b-modal>
   </div>
@@ -126,6 +126,17 @@ export default {
 
 .details-left {
   flex: 1 1 60%;
+}
+
+.rent-now{
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 15px !important;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .details-right {

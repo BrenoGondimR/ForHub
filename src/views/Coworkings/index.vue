@@ -68,7 +68,7 @@ import InputAcomodacoes from "@/components/Common/InputAcomodacoes.vue";
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
 import CoworkingMapCard from "@/components/Common/CoworkingMapCard.vue";
 import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
-import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
+import {getAllCoworking, getAllCoworkingByLocation} from "@/views/Coworkings/coworkings_service";
 
 export default {
   name: "home",
@@ -409,7 +409,7 @@ export default {
     },
     async fetchCoworkings() {
       try {
-        const response = await getAllCoworking();
+        const response = await getAllCoworkingByLocation();
         const spaces = response.data.data;
         console.log(spaces);
 

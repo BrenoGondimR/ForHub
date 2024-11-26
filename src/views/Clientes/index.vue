@@ -5,7 +5,7 @@
     </b-colxx>
     <b-colxx lg="12">
       <b-row>
-        <b-colxx v-for="(card, index) in cards" :key="index" md="4">
+        <b-colxx v-for="(card, index) in cards" :key="index" md="6">
           <CardComponent :title="card.title" :icon="card.icon" :quantity="card.quantity" />
         </b-colxx>
       </b-row>
@@ -29,19 +29,18 @@
                 <span>{{ slotProps.data.name }}</span>
               </template>
             </Column>
-            <Column field="telefone" header="Telefone" style="width: 16%"></Column>
-            <Column field="start_date" header="Cadastro" style="width: 16%"></Column>
-            <Column field="stage" header="Email" style="width: 16%"></Column>
-            <Column field="status" header="Status" style="width: 16%">
+            <Column field="telefone" header="Telefone" style="width: 25%"></Column>
+            <Column field="start_date" header="Cadastro" style="width: 25%">
+              <template #body="slotProps">
+                {{ formatDate(slotProps.data.start_date) }}
+              </template>
+            </Column>
+            <Column field="stage" header="Email" style="width: 25%"></Column>
+            <Column field="status" header="Status" style="width: 25%">
               <template #body="slotProps">
                 <div :class="getStatusClass(slotProps.data.status)">
                   {{ slotProps.data.status }}
                 </div>
-              </template>
-            </Column>
-            <Column field="progress" header="Pagamento" style="width: 16%">
-              <template #body="slotProps">
-                <ProgressBar :value="slotProps.data.progress"></ProgressBar>
               </template>
             </Column>
           </DataTable>
@@ -56,19 +55,18 @@
                 <span>{{ slotProps.data.name }}</span>
               </template>
             </Column>
-            <Column field="telefone" header="Telefone" style="width: 16%"></Column>
-            <Column field="start_date" header="Cadastro" style="width: 16%"></Column>
-            <Column field="stage" header="Email" style="width: 16%"></Column>
-            <Column field="status" header="Status" style="width: 16%">
+            <Column field="telefone" header="Telefone" style="width: 25%"></Column>
+            <Column field="start_date" header="Cadastro" style="width: 25%">
+              <template #body="slotProps">
+                {{ formatDate(slotProps.data.start_date) }}
+              </template>
+            </Column>
+            <Column field="stage" header="Email" style="width: 25%"></Column>
+            <Column field="status" header="Status" style="width: 25%">
               <template #body="slotProps">
                 <div :class="getStatusClass(slotProps.data.status)">
                   {{ slotProps.data.status }}
                 </div>
-              </template>
-            </Column>
-            <Column field="progress" header="Pagamento" style="width: 16%">
-              <template #body="slotProps">
-                <ProgressBar :value="slotProps.data.progress"></ProgressBar>
               </template>
             </Column>
           </DataTable>
@@ -147,6 +145,11 @@ export default {
         customer.status === 'inativo'
       ).length;
     },
+    formatDate(dateString) {
+      if (!dateString) return '';
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('pt-BR', options);
+    },
     fetchClients() {
       const userId = parseInt(localStorage.getItem('userId'), 10);
       getAllClients(userId)
@@ -155,11 +158,12 @@ export default {
           this.customers = clientsFromApi.map(client => ({
             name: client.Nome,
             telefone: client.TelefoneWpp,
-            start_date: client.DataCriacao,
+            start_date: client.CreatedAt,
             stage: client.Email,
             status: client.StatusConta,
             progress: 100
           }));
+          debugger
           this.assignRandomBadgeClass();
           this.updateCardQuantities();
         })

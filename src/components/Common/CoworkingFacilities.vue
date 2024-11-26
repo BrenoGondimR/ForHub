@@ -15,9 +15,8 @@
           :zoom="15"
       >
         <Marker
-            v-for="(marker, index) in markers"
-            :key="index"
-            :options="{ position: marker.position }"
+            v-if="center.lat && center.lng"
+            :options="{ position: center }"
         />
       </GoogleMap>
     </div>
@@ -26,7 +25,8 @@
 
 <script>
 import { GoogleMap, Marker } from 'vue3-google-map';
-import { getAllCoworking } from "@/views/Coworkings/coworkings_service";
+import { getCoworking } from "@/views/Coworkings/coworkings_service";
+import axios from "axios";
 
 export default {
   name: 'CoworkingFacilities',
@@ -43,19 +43,26 @@ export default {
   data() {
     return {
       apiKeyGoogle: 'AIzaSyCff758FRfR8mAYrc2p6xQq_fEWO1GpKEs',
-      center: {},
-      markers: []
+      center: { lat: 0, lng: 0 },
+      markers: [],
+      coworkingId: null
     };
   },
   methods: {
     async getCoordinates(address) {
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const response = await fetch(
+            `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=cb6cbafdb0c4448a893609c6d4695522`
+        );
         const data = await response.json();
-        if (data.status === 'OK') {
-          return data.results[0].geometry.location;
+
+        if (data.results && data.results.length > 0) {
+          return {
+            lat: data.results[0].geometry.lat,
+            lng: data.results[0].geometry.lng
+          };
         } else {
-          console.error('Geocoding error:', data.status);
+          console.error('Geocoding error: No results found');
           return null;
         }
       } catch (error) {
@@ -63,33 +70,33 @@ export default {
         return null;
       }
     },
+    async fetchCoworking() {
+      debugger
+      // Obtendo o ID do coworking pela rota ou propriedade
+      const coworkingId = this.$route.params.id || this.coworkingId;
+      if (!coworkingId) {
+        console.error("Coworking ID is required.");
+        return;
+      }
 
-    async fetchCoworkings() {
       try {
-        const response = await getAllCoworking();
-        const coworkings = response.data.data; // Ajuste conforme a estrutura real da resposta da sua API
-        for (const coworking of coworkings) {
-          const coordinates = await this.getCoordinates(coworking.Logradouro + ', ' + coworking.Numero + ', ' + coworking.Cep);
-          if (coordinates) {
-            this.markers.push({
-              title: coworking.Nome,
-              position: coordinates,
-              info: `R$${coworking.Valores[0].preco}/${coworking.Valores[0].unidade}`,
-              description: coworking.Descricao
-            });
+        const response = await getCoworking(coworkingId);
+        const coworking = response.data.data;
 
-            if (!this.center.lat && !this.center.lng) { // Se o centro ainda não foi definido, defina-o aqui
-              this.center = coordinates;
-            }
-          }
+        // Construir endereço com base no logradouro e cep
+        const address = `${coworking.Logradouro}, ${coworking.Cep}`;
+        const coordinates = await this.getCoordinates(address);
+
+        if (coordinates) {
+          this.center = coordinates; // Atualizando o centro do mapa
         }
       } catch (error) {
-        console.error("Error fetching coworking spaces:", error);
+        console.error("Failed to fetch coworking details:", error);
       }
     }
   },
   created() {
-    this.fetchCoworkings();
+    this.fetchCoworking();
   }
 };
 </script>
@@ -104,7 +111,6 @@ export default {
   height: 400px;
   margin-bottom: 20px;
   margin-top: 20px;
-
 }
 
 :deep(.mapdiv) {

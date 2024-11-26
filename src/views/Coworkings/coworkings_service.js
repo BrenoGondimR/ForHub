@@ -4,7 +4,7 @@ import {
     getCoworkingUrl,
     updateCoworkingUrl,
     deleteCoworkingUrl,
-    getAllCoworkingUrl, getAllClientsUrl
+    getAllCoworkingUrl, getAllClientsUrl, getAllCoworkingsPlacesUrl
 } from "@/constants/config";
 
 export const createCoworking = (data) => {
@@ -25,4 +25,8 @@ export const deleteCoworking = (id) => {
 
 export const getAllCoworking = (userID) => {
     return axios.get(getAllCoworkingUrl, { params: { userID }});
+};
+
+export const getAllCoworkingByLocation = () => {
+    return axios.get(getAllCoworkingsPlacesUrl);
 };
