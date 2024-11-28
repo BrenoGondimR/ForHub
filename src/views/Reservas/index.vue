@@ -44,7 +44,8 @@
 import BColxx from "@/components/Common/Colxx.vue";
 import CardComponent from "@/components/Common/ClientsCard.vue";
 import { getAllReservas } from "@/views/Reservas/reservas_service";
-import {getUserName} from "@/services/userService"; // Importar o método
+import {getUserName} from "@/services/userService";
+import {getAllClients} from "@/views/Clientes/clientes_service"; // Importar o método
 
 export default {
   name: "reservations",
@@ -124,7 +125,7 @@ export default {
         this.reservations = []; // Limpa o array antes de adicionar novos dados
 
         for (let reserva of reservasFromApi) {
-          const clientName = await this.fetchUserName(reserva.ClienteID);
+          const clientName = await this.fetchUserName(reserva.UserID);
           this.reservations.push({
             clientName: clientName || "Nome não disponível",
             space: reserva.CoworkingSpaceID,
@@ -136,21 +137,20 @@ export default {
             horaFim: reserva.HoraFim
           });
         }
-        
+
         this.updateCardQuantities(); // Atualiza as quantidades após carregar as reservas
       } catch (error) {
         console.error('Erro ao buscar reservas:', error);
       }
     },
 
-    async fetchUserName(userId) {
+    async fetchUserName(clientId) {
       try {
-        const response = await getUserName(userId); // Retorna o nome do usuário
-        return response.data.data.Nome;
+        const response = await getUserName(clientId);
+        return response.data.data.Nome; // Ajuste conforme a estrutura de dados retornada
       } catch (error) {
-        console.error("Falha ao Logar:", error);
-        alert("Erro ao Logar. Verifique os dados e tente novamente.");
-        return "Nome não disponível"; // Retorna uma string de fallback em caso de erro
+        console.error('Erro ao buscar cliente:', error);
+        return null; // Retorna null em caso de erro
       }
     },
   }

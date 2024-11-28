@@ -28,5 +28,6 @@ export const getReservaUrl = (id) => `${apisUrl}reservas/${id}`;
 export const updateReservaUrl = (id) => `${apisUrl}reservas/${id}`;
 export const deleteReservaUrl = (id) => `${apisUrl}reservas/${id}`;
 export const getAllReservasUrl = apisUrl + 'reservas';
+export const getAllConfirmedReservasById = apisUrl + 'reservas-confirmadas';
 export const getReservasByUserUrl = (userId) => `${apisUrl}reservas/user/${userId}`;
 export const getUserNameByIdUrl = (userId) => `${apisUrl}users/${userId}`;

@@ -5,7 +5,7 @@ import {
     updateReservaUrl,
     deleteReservaUrl,
     getAllReservasUrl,
-    getReservasByUserUrl
+    getReservasByUserUrl, getAllConfirmedReservasById
 } from "@/constants/config";
 
 export const createReserva = (data) => {
@@ -26,6 +26,10 @@ export const deleteReserva = (id) => {
 
 export const getAllReservas = (userID) => {
     return axios.get(getAllReservasUrl, { params: { userID } });
+};
+
+export const getAllConfirmedReservas = (userID) => {
+    return axios.get(getAllConfirmedReservasById, { params: { userID } });
 };
 
 export const getReservasByUser = (userId) => {

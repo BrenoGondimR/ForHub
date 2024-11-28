@@ -196,8 +196,6 @@ export default {
     },
 
     fetchUserName() {
-      debugger
-      console.log("Rota atual:", this.$route.path);
       console.log("Verificação da rota dashboard:", this.$route.path.startsWith('/dashboard'));
       // Verifica se a rota atual começa com /dashboard
       if (this.$route.path.startsWith('/dashboard')) {

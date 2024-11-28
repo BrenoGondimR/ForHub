@@ -1,5 +1,5 @@
 <template>
-  <Card style="width: 20rem; overflow: hidden">
+  <Card style="width: 20rem; overflow: hidden;  padding: 20px;" class="card-info-window">
     <template #header>
       <Galleria :value="images" :numVisible="5" containerStyle="max-width: 640px"
                 :showThumbnails="false" :showIndicators="true" :changeItemOnIndicatorHover="true">
@@ -9,7 +9,6 @@
       </Galleria>
     </template>
     <template #title>{{ title }}</template>
-    <template #subtitle><Rating v-model="rating" readonly :cancel="false" /></template>
     <template #content>
       <p class="m-0">
         {{ description }}
@@ -61,5 +60,12 @@ export default {
 </script>
 
 <style scoped>
-/* Adicione seus estilos aqui */
+:deep(.gm-style-iw-chr > div){
+  display: none;
+}
+.gm-style-iw-chr{
+  position: absolute !important;
+  left: 280px !important;
+  z-index: 100 !important;
+}
 </style>

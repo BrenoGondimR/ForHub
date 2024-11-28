@@ -68,6 +68,7 @@ export default {
 .avatar {
   width: 30px;
   height: 30px;
+  border: 1px solid;
   border-radius: 50%;
   background-color: #007bff;
   color: white;

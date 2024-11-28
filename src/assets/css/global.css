@@ -301,3 +301,7 @@ body {
 .sub-text-accordion{
     color: #637D87
 }
+
+.p-galleria-item > img{
+    border-radius: 10px !important;
+}

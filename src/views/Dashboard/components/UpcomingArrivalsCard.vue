@@ -1,10 +1,18 @@
 <template>
   <div class="upcoming-arrivals-card">
-    <h3>Próximas Chegadas</h3>
     <ul>
-      <li v-for="reservation in reservations" :key="reservation.name" class="reservation-item">
+      <li
+          v-for="reservation in reservations"
+          :key="reservation.name"
+          class="reservation-item"
+      >
         <div class="reservation-info">
-          <div class="avatar">{{ reservation.name.split(' ').map(n => n[0]).join('') }}</div>
+          <div class="avatar">
+            {{ reservation.name
+              .split(' ')
+              .map((n) => n[0])
+              .join('') }}
+          </div>
           <div class="details">
             <p class="name">{{ reservation.name }}</p>
             <p class="room">{{ reservation.room }}</p>
@@ -16,8 +24,11 @@
             </p>
           </div>
         </div>
-        <div class="icon">
-          <i class="pi pi-users"></i> {{ reservation.people }}
+        <div class="total-value">
+          <i class="pi pi-dollar"></i> {{ reservation.totalValue }}
+        </div>
+        <div v-if="reservation.observations" class="observations">
+          <i class="pi pi-info-circle"></i> {{ reservation.observations }}
         </div>
       </li>
     </ul>
@@ -28,8 +39,8 @@
 export default {
   name: "UpcomingArrivalsCard",
   props: {
-    reservations: Array
-  }
+    reservations: Array,
+  },
 };
 </script>
 
@@ -56,10 +67,7 @@ export default {
 }
 
 .reservation-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
+  padding: 15px 0;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -73,53 +81,93 @@ export default {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  border: 3px solid black;
+  background-color: #1AA3E9;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  color: #333;
-  margin-right: 10px;
+  color: #fff;
+  margin-right: 15px;
+  font-size: 18px;
 }
 
 .details {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.details p {
+  margin: 0 10px 5px 0;
+  color: #555;
+  font-size: 20px;
 }
 
 .name {
   font-size: 16px;
   font-weight: bold;
   color: #333;
-  margin: 0;
 }
 
-.room, .dates, .time {
+.room {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.dates,
+.time {
+  display: flex;
+  align-items: center;
+}
+
+.dates i,
+.time i {
+  margin-right: 5px;
+  color: #1AA3E9;
+}
+
+.total-value {
+  color: #555;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.total-value i {
+  margin-right: 5px;
+  color: #1AA3E9;
+}
+
+.observations {
+  margin-top: 10px;
   font-size: 14px;
   color: #888;
-  margin: 0;
-}
-
-.dates, .time {
   display: flex;
   align-items: center;
 }
 
-.dates i, .time i {
+.observations i {
   margin-right: 5px;
+  color: #1AA3E9;
 }
 
-.icon {
-  font-size: 18px;
-  color: #888;
-  display: flex;
-  align-items: center;
-}
+@media (max-width: 768px) {
+  .reservation-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.icon i {
-  margin-right: 5px;
+  .total-value {
+    margin-top: 10px;
+  }
 }
 </style>

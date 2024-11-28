@@ -72,6 +72,9 @@
 </template>
 
 <script>
+import {deleteCoworking} from "@/views/Coworkings/coworkings_service";
+import {createClient} from "@/views/Clientes/clientes_service";
+
 export default {
   name: 'CoworkingListView',
   props: {
@@ -164,7 +167,14 @@ export default {
       console.log(`Edit card with id: ${id}`);
     },
     deleteCard(id) {
-      console.log(`Delete card with id: ${id}`);
+      deleteCoworking(id)
+          .then(response => {
+            this.$router.push("/dashboard/coworkings/espacos")
+          })
+          .catch(error => {
+            alert('Erro ao criar o cliente');
+            console.error('Erro:', error.response.data);
+          });
     }
   }
 };
@@ -181,8 +191,6 @@ export default {
   margin-bottom: 20px;
   position: relative;
   flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto 20px;
 }
 
 .custom-card:hover {

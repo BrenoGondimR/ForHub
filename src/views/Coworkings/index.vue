@@ -13,15 +13,23 @@
   <b-row style="padding: 30px; width: 100%;">
     <b-colxx lg="12"><AnimatedLogo :show-logo="showAnimatedLogo" v-if="showAnimatedLogo" /></b-colxx>
     <b-colxx lg="6" v-if="showAnimatedLogo === false">
-      <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in acomodacoesPatrocinadas" :key="index">
-        <card-coworkings
+      <b-colxx class="mt-5" lg="12" v-for="(acomodacao, index) in paginatedAcomodacoes" :key="index">
+        <CardCoworkingSearch
             :images="acomodacao.imagens"
             :title="acomodacao.nome"
             :endereco="acomodacao.endereco"
+            :cep="acomodacao.cep"
+            :numero="acomodacao.numero"
+            :complemento="acomodacao.complemento"
             :id="acomodacao.id"
-            :rating="acomodacao.rating"
-            :button-info="true"
-            :description="acomodacao.description"
+            :description="acomodacao.descricao"
+            :wifi="acomodacao.wifi"
+            :telefone="acomodacao.telefone"
+            :quadroBranco="acomodacao.quadro_branco"
+            :salaReuniao="acomodacao.sala_reuniao"
+            :cafe="acomodacao.cafe"
+            :estacionamento="acomodacao.estacionamento"
+            :areaRelaxamento="acomodacao.area_relaxamento"
         />
       </b-colxx>
       <b-colxx lg="12" class="mt-4">
@@ -42,7 +50,7 @@
             :options="{ position: marker.position }"
             @mouseover="showInfoWindow(index)"
         >
-          <InfoWindow v-if="marker.showInfo">
+          <InfoWindow v-if="marker.showInfo" class="info-window">
             <div>
               <CoworkingMapCard
                   :title="marker.title"
@@ -69,10 +77,12 @@ import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map';
 import CoworkingMapCard from "@/components/Common/CoworkingMapCard.vue";
 import AnimatedLogo from "@/components/Common/AnimatedLogo.vue";
 import {getAllCoworking, getAllCoworkingByLocation} from "@/views/Coworkings/coworkings_service";
+import CardCoworkingSearch from "@/components/Common/CardCoworkingSearch.vue";
 
 export default {
   name: "home",
   components: {
+    CardCoworkingSearch,
     AnimatedLogo,
     CoworkingMapCard,
     InputAcomodacoes,
@@ -386,26 +396,63 @@ export default {
         return null;
       }
     },
+    calculateDistance(lat1, lng1, lat2, lng2) {
+      const toRad = x => x * Math.PI / 180;
+      const R = 6371; // Raio da Terra em km
+      const dLat = toRad(lat2 - lat1);
+      const dLng = toRad(lng2 - lng1);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+          Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c;
+      return distance; // Distância em km
+    },
     async getCenter() {
-      const address = localStorage.getItem('lastSearchedLocation');  // Obter o endereço do localStorage
-      console.log(address)
+      const address = localStorage.getItem('lastSearchedLocation');
+      console.log(address);
       if (!address) {
         console.log("Nenhum endereço armazenado encontrado.");
-        return;
+        return false;
       }
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyCm3EdFXiZTzPHS1rulG5LKo8WYHWICACM`);
+        const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=cb6cbafdb0c4448a893609c6d4695522`);
         const data = await response.json();
-        if (data.status === 'OK') {
-          const location = data.results[0].geometry.location;
-          console.log(location)
-          this.center = { lat: location.lat, lng: location.lng };  // Atualiza o centro do mapa
+        if (data.status.code === 200 && data.results.length > 0) {
+          const location = data.results[0].geometry;
+          console.log(location);
+          this.center = { lat: parseFloat(location.lat), lng: parseFloat(location.lng) };
+          return true;
         } else {
-          console.error('Geocoding error:', data.status);
+          console.error('Erro de geocodificação:', data.status.message);
+          return false;
         }
       } catch (error) {
-        console.error('Error fetching geocoding data:', error);
+        console.error('Erro ao buscar dados de geocodificação:', error);
+        return false;
       }
+    },
+    getUserLocation() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              (position) => {
+                this.center = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                resolve(true);
+              },
+              () => {
+                alert("Não foi possível obter a localização.");
+                resolve(false);
+              }
+          );
+        } else {
+          alert("Geolocalização não é suportada por este navegador.");
+          resolve(false);
+        }
+      });
     },
     async fetchCoworkings() {
       try {
@@ -413,57 +460,74 @@ export default {
         const spaces = response.data.data;
         console.log(spaces);
 
-        this.acomodacoesPatrocinadas = spaces.map(space => ({
-          id: space.ID.toString(),
-          imagens: space.Imagens.map(img => img.url),
-          nome: space.Nome,
-          endereco: space.Logradouro,
-          descricao: space.Descricao
-        }));
-
-        const markers = await Promise.all(spaces.map(async (space) => {
+        // Obter coordenadas e construir objetos de coworking
+        const coworkingsWithCoordinates = await Promise.all(spaces.map(async (space) => {
           const address = `${space.Logradouro}, ${space.Numero}`;
           const coordinates = await this.getCoordinates(address);
           if (coordinates) {
             return {
-              title: space.Nome,
-              position: coordinates,
-              info: `R$${space.Valores[0].preco}/${space.Valores[0].unidade}`,
-              rating: space.Rating, // Adicione Rating ao seu backend se necessário
-              showInfo: false,
-              images: space.Imagens.map(img => ({ itemImageSrc: img.url, alt: space.Nome })),
-              description: space.Descricao
+              id: space.ID.toString(),
+              imagens: space.Imagens.map(img => img.url),
+              nome: space.Nome,
+              endereco: space.Logradouro,
+              cep: space.Cep,
+              numero: space.Numero,
+              complemento: space.Complemento,
+              descricao: space.Descricao,
+              wifi: space.Wifi,
+              telefone: space.Telefone,
+              quadro_branco: space.QuadroBranco,
+              sala_reuniao: space.SalaReuniao,
+              cafe: space.Cafe,
+              estacionamento: space.Estacionamento,
+              area_relaxamento: space.AreaRelaxamento,
+              coordinates: coordinates,
+              preco: space.Valores[0].preco,
+              unidade: space.Valores[0].unidade,
+              rating: space.Rating || 0, // Defina um valor padrão se necessário
+              images: space.Imagens.map(img => ({ itemImageSrc: img.url, alt: space.Nome }))
             };
           } else {
             return null;
           }
         }));
 
-        this.markers = markers.filter(marker => marker !== null);
+        // Filtrar nulos
+        const validCoworkings = coworkingsWithCoordinates.filter(coworking => coworking !== null);
+
+        // Filtrar coworkings dentro do raio desejado (por exemplo, 10 km)
+        const radius = 100; // Raio em km
+        const filteredCoworkings = validCoworkings.filter(coworking => {
+          const distance = this.calculateDistance(
+              this.center.lat,
+              this.center.lng,
+              coworking.coordinates.lat,
+              coworking.coordinates.lng
+          );
+          return distance <= radius;
+        });
+
+        // Atualizar acomodações patrocinadas
+        this.acomodacoesPatrocinadas = filteredCoworkings;
+
+        // Atualizar marcadores
+        this.markers = filteredCoworkings.map(coworking => ({
+          title: coworking.nome,
+          position: coworking.coordinates,
+          info: `R$${coworking.preco}/${coworking.unidade}`,
+          rating: coworking.rating,
+          showInfo: false,
+          images: coworking.images,
+          description: coworking.descricao
+        }));
+
         this.totalRecords = this.acomodacoesPatrocinadas.length; // Atualiza o total de registros
       } catch (error) {
-        console.error("Error fetching coworking spaces:", error);
+        console.error("Erro ao buscar espaços de coworking:", error);
       }
     },
     onPageChange(event) {
       this.currentPage = event.page + 1; // Atualiza a página atual com base no evento do paginador
-    },
-    getUserLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-              this.center = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-              };
-            },
-            () => {
-              alert("Não foi possível obter a localização.");
-            }
-        );
-      } else {
-        alert("Geolocalização não é suportada por este navegador.");
-      }
     },
     showInfoWindow(index) {
       this.markers.forEach((marker, i) => {
@@ -474,14 +538,18 @@ export default {
       this.markers[index].showInfo = false;
     }
   },
-  mounted() {
-    this.getUserLocation();
-    this.getCenter();
+  mounted: async function() {
+    this.showAnimatedLogo = true;
+    let success = await this.getCenter();
+    if (!success) {
+      await this.getUserLocation();
+    }
+    await this.fetchCoworkings();
     setTimeout(() => {
       this.showAnimatedLogo = false;
-      this.fetchCoworkings();
-    }, 2500);
-  }
+
+    }, 3000);
+  },
 };
 </script>
 
