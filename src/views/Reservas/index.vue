@@ -45,7 +45,7 @@ import BColxx from "@/components/Common/Colxx.vue";
 import CardComponent from "@/components/Common/ClientsCard.vue";
 import { getAllReservas } from "@/views/Reservas/reservas_service";
 import {getUserName} from "@/services/userService";
-import {getAllClients} from "@/views/Clientes/clientes_service"; // Importar o método
+import {getAllClients, getClient} from "@/views/Clientes/clientes_service"; // Importar o método
 
 export default {
   name: "reservations",
@@ -125,7 +125,7 @@ export default {
         this.reservations = []; // Limpa o array antes de adicionar novos dados
 
         for (let reserva of reservasFromApi) {
-          const clientName = await this.fetchUserName(reserva.UserID);
+          const clientName = await this.fetchClientName(reserva.ClienteID);
           this.reservations.push({
             clientName: clientName || "Nome não disponível",
             space: reserva.CoworkingSpaceID,
@@ -144,10 +144,10 @@ export default {
       }
     },
 
-    async fetchUserName(clientId) {
+    async fetchClientName(clientId) {
       try {
-        const response = await getUserName(clientId);
-        return response.data.data.Nome; // Ajuste conforme a estrutura de dados retornada
+        const response = await getClient(clientId);
+        return response.data.data.Nome; // Ajuste conforme a estrutura da sua resposta
       } catch (error) {
         console.error('Erro ao buscar cliente:', error);
         return null; // Retorna null em caso de erro
@@ -160,22 +160,26 @@ export default {
 <style scoped>
 /* Adicione estilos adicionais conforme necessário */
 .status-active {
-  background-color: #C8E6C9;
-  color: #256029;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
+  background-color: #E8F7E9;
+  border: 1px solid #C9ECC8;
+  color: #41BF43;
+  padding: 0 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.status-inactive {
+  background-color: #FFE9E9;
+  border: 1px solid #FFC9CE;
+  color: #FE3232;
+  padding: 0 10px;
+  border-radius: 10px;
+  display: inline-block;
 }
 
 .status-pending {
   background-color: #FEEDAF;
   color: #8A5340;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-}
-
-.status-inactive {
-  background-color: #FFCDD2;
-  color: #C63737;
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
 }
