@@ -2,7 +2,6 @@
   <div class="details-container">
     <div class="details-left">
       <h1>{{ details.name }}</h1>
-      <h2>por {{ details.provider }}</h2>
       <p>{{ details.description }}</p>
       <CoworkingFacilities :facilities="facilities" />
     </div>
@@ -81,6 +80,7 @@ export default {
       getCoworking(coworkingId)
           .then(response => {
             const spaces = response.data.data;
+            debugger
             this.fieldsValores = spaces.Valores.map(space => ({
               key: space.servico.toLowerCase().replace(/\s+/g, '_'),
               label: space.servico,

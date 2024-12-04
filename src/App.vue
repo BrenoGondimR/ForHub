@@ -28,7 +28,7 @@
       </div>
     </div>
   </nav>
-  <Toolbar v-if="$route.path.startsWith('/dashboard')" class="toolbar-transition" :style="visible ? 'margin-left: 355px;' : ''" style="border-radius: 1rem; padding: 1rem 1rem 1rem 1.5rem; margin-top: 15px;">
+  <Toolbar v-if="$route.path.startsWith('/dashboard')" class="toolbar-transition" :style="visible ? 'margin-left: 355px;' : 'margin-left: 20px;'" style="border-radius: 1rem; padding: 1rem 1rem 1rem 1.5rem; margin-right: 20px; margin-top: 15px;">
     <template #start>
       <Breadcrumb :home="home" :model="breadcrumbItems">
         <template #item="{ item, props }">

@@ -11,7 +11,7 @@
       <div class="title-container">
         <h5 class="card-title">{{ title }}</h5>
       </div>
-      
+
       <div class="info-row">
         <i class="pi pi-map-marker location-icon"></i>
         <div class="address-info">
@@ -61,19 +61,14 @@
       </div>
     </div>
     <div class="actions-container">
-      <button class="action-button edit" @click="deleteCard(id)" title="Excluir">
-        <i class="pi pi-trash"></i>
-      </button>
+      <b-button class="button-dados" type="button" @click="showInfo(id)" variant="success" block style="width: 100%; margin-top: 30px;">Saiba Mais</b-button>
     </div>
   </div>
 </template>
 
 <script>
-import {deleteCoworking} from "@/views/Coworkings/coworkings_service";
-import {createClient} from "@/views/Clientes/clientes_service";
-
 export default {
-  name: 'CoworkingListView',
+  name: 'CardCoworkingSearch',
   props: {
     images: {
       type: Array,
@@ -164,14 +159,7 @@ export default {
       console.log(`Edit card with id: ${id}`);
     },
     deleteCard(id) {
-      deleteCoworking(id)
-          .then(response => {
-            this.$router.push("/dashboard/coworkings/espacos")
-          })
-          .catch(error => {
-            alert('Erro ao criar o cliente');
-            console.error('Erro:', error.response.data);
-          });
+      console.log(`Delete card with id: ${id}`);
     }
   }
 };

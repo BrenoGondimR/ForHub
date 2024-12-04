@@ -17,6 +17,7 @@
       />
     </div>
     <div class="charts-and-satisfaction">
+      <h2 class="titulo-dash">Lista de Chegadas</h2>
       <div class="satisfaction-and-arrivals">
         <UpcomingArrivalsCard :reservations="reservations" />
       </div>
@@ -209,7 +210,6 @@ export default {
 }
 
 .charts-and-satisfaction {
-  display: flex;
   gap: 20px;
   margin-bottom: 20px;
 }
